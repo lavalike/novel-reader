@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.tools_version
+    defaultConfig {
+        applicationId "com.example.newbiechen.ireader"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    signingConfigs {
+        release {
+            storeFile file("reader.keystore")
+            storePassword "123456"
+            keyAlias "reader"
+            keyPassword "123456"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildToolsVersion '26.0.2'
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+greendao {
+    schemaVersion 3
+    daoPackage 'com.example.newbiechen.ireader.model.gen'
+    targetGenDir 'src/main/java'
+}
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/qichuan/maven/'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    implementation deps.android.appcompat
+    implementation deps.android.design
+    implementation deps.android.support
+    implementation deps.android.cardview
+    //View injection
+    implementation deps.butterknife.runtime
+    annotationProcessor deps.butterknife.compiler
+    //RxJava
+    implementation deps.reactivex.rxandroid
+    implementation deps.reactivex.rxjava2
+    //NetWork
+    implementation deps.okhttp.runtime
+
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.rxjava2
+    //ImageLoader
+    implementation deps.glide.runtime
+    /*implementation deps.glide.compiler*/
+    //ORM Database
+    implementation deps.greendao.runtime
+    testImplementation deps.testing.junit
+
+    // Android Leak Analysis
+    releaseImplementation deps.leakcanary.release
+    debugImplementation deps.leakcanary.debug
+
+    // OpenCC to convert Simp. Chinese to Trad. Chinese
+    implementation 'com.github.qichuan:android-opencc:1.2.0'
+
+    // AndroidTagGroup
+    implementation 'me.gujun.android.taggroup:library:1.4@aar'
+}
