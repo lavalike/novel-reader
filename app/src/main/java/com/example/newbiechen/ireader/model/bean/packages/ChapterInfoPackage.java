@@ -3,7 +3,7 @@ package com.example.newbiechen.ireader.model.bean.packages;
 import com.example.newbiechen.ireader.model.bean.ChapterInfoBean;
 
 /**
- * Created by newbiechen on 17-5-10.
+ * Created by wangzhen on 17-5-10.
  */
 
 public class ChapterInfoPackage {

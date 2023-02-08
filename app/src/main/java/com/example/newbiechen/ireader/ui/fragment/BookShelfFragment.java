@@ -14,7 +14,7 @@ import com.example.newbiechen.ireader.ui.base.BaseFragment;
 import butterknife.BindView;
 
 /**
- * Created by newbiechen on 17-4-15.
+ * Created by wangzhen on 17-4-15.
  */
 
 public class BookShelfFragment extends BaseFragment {
@@ -42,13 +42,17 @@ public class BookShelfFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        setUpAdapter();
+    }
+
+    @Override
     protected void initClick() {
         super.initClick();
-        mCollBookAdapter.setOnItemClickListener(
-                (view, pos) -> {
-                    CollBookBean collBook = mCollBookAdapter.getItem(pos);
-                    ReadActivity.startActivity(requireContext(), collBook, true);
-                }
-        );
+        mCollBookAdapter.setOnItemClickListener((view, pos) -> {
+            CollBookBean collBook = mCollBookAdapter.getItem(pos);
+            ReadActivity.startActivity(requireContext(), collBook, true);
+        });
     }
 }

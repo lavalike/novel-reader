@@ -5,7 +5,7 @@ import com.example.newbiechen.ireader.model.bean.ChapterInfoBean;
 import io.reactivex.Single;
 
 /**
- * Created by newbiechen on 17-4-20.
+ * Created by wangzhen on 17-4-20.
  */
 
 public class RemoteRepository {

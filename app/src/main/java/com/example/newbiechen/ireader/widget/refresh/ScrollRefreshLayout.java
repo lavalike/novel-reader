@@ -20,7 +20,7 @@ import com.example.newbiechen.ireader.R;
 import butterknife.ButterKnife;
 
 /**
- * Created by newbiechen on 17-4-18.
+ * Created by wangzhen on 17-4-18.
  * 自带错误提示、数据为空、下拉刷新的控件
  */
 

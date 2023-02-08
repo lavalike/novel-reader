@@ -6,7 +6,7 @@ import com.example.newbiechen.ireader.ui.base.adapter.IViewHolder;
 import com.example.newbiechen.ireader.widget.adapter.WholeAdapter;
 
 /**
- * Created by newbiechen on 17-5-8.
+ * Created by wangzhen on 17-5-8.
  */
 
 public class CollBookAdapter extends WholeAdapter<CollBookBean> {

@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import com.example.newbiechen.ireader.R;
 
 /**
- * Created by newbiechen on 17-4-22.
+ * Created by wangzhen on 17-4-22.
  * 功能:
  * 1. 加载动画
  * 2. 加载错误点击重新加载

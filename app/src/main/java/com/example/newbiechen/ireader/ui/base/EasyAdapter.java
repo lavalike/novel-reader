@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-6-5.
+ * Created by wangzhen on 17-6-5.
  * ListView 使用的Adapter
  */
 

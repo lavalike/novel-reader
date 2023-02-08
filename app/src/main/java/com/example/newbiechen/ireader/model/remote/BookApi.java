@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by newbiechen on 17-4-20.
+ * Created by wangzhen on 17-4-20.
  */
 
 public interface BookApi {

@@ -1,7 +1,7 @@
 package com.example.newbiechen.ireader.widget.page;
 
 /**
- * Created by newbiechen on 17-7-1.
+ * Created by wangzhen on 17-7-1.
  */
 
 public class TxtChapter {

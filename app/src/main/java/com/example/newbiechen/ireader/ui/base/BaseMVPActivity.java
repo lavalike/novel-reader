@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by newbiechen on 17-4-25.
+ * Created by wangzhen on 17-4-25.
  */
 
 public abstract class BaseMVPActivity<T extends BaseContract.BasePresenter> extends BaseActivity{

@@ -8,7 +8,7 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.ui.base.adapter.ViewHolderImpl;
 
 /**
- * Created by newbiechen on 17-5-19.
+ * Created by wangzhen on 17-5-19.
  */
 
 public class PageStyleHolder extends ViewHolderImpl<Drawable> {

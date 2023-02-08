@@ -33,7 +33,7 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by newbiechen on 17-7-1.
+ * Created by wangzhen on 17-7-1.
  * 问题:
  * 1. 异常处理没有做好
  */

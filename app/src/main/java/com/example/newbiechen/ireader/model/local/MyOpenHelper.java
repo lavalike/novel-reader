@@ -10,7 +10,7 @@ import com.example.newbiechen.ireader.model.local.update.Update2Helper;
 import org.greenrobot.greendao.database.Database;
 
 /**
- * Created by newbiechen on 2017/10/9.
+ * Created by wangzhen on 2017/10/9.
  */
 
 public class MyOpenHelper extends DaoMaster.DevOpenHelper{

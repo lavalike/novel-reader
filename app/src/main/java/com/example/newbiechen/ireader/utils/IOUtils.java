@@ -4,7 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * Created by newbiechen on 17-5-11.
+ * Created by wangzhen on 17-5-11.
  */
 
 public class IOUtils {

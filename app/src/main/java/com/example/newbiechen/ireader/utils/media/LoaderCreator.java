@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 
 /**
- * Created by newbiechen on 2018/1/14.
+ * Created by wangzhen on 2018/1/14.
  */
 
 public class LoaderCreator {

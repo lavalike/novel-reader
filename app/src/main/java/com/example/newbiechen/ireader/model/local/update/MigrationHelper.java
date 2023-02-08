@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by newbiechen on 2017/10/9.
+ * Created by wangzhen on 2017/10/9.
  * 数据库更新策略
  */
 

@@ -1,7 +1,7 @@
 package com.example.newbiechen.ireader.model.bean;
 
 /**
- * Created by newbiechen on 17-5-10.
+ * Created by wangzhen on 17-5-10.
  */
 
 public class ChapterInfoBean {

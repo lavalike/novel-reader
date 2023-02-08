@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 /**
- * Created by newbiechen on 17-4-19.
+ * Created by wangzhen on 17-4-19.
  * 前提是，保证不会重新绘制
  */
 

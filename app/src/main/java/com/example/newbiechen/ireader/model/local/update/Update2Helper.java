@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by newbiechen on 2018/1/5.
+ * Created by wangzhen on 2018/1/5.
  * 由于 BookChapterBean 做了一次表的大更改，所以需要自定义更新。
  * 作用：将数据库2.0 升级到 3.0
  */

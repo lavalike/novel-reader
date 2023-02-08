@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by newbiechen on 17-4-14.
+ * Created by wangzhen on 17-4-14.
  */
 
 public class SplashActivity extends AppCompatActivity {

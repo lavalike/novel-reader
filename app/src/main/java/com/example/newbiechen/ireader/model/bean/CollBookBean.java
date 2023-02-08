@@ -18,7 +18,7 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-5-8.
+ * Created by wangzhen on 17-5-8.
  * 收藏的书籍
  */
 @Entity

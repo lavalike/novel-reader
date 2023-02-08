@@ -22,7 +22,7 @@ import android.widget.Scroller;
 import com.example.newbiechen.ireader.R;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created by wangzhen on 17-7-24.
  */
 
 public class SimulationPageAnim extends HorizonPageAnim {

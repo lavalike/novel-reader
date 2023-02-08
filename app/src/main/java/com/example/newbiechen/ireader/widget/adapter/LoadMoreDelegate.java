@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
- * Created by newbiechen on 17-4-20.
+ * Created by wangzhen on 17-4-20.
  */
 
 public class LoadMoreDelegate implements WholeAdapter.ItemView {

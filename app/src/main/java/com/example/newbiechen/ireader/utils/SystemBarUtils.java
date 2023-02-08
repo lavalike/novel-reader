@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import com.example.newbiechen.ireader.R;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by wangzhen on 17-5-16.
  * 基于 Android 4.4
  *
  * 主要参数说明:

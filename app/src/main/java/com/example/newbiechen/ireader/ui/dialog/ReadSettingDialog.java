@@ -36,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by newbiechen on 17-5-18.
+ * Created by wangzhen on 17-5-18.
  */
 
 public class ReadSettingDialog extends Dialog {

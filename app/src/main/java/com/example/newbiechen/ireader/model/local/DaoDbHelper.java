@@ -7,7 +7,7 @@ import com.example.newbiechen.ireader.model.gen.DaoMaster;
 import com.example.newbiechen.ireader.model.gen.DaoSession;
 
 /**
- * Created by newbiechen on 17-4-26.
+ * Created by wangzhen on 17-4-26.
  */
 
 public class DaoDbHelper {

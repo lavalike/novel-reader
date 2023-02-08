@@ -11,7 +11,7 @@ import com.example.newbiechen.ireader.ui.base.adapter.IViewHolder;
 import com.example.newbiechen.ireader.widget.page.PageStyle;
 
 /**
- * Created by newbiechen on 17-5-19.
+ * Created by wangzhen on 17-5-19.
  */
 
 public class PageStyleAdapter extends BaseListAdapter<Drawable> {

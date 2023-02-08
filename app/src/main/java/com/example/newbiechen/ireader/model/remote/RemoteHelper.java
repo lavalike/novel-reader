@@ -15,7 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by newbiechen on 17-4-20.
+ * Created by wangzhen on 17-4-20.
  */
 
 public class RemoteHelper {

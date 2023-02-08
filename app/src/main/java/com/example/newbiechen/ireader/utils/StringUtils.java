@@ -17,7 +17,7 @@ import com.zqc.opencc.android.lib.ConversionType;
 import static com.example.newbiechen.ireader.model.local.ReadSettingManager.SHARED_READ_CONVERT_TYPE;
 
 /**
- * Created by newbiechen on 17-4-22.
+ * Created by wangzhen on 17-4-22.
  * 对文字操作的工具类
  */
 

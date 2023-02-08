@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created by wangzhen on 17-7-24.
  * 横向动画的模板
  */
 

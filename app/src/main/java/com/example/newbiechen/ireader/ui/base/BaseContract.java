@@ -1,7 +1,7 @@
 package com.example.newbiechen.ireader.ui.base;
 
 /**
- * Created by newbiechen on 17-4-26.
+ * Created by wangzhen on 17-4-26.
  */
 
 public interface BaseContract {

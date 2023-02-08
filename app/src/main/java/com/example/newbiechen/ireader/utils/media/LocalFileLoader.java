@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by newbiechen on 2018/1/14.
+ * Created by wangzhen on 2018/1/14.
  */
 
 public class LocalFileLoader extends CursorLoader {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by newbiechen on 17-7-23.
+ * Created by wangzhen on 17-7-23.
  * 原理:仿照ListView源码实现的上下滑动效果
  * Alter by: zeroAngus
  * <p>

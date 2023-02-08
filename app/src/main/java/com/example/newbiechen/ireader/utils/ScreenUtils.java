@@ -13,7 +13,7 @@ import com.example.newbiechen.ireader.App;
 import java.lang.reflect.Method;
 
 /**
- * Created by newbiechen on 17-5-1.
+ * Created by wangzhen on 17-5-1.
  */
 
 public class ScreenUtils {

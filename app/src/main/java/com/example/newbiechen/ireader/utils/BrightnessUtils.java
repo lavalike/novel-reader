@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 /**
- * Created by newbiechen on 17-5-19.
+ * Created by wangzhen on 17-5-19.
  * 调节亮度的工具类
  */
 

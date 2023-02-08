@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.example.newbiechen.ireader.App;
 
 /**
- * Created by newbiechen on 17-4-16.
+ * Created by wangzhen on 17-4-16.
  */
 
 public class SharedPreUtils {

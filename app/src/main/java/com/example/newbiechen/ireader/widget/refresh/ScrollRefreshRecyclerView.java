@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by newbiechen on 17-4-18.
+ * Created by wangzhen on 17-4-18.
  */
 
 public class ScrollRefreshRecyclerView extends ScrollRefreshLayout {

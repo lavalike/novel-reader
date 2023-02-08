@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by newbiechen on 17-4-27.
+ * Created by wangzhen on 17-4-27.
  */
 
 public class LogUtils {

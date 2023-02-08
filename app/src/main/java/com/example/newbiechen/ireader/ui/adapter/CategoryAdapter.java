@@ -15,7 +15,7 @@ import com.example.newbiechen.ireader.widget.page.TxtChapter;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-6-5.
+ * Created by wangzhen on 17-6-5.
  */
 
 public class CategoryAdapter extends EasyAdapter<TxtChapter> {

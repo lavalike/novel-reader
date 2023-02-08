@@ -14,7 +14,7 @@ import com.example.newbiechen.ireader.utils.Constant;
 import com.example.newbiechen.ireader.utils.StringUtils;
 
 /**
- * Created by newbiechen on 17-5-8.
+ * Created by wangzhen on 17-5-8.
  * CollectionBookView
  */
 

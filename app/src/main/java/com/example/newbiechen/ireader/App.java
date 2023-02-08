@@ -6,7 +6,7 @@ import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
- * Created by newbiechen on 17-4-15.
+ * Created by wangzhen on 17-4-15.
  */
 
 public class App extends Application {

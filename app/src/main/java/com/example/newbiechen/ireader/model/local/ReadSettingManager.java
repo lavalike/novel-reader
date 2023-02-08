@@ -6,7 +6,7 @@ import com.example.newbiechen.ireader.widget.page.PageMode;
 import com.example.newbiechen.ireader.widget.page.PageStyle;
 
 /**
- * Created by newbiechen on 17-5-17.
+ * Created by wangzhen on 17-5-17.
  * 阅读器的配置管理
  */
 

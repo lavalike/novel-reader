@@ -3,7 +3,7 @@ package com.example.newbiechen.ireader.utils;
 import java.io.File;
 
 /**
- * Created by newbiechen on 17-4-16.
+ * Created by wangzhen on 17-4-16.
  */
 
 public class Constant {

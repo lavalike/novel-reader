@@ -1,7 +1,7 @@
 package com.example.newbiechen.ireader.utils;
 
 /**
- * Created by newbiechen on 2018/1/1.
+ * Created by wangzhen on 2018/1/1.
  */
 
 import java.security.MessageDigest;

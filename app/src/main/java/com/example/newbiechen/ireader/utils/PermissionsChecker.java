@@ -5,7 +5,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
 /**
- * Created by newbiechen on 2017/10/8.
+ * Created by wangzhen on 2017/10/8.
  */
 
 public class PermissionsChecker {

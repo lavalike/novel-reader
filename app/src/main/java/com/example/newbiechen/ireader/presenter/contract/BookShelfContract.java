@@ -3,7 +3,7 @@ package com.example.newbiechen.ireader.presenter.contract;
 import com.example.newbiechen.ireader.ui.base.BaseContract;
 
 /**
- * Created by newbiechen on 17-5-8.
+ * Created by wangzhen on 17-5-8.
  */
 
 public interface BookShelfContract {

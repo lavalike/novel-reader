@@ -21,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by wangzhen on 17-5-16.
  */
 
 public class ReadPresenter extends RxPresenter<ReadContract.View>

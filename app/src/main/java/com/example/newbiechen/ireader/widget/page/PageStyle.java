@@ -5,7 +5,7 @@ import android.support.annotation.ColorRes;
 import com.example.newbiechen.ireader.R;
 
 /**
- * Created by newbiechen on 2018/2/5.
+ * Created by wangzhen on 2018/2/5.
  * 作用：页面的展示风格。
  */
 

@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 /**
- * Created by newbiechen on 17-6-6.
+ * Created by wangzhen on 17-6-6.
  * 阅读界面的更多设置
  */
 

@@ -60,7 +60,7 @@ import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by wangzhen on 17-5-16.
  */
 
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
