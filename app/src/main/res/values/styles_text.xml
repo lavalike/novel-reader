@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<!--Common-->
+	<style name="Theme.TextAppearance.Common"/>
+	<style name="Theme.TextAppearance.Common.SingleLine">
+		<item name="android:singleLine">true</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:ellipsize">end</item>
+	</style>
+	
+	<!--表示领域-->
+	<style name="Theme.TextAppearance.Billboard"/>
+	<style name="Theme.TextAppearance.Billboard.Title">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:padding">10dp</item>
+		<item name="android:textColor">@color/text_default</item>
+		<item name="android:textSize">@dimen/text.large</item>
+	</style>
+	
+	<!--书籍-->
+	<style name="Theme.TextAppearance.Book"/>
+	<style name="Theme.TextAppearance.Book.Name">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:ellipsize">end</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:textColor">@color/text_default</item>
+		<item name="android:textSize">16sp</item>
+	</style>
+	
+	<!--ReadActivity-->
+	<style name="Theme.TextAppearance.Read"></style>
+	<style name="Theme.TextAppearance.Read.TopMenu">
+		<item name="android:layout_width">50dp</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textColor">@color/read_menu_text</item>
+		<item name="android:textSize">@dimen/read.text.top</item>
+	</style>
+	<style name="Theme.TextAppearance.Read.BottomMenu">
+		<item name="android:textColor">@color/read_menu_text</item>
+		<item name="android:textSize">@dimen/read.text.bottom</item>
+	</style>
+	
+	
+	<style name="Theme.TextAppearance.Read.BottomMenu.Button"
+		parent="Theme.TextAppearance.Read.BottomMenu">
+		<item name="android:gravity">center_horizontal|bottom</item>
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_weight">1</item>
+	</style>
+	
+	
+	<style name="Theme.TextAppearance.File"/>
+	<style name="Theme.TextAppearance.File.Tag">
+		<item name="android:layout_width">38dp</item>
+		<item name="android:layout_height">18dp</item>
+		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:gravity">center</item>
+	</style>
+</resources>

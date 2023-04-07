@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.wangzhen.reader"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+    }
+    signingConfigs {
+        release {
+            storeFile file("reader.keystore")
+            storePassword "123456"
+            keyAlias "reader"
+            keyPassword "123456"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+greendao {
+    schemaVersion 3
+    daoPackage 'com.wangzhen.reader.model.gen'
+    targetGenDir 'src/main/java'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.2.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    implementation "com.jakewharton:butterknife:10.2.3"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.3"
+
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.19"
+
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+
+    implementation "com.squareup.retrofit2:retrofit:2.7.2"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.2"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.2"
+
+    implementation "com.github.bumptech.glide:glide:4.9.0"
+
+    implementation "org.greenrobot:greendao:3.2.2"
+
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:1.5.4"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:1.6.1"
+
+    implementation 'me.gujun.android.taggroup:library:1.4@aar'
+
+    // lavalike
+    implementation 'com.github.lavalike:adapter:0.2.0'
+    implementation 'com.github.lavalike:circle-imageview:0.0.1'
+}
