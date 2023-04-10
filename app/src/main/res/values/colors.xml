@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#40CFC8</color>
-    <color name="colorPrimaryDark">#1CA39C</color>
+    <color name="colorPrimary">#F18E1A</color>
+    <color name="colorPrimaryDark">#C57415</color>
     <color name="colorAccent">#FF4081</color>
     <color name="theme_background">@color/white</color>
 
@@ -21,7 +21,8 @@
     <color name="light_blue">#039BE5</color>
     <color name="light_translucent">#23000000</color>
     <color name="common_gray">#EEEEEE</color>
-    
+    <color name="textColor">#3b424c</color>
+
     <!--list-->
     <color name="divider_common">#727272</color>
     <color name="divider_dash">@color/light_white</color>
@@ -29,8 +30,8 @@
     <color name="vidier_narrow">#E3E3E3</color>
     <!--通用分割线粗-->
     <color name="divider_wide">@color/light_white</color>
-    
-    
+
+
     <!--text-->
 
     <color name="text_default">@color/black</color>
@@ -64,7 +65,7 @@
     <color name="download_wait">#afafad</color>
     <color name="download_error">#e33a35</color>
     <color name="download_finish">#8bd715</color>
-    
+
     <!--read-->
     <color name="read_bg_1">#E6DDD5</color>
     <color name="read_bg_2">#EBDABC</color>
@@ -78,10 +79,10 @@
     <color name="read_font_3">#3b424c</color>
     <color name="read_font_4">#3b424c</color>
     <color name="read_font_5">#a0a4a9</color>
-    
+
     <color name="read_bg_night">#000000</color>
     <color name="read_font_night">#99ffffff</color>
-    
+
     <color name="read_menu_bg">#191919</color>
     <color name="read_menu_text">#CBCBCB</color>
     <color name="read_bar_translucent">#88000000</color>

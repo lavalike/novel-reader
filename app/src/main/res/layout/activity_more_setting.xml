@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
-
     <RelativeLayout
         android:id="@+id/more_setting_rl_volume"
         android:layout_width="match_parent"
@@ -23,31 +21,6 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/more_setting_sc_volume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:clickable="false"
-            android:longClickable="false" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/more_setting_rl_full_screen"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/selector_common_bg"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="全屏模式" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/more_setting_sc_full_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

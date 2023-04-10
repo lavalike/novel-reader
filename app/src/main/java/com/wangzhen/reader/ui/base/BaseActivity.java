@@ -1,15 +1,12 @@
 package com.wangzhen.reader.ui.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.wangzhen.reader.R;
+import com.wangzhen.commons.toolbar.ToolbarActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,7 +16,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * Created by PC on 2016/9/8.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends ToolbarActivity {
     private static final int INVALID_VAL = -1;
 
     protected CompositeDisposable mDisposable;
@@ -39,14 +36,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             mDisposable = new CompositeDisposable();
         }
         mDisposable.add(d);
-    }
-
-    /**
-     * 配置Toolbar
-     *
-     * @param toolbar
-     */
-    protected void setUpToolbar(Toolbar toolbar) {
     }
 
     protected void initData(Bundle savedInstanceState) {
@@ -79,22 +68,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getContentId());
         initData(savedInstanceState);
         unbinder = ButterKnife.bind(this);
-        initToolbar();
         initWidget();
         initClick();
         processLogic();
 
     }
-
-    private void initToolbar() {
-        //更严谨是通过反射判断是否存在Toolbar
-        mToolbar = findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            supportActionBar(mToolbar);
-            setUpToolbar(mToolbar);
-        }
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -103,23 +81,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mDisposable != null) {
             mDisposable.dispose();
         }
-    }
-
-    /**************************used method area*******************************************/
-
-    protected void startActivity(Class<? extends AppCompatActivity> activity) {
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
-    }
-
-    protected ActionBar supportActionBar(Toolbar toolbar) {
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
-        mToolbar.setNavigationOnClickListener((v) -> finish());
-        return actionBar;
     }
 }

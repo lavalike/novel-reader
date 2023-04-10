@@ -1,21 +1,26 @@
 package com.wangzhen.reader.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.wangzhen.commons.toolbar.impl.IconMenuToolbar;
+import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.ActivityMainBinding;
 import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.utils.PermissionsChecker;
 import com.wangzhen.reader.utils.ToastUtils;
@@ -29,47 +34,29 @@ public class MainActivity extends BaseActivity {
     private boolean isPrepareFinish = false;
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        findViewById(R.id.btn_open).setOnClickListener(view -> open());
+    }
+
+    @Override
     protected int getContentId() {
         return R.layout.activity_main;
     }
 
-    @Override
-    protected void setUpToolbar(Toolbar toolbar) {
-        super.setUpToolbar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setTitle(getString(R.string.app_name));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Class<?> activityCls = null;
-        if (id == R.id.action_scan_local_book) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                if (mPermissionsChecker == null) {
-                    mPermissionsChecker = new PermissionsChecker(this);
-                }
-                //获取读取和写入SD卡的权限
-                if (mPermissionsChecker.lacksPermissions(PERMISSIONS)) {
-                    //请求权限
-                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_STORAGE);
-                    return super.onOptionsItemSelected(item);
-                }
+    private void open() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (mPermissionsChecker == null) {
+                mPermissionsChecker = new PermissionsChecker(this);
             }
-            activityCls = FileSystemActivity.class;
+            //获取读取和写入SD卡的权限
+            if (mPermissionsChecker.lacksPermissions(PERMISSIONS)) {
+                //请求权限
+                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_STORAGE);
+            }
         }
-        if (activityCls != null) {
-            Intent intent = new Intent(this, activityCls);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
+        Intent intent = new Intent(this, FileSystemActivity.class);
+        startActivity(intent);
     }
 
     @Override

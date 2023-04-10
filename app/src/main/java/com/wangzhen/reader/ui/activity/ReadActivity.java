@@ -17,10 +17,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.Settings;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -33,6 +29,10 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.appbar.AppBarLayout;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
@@ -47,7 +47,6 @@ import com.wangzhen.reader.utils.LogUtils;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.ScreenUtils;
 import com.wangzhen.reader.utils.StringUtils;
-import com.wangzhen.reader.utils.SystemBarUtils;
 import com.wangzhen.reader.widget.page.PageLoader;
 import com.wangzhen.reader.widget.page.PageView;
 import com.wangzhen.reader.widget.page.TxtChapter;
@@ -182,7 +181,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     /***************params*****************/
     private boolean isCollected = false; // isFromSDCard
     private boolean isNightMode = false;
-    private boolean isFullScreen = false;
     private boolean isRegistered = false;
 
     private String mBookId;
@@ -207,18 +205,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
         isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
         isNightMode = ReadSettingManager.getInstance().isNightMode();
-        isFullScreen = ReadSettingManager.getInstance().isFullScreen();
-
         mBookId = mCollBook.get_id();
-    }
-
-    @Override
-    protected void setUpToolbar(Toolbar toolbar) {
-        super.setUpToolbar(toolbar);
-        //设置标题
-        toolbar.setTitle(mCollBook.getTitle());
-        //半透明化StatusBar
-        SystemBarUtils.transparentStatusBar(this);
     }
 
     @Override
@@ -269,18 +256,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     }
 
     private void initBottomMenu() {
-        //判断是否全屏
-        if (ReadSettingManager.getInstance().isFullScreen()) {
-            //还需要设置mBottomMenu的底部高度
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
-            params.bottomMargin = ScreenUtils.getNavigationBarHeight();
-            mLlBottomMenu.setLayoutParams(params);
-        } else {
-            //设置mBottomMenu的底部距离
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
-            params.bottomMargin = 0;
-            mLlBottomMenu.setLayoutParams(params);
-        }
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
+        params.bottomMargin = 0;
+        mLlBottomMenu.setLayoutParams(params);
     }
 
     @Override
@@ -489,18 +467,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
 
     private void showSystemBar() {
         //显示
-        SystemBarUtils.showUnStableStatusBar(this);
-        if (isFullScreen) {
-            SystemBarUtils.showUnStableNavBar(this);
-        }
+
     }
 
     private void hideSystemBar() {
         //隐藏
-        SystemBarUtils.hideStableStatusBar(this);
-        if (isFullScreen) {
-            SystemBarUtils.hideStableNavBar(this);
-        }
+
     }
 
     /**
@@ -590,11 +562,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     @Override
     public void onBackPressed() {
         if (mAblTopMenu.getVisibility() == View.VISIBLE) {
-            // 非全屏下才收缩，全屏下直接退出
-            if (!ReadSettingManager.getInstance().isFullScreen()) {
-                toggleMenu(true);
-                return;
-            }
+            toggleMenu(true);
         } else if (mSettingDialog.isShowing()) {
             mSettingDialog.dismiss();
             return;
@@ -665,26 +633,5 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
                 break;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        SystemBarUtils.hideStableStatusBar(this);
-        if (requestCode == REQUEST_MORE_SETTING) {
-            boolean fullScreen = ReadSettingManager.getInstance().isFullScreen();
-            if (isFullScreen != fullScreen) {
-                isFullScreen = fullScreen;
-                // 刷新BottomMenu
-                initBottomMenu();
-            }
-
-            // 设置显示状态
-            if (isFullScreen) {
-                SystemBarUtils.hideStableNavBar(this);
-            } else {
-                SystemBarUtils.showStableNavBar(this);
-            }
-        }
     }
 }

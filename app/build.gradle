@@ -40,6 +40,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    viewBinding.enabled = true
 }
 
 greendao {
@@ -79,4 +81,5 @@ dependencies {
     // lavalike
     implementation 'com.github.lavalike:adapter:0.2.0'
     implementation 'com.github.lavalike:circle-imageview:0.0.1'
+    implementation 'com.github.lavalike:commons:0.0.3'
 }

@@ -1,22 +1,20 @@
 <resources>
-    
+
     <!-- Base application theme. -->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="CommonTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:listDivider">@drawable/shape_divider_dash</item>
-        <item name="android:actionOverflowMenuStyle">@style/ActionButton.Overflow.Menu</item>
+
+        <item name="textAllCaps">false</item>
     </style>
-    
-    <style name="AppTheme" parent="BaseAppTheme"/>
-    
+
     <!--Splash-->
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:background">@color/transparent</item>
     </style>
-    
+
     <!--Dialog-->
     <style name="CommonDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
@@ -29,27 +27,27 @@
         <!--直接写windowEnter或者windowExit 是无效的-->Re
         <item name="android:windowAnimationStyle">@style/anim_slide_left_in_right_out</item>
     </style>
-    
+
     <style name="ReadSettingDialog" parent="CommonDialog">
         <item name="android:windowAnimationStyle">@style/anim_slide_bottom_in_out</item>
     </style>
-    
+
     <!--animation-->
     <style name="anim_slide_bottom_in_out" parent="android:Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/slide_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
     </style>
-    
+
     <style name="anim_slide_left_in_right_out" parent="android:Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
         <item name="android:windowExitAnimation">@anim/slide_right_out</item>
     </style>
-    
+
     <style name="anim_slide_right_in_left_out" parent="android:Animation.Dialog">
         <item name="android:windowExitAnimation">@anim/slide_right_out</item>
         <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
     </style>
-    
+
     <!--Toolbar-->
     <style name="Theme.ToolBar.Menu" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!-- 设置-弹窗的背景-颜色-->
@@ -82,38 +80,39 @@
         <item name="android:divider">@color/divider_common</item>
         <item name="android:dividerHeight">@dimen/divider.line</item>
     </style>
-    
+
     <!--Common-->
-    <style name="Theme" parent="AppTheme"/>
-    
-    
-    <style name="Theme.Linear"/>
-    
+    <style name="Theme" parent="AppTheme" />
+
+
+    <style name="Theme.Linear" />
+
     <style name="Theme.Linear.Weight" parent="Theme.Linear">
         <item name="android:layout_weight">1</item>
     </style>
-    
+
     <style name="Theme.Linear.Weight.Wrap_Width" parent="Theme.Linear.Weight">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">0dp</item>
     </style>
-    
+
     <style name="Theme.Linear.Weight.Wrap_Height" parent="Theme.Linear.Weight">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <style name="Theme.Linear.Weight.Match_Width" parent="Theme.Linear.Weight">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
     </style>
-    
+
     <style name="Theme.Linear.Weight.Match_Height" parent="Theme.Linear.Weight">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
-    
+
     <!-- Widget:修改View的样式的-->
-    <style name="Theme.Widget"/>
+    <style name="Theme.Widget" />
 
     <!--ExpandListView-->
     <style name="Theme.Widget.DefaultExpandListView">
@@ -123,10 +122,10 @@
         <item name="android:groupIndicator">@null</item>
         <item name="android:listSelector">@drawable/selector_common_bg</item>
     </style>
-    
+
     <!--图片-->
-    <style name="Theme.Widget.ImageView"/>
-    
+    <style name="Theme.Widget.ImageView" />
+
     <!--书籍的显示封面-->
     <style name="Theme.Widget.ImageView.Book">
         <item name="android:layout_width">@dimen/book.cover.width</item>
@@ -134,7 +133,7 @@
         <item name="android:src">@drawable/ic_book_loading</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
-    
+
     <!-- TextAppearance:修改 -->
-    <style name="Theme.TextAppearance"/>
+    <style name="Theme.TextAppearance" />
 </resources>
