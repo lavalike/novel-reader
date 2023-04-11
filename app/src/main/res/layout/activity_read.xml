@@ -136,19 +136,19 @@
                     android:id="@+id/read_tv_category"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@drawable/ic_read_menu_category"
-                    android:text="@string/read.category" />
+                    android:text="@string/read_category" />
 
                 <TextView
                     android:id="@+id/read_tv_night_mode"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@drawable/ic_read_menu_night"
-                    android:text="@string/mode.night" />
+                    android:text="@string/mode_night" />
 
                 <TextView
                     android:id="@+id/read_tv_setting"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@drawable/ic_read_menu_font"
-                    android:text="@string/read.setting" />
+                    android:text="@string/read_setting" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -162,8 +162,8 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:paddingTop="@dimen/padding.large"
-        android:paddingBottom="@dimen/padding.large">
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large">
 
         <TextView
             android:layout_width="wrap_content"

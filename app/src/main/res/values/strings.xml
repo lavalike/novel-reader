@@ -1,58 +1,22 @@
 <resources>
     <string name="app_name">图书</string>
-
-    <!--menu-->
-    <string name="menu.action.search">搜索</string>
-    <string name="menu.action.login">请登录</string>
-    <string name="menu.action.message">我的消息</string>
-    <string name="menu.action.download">下载列表</string>
-    <string name="menu.action.sync">同步书架</string>
-    <string name="menu.action.scan">扫描本地书籍</string>
-    <string name="menu.action.transfer">WIFI传书</string>
-    <string name="menu.action.feedback">意见反馈</string>
-    <string name="menu.action.night_mode">夜间模式</string>
-    <string name="menu.action.setting">设置</string>
-
-    <string name="menu.action.top">置顶</string>
-    <string name="menu.action.cache">缓存</string>
-    <string name="menu.action.delete">删除</string>
-    <string name="menu.action.batch_manage">批量管理</string>
-
-    <!--SplashActivity-->
-    <string name="splash.skip">跳过</string>
-
-    <!--user:用户的信息-->
-    <string name="user.lv">&#160;lv.%1$d</string>
-    <!--book:书籍的信息-->
-    <string name="book.type">[%1$s]</string>
-    <string name="book.recommend">%1$d 人推荐</string>
-    <string name="book.message">%1$d人在追 |&#160; %2$s%%读者留存</string>
-    <string name="book.word">|&#160;%1$d&#160;万字</string>
-
-    <!--sort:每类的书-->
-    <string name="sort.book_count">%1$d 本</string>
-
     <!--mode-->
-    <string name="mode.night">夜间</string>
-    <string name="mode.morning">日间</string>
+    <string name="mode_night">夜间</string>
+    <string name="mode_morning">日间</string>
 
     <!--read-->
-    <string name="read.community">社区</string>
-    <string name="read.brief">简介</string>
-    <string name="read.setting">设置</string>
-    <string name="read.download">缓存</string>'
-    <string name="read.category">目录</string>
-    <string name="read.no_chapter">第 %1$d 章(%2$d)</string>
+    <string name="read_setting">设置</string>
+    <string name="read_category">目录</string>
 
     <!--file system-->
-    <string name="file.sub_count">%1$d 项</string>
-    <string name="file.path">存储卡:%1$s</string>
-    <string name="file.add_shelf">加入书架</string>
-    <string name="file.add_shelves">加入书架(%1$d)</string>
-    <string name="file.add_succeed">成功添加%1$d本书</string>
+    <string name="file_sub_count">%1$d 项</string>
+    <string name="file_path">存储卡:%1$s</string>
+    <string name="file_add_shelf">加入书架</string>
+    <string name="file_add_shelves">加入书架(%1$d)</string>
+    <string name="file_add_succeed">成功添加%1$d本书</string>
 
     <!--常用-->
-    <string name="common.tip">提示</string>
-    <string name="common.sure">确定</string>
-    <string name="common.cancel">取消</string>
+    <string name="common_tip">提示</string>
+    <string name="common_sure">确定</string>
+    <string name="common_cancel">取消</string>
 </resources>
