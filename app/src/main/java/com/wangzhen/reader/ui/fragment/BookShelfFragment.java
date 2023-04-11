@@ -2,41 +2,47 @@ package com.wangzhen.reader.ui.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.FragmentBookshelfBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.activity.ReadActivity;
 import com.wangzhen.reader.ui.adapter.CollBookAdapter;
-import com.wangzhen.reader.ui.base.BaseFragment;
+import com.wangzhen.reader.ui.base.NewBaseFragment;
 
 import java.util.Locale;
-
-import butterknife.BindView;
 
 /**
  * Created by wangzhen on 17-4-15.
  */
 
-public class BookShelfFragment extends BaseFragment {
-    @BindView(R.id.book_shelf_rv_content)
-    RecyclerView mRvContent;
+public class BookShelfFragment extends NewBaseFragment {
+    private FragmentBookshelfBinding binding;
+    private RecyclerView mRvContent;
 
     private CollBookAdapter mCollBookAdapter;
 
+    @Nullable
     @Override
-    protected int getContentId() {
-        return R.layout.fragment_bookshelf;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentBookshelfBinding.inflate(inflater);
+        mRvContent = binding.bookShelfRvContent;
+        return binding.getRoot();
     }
 
     @Override
-    protected void initWidget(Bundle savedInstanceState) {
-        super.initWidget(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setUpAdapter();
     }
 
