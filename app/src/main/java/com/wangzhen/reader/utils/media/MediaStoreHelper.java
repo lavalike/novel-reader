@@ -3,6 +3,7 @@ package com.wangzhen.reader.utils.media;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -23,13 +24,11 @@ public class MediaStoreHelper {
      * <p>
      * 暂时只支持 TXT
      *
-     * @param activity
-     * @param resultCallback
+     * @param activity       activity
+     * @param resultCallback callback
      */
     public static void getAllBookFile(FragmentActivity activity, MediaResultCallback resultCallback) {
-        // 将文件的获取处理交给 LoaderManager。
-        activity.getSupportLoaderManager()
-                .initLoader(LoaderCreator.ALL_BOOK_FILE, null, new MediaLoaderCallbacks(activity, resultCallback));
+        LoaderManager.getInstance(activity).initLoader(LoaderCreator.ALL_BOOK_FILE, null, new MediaLoaderCallbacks(activity, resultCallback));
     }
 
     public interface MediaResultCallback {
