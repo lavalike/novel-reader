@@ -35,12 +35,10 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by wangzhen on 17-7-1.
+ * PageLoader
+ * Created by wangzhen on 2023/4/11
  */
-
 public abstract class PageLoader {
-    private static final String TAG = "PageLoader";
-
     // 当前页面的状态
     public static final int STATUS_LOADING = 1;         // 正在加载
     public static final int STATUS_FINISH = 2;          // 加载完成
@@ -1406,13 +1404,6 @@ public abstract class PageLoader {
          * @param pos:切换章节的序号
          */
         void onChapterChange(int pos);
-
-        /**
-         * 作用：请求加载章节内容
-         *
-         * @param requestChapters:需要下载的章节列表
-         */
-        void requestChapters(List<TxtChapter> requestChapters);
 
         /**
          * 作用：章节目录加载完成时候回调

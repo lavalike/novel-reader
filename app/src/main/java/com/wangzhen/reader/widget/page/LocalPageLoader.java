@@ -32,11 +32,9 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by wangzhen on 17-7-1.
- * 问题:
- * 1. 异常处理没有做好
+ * LocalPageLoader
+ * Created by wangzhen on 2023/4/11
  */
-
 public class LocalPageLoader extends PageLoader {
     private static final String TAG = "LocalPageLoader";
     //默认从文件中获取数据的长度
@@ -49,11 +47,7 @@ public class LocalPageLoader extends PageLoader {
 
     //正则表达式章节匹配模式
     // "(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节回集卷])(.*)"
-    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(\u7b2c)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\u7ae0\u8282\u56de\u96c6\u5377])(.{0,30})$",
-            "^(\\s{0,4})([\\(\u3010\u300a]?(\u5377)?)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\\.:\uff1a\u0020\f\t])(.{0,30})$",
-            "^(\\s{0,4})([\\(\uff08\u3010\u300a])(.{0,30})([\\)\uff09\u3011\u300b])(\\s{0,2})$",
-            "^(\\s{0,4})(\u6b63\u6587)(.{0,20})$",
-            "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"};
+    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(\u7b2c)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\u7ae0\u8282\u56de\u96c6\u5377])(.{0,30})$", "^(\\s{0,4})([\\(\u3010\u300a]?(\u5377)?)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\\.:\uff1a\u0020\f\t])(.{0,30})$", "^(\\s{0,4})([\\(\uff08\u3010\u300a])(.{0,30})([\\)\uff09\u3011\u300b])(\\s{0,2})$", "^(\\s{0,4})(\u6b63\u6587)(.{0,20})$", "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"};
 
     //章节解析模式
     private Pattern mChapterPattern = null;
@@ -323,11 +317,9 @@ public class LocalPageLoader extends PageLoader {
             //表示当前CollBook已经阅读
             mCollBook.setIsUpdate(false);
             mCollBook.setLastChapter(mChapterList.get(mCurChapterPos).getTitle());
-            mCollBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            mCollBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
             //直接更新
-            BookRepository.getInstance()
-                    .saveCollBook(mCollBook);
+            BookRepository.getInstance().saveCollBook(mCollBook);
         }
     }
 
@@ -350,9 +342,7 @@ public class LocalPageLoader extends PageLoader {
         String lastModified = StringUtils.dateConvert(mBookFile.lastModified(), Constant.FORMAT_BOOK_DATE);
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.isUpdate() && mCollBook.getUpdated() != null
-                && mCollBook.getUpdated().equals(lastModified)
-                && mCollBook.getBookChapters() != null) {
+        if (!mCollBook.isUpdate() && mCollBook.getUpdated() != null && mCollBook.getUpdated().equals(lastModified) && mCollBook.getBookChapters() != null) {
 
             mChapterList = convertTxtChapter(mCollBook.getBookChapters());
             isChapterListPrepare = true;
@@ -375,52 +365,50 @@ public class LocalPageLoader extends PageLoader {
                 loadChapters();
                 e.onSuccess(new Void());
             }
-        }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<Void>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mChapterDisp = d;
-                    }
+        }).compose(RxUtils::toSimpleSingle).subscribe(new SingleObserver<Void>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                mChapterDisp = d;
+            }
 
-                    @Override
-                    public void onSuccess(Void value) {
-                        mChapterDisp = null;
-                        isChapterListPrepare = true;
+            @Override
+            public void onSuccess(Void value) {
+                mChapterDisp = null;
+                isChapterListPrepare = true;
 
-                        // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(mChapterList);
-                        }
+                // 提示目录加载完成
+                if (mPageChangeListener != null) {
+                    mPageChangeListener.onCategoryFinish(mChapterList);
+                }
 
-                        // 存储章节到数据库
-                        List<BookChapterBean> bookChapterBeanList = new ArrayList<>();
-                        for (int i = 0; i < mChapterList.size(); ++i) {
-                            TxtChapter chapter = mChapterList.get(i);
-                            BookChapterBean bean = new BookChapterBean();
-                            bean.setId(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath()
-                                    + File.separator + chapter.title)); // 将路径+i 作为唯一值
-                            bean.setTitle(chapter.getTitle());
-                            bean.setStart(chapter.getStart());
-                            bean.setUnreadble(false);
-                            bean.setEnd(chapter.getEnd());
-                            bookChapterBeanList.add(bean);
-                        }
-                        mCollBook.setBookChapters(bookChapterBeanList);
-                        mCollBook.setUpdated(lastModified);
+                // 存储章节到数据库
+                List<BookChapterBean> bookChapterBeanList = new ArrayList<>();
+                for (int i = 0; i < mChapterList.size(); ++i) {
+                    TxtChapter chapter = mChapterList.get(i);
+                    BookChapterBean bean = new BookChapterBean();
+                    bean.setId(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + File.separator + chapter.title)); // 将路径+i 作为唯一值
+                    bean.setTitle(chapter.getTitle());
+                    bean.setStart(chapter.getStart());
+                    bean.setUnreadble(false);
+                    bean.setEnd(chapter.getEnd());
+                    bookChapterBeanList.add(bean);
+                }
+                mCollBook.setBookChapters(bookChapterBeanList);
+                mCollBook.setUpdated(lastModified);
 
-                        BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList);
-                        BookRepository.getInstance().saveCollBook(mCollBook);
+                BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList);
+                BookRepository.getInstance().saveCollBook(mCollBook);
 
-                        // 加载并显示当前章节
-                        openChapter();
-                    }
+                // 加载并显示当前章节
+                openChapter();
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError();
-                        LogUtils.d(TAG, "file load error:" + e.toString());
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                chapterError();
+                LogUtils.d(TAG, "file load error:" + e.toString());
+            }
+        });
     }
 
     @Override

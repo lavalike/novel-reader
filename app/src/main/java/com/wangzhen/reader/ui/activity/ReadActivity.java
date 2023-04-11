@@ -18,7 +18,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.wangzhen.reader.R;
@@ -38,10 +38,8 @@ import com.wangzhen.reader.databinding.ActivityReadBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.model.local.ReadSettingManager;
-import com.wangzhen.reader.presenter.ReadPresenter;
-import com.wangzhen.reader.presenter.contract.ReadContract;
 import com.wangzhen.reader.ui.adapter.CategoryAdapter;
-import com.wangzhen.reader.ui.base.BaseMVPActivity;
+import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.dialog.ReadSettingDialog;
 import com.wangzhen.reader.utils.BrightnessUtils;
 import com.wangzhen.reader.utils.LogUtils;
@@ -60,7 +58,7 @@ import io.reactivex.disposables.Disposable;
  * ReadActivity
  * Created by wangzhen on 2023/4/11
  */
-public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implements ReadContract.View {
+public class ReadActivity extends BaseActivity {
     private ActivityReadBinding binding;
     private static final String TAG = "ReadActivity";
     public static final int REQUEST_MORE_SETTING = 1;
@@ -202,11 +200,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         mLvCategory = binding.readIvCategory;
     }
 
-    @Override
-    protected ReadContract.Presenter bindPresenter() {
-        return new ReadPresenter();
-    }
-
     private void initEvents() {
         mBtnBack.setOnClickListener(view -> finish());
         mBookName.setText(mCollBook.getTitle());
@@ -255,14 +248,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
             }
 
             @Override
-            public void requestChapters(List<TxtChapter> requestChapters) {
-                mPresenter.loadChapter(mBookId, requestChapters);
-                mHandler.sendEmptyMessage(WHAT_CATEGORY);
-                //隐藏提示
-                mTvPageTip.setVisibility(GONE);
-            }
-
-            @Override
             public void onCategoryFinish(List<TxtChapter> chapters) {
                 for (TxtChapter chapter : chapters) {
                     chapter.setTitle(chapter.getTitle());
@@ -275,11 +260,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
                 mSbChapterProgress.setMax(Math.max(0, count - 1));
                 mSbChapterProgress.setProgress(0);
                 // 如果处于错误状态，那么就冻结使用
-                if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
-                    mSbChapterProgress.setEnabled(false);
-                } else {
-                    mSbChapterProgress.setEnabled(true);
-                }
+                mSbChapterProgress.setEnabled(mPageLoader.getPageStatus() != PageLoader.STATUS_LOADING && mPageLoader.getPageStatus() != PageLoader.STATUS_ERROR);
             }
 
             @Override
@@ -339,7 +320,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         });
 
         mLvCategory.setOnItemClickListener((parent, view, position, id) -> {
-            mDlSlide.closeDrawer(Gravity.START);
+            mDlSlide.closeDrawer(GravityCompat.START);
             mPageLoader.skipToChapter(position);
         });
 
@@ -351,7 +332,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
             //切换菜单
             toggleMenu(true);
             //打开侧滑动栏
-            mDlSlide.openDrawer(Gravity.START);
+            mDlSlide.openDrawer(GravityCompat.START);
         });
         mTvSetting.setOnClickListener((v) -> {
             toggleMenu(false);
@@ -516,33 +497,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         addDisposable(disposable);
     }
 
-    /***************************view************************************/
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void complete() {
-
-    }
-
-    @Override
-    public void finishChapter() {
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
-            mHandler.sendEmptyMessage(WHAT_CHAPTER);
-        }
-        // 当完成章节的时候，刷新列表
-        mCategoryAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void errorChapter() {
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
-            mPageLoader.chapterError();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (mTopMenuContainer.getVisibility() == View.VISIBLE) {
@@ -550,15 +504,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         } else if (mSettingDialog.isShowing()) {
             mSettingDialog.dismiss();
             return;
-        } else if (mDlSlide.isDrawerOpen(Gravity.START)) {
-            mDlSlide.closeDrawer(Gravity.START);
+        } else if (mDlSlide.isDrawerOpen(GravityCompat.START)) {
+            mDlSlide.closeDrawer(GravityCompat.START);
             return;
         }
-        exit();
-    }
-
-    // 退出
-    private void exit() {
         super.onBackPressed();
     }
 

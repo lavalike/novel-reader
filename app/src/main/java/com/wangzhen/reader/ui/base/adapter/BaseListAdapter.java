@@ -1,9 +1,10 @@
 package com.wangzhen.reader.ui.base.adapter;
 
 import android.os.Handler;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by wangzhen on 17-3-21.
  */
 
-public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "BaseListAdapter";
     /*common statement*/
@@ -42,23 +43,23 @@ public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerV
             throw new IllegalArgumentException("The ViewHolder item must extend BaseViewHolder");
 
         IViewHolder<T> iHolder = ((BaseViewHolder) holder).holder;
-        iHolder.onBind(getItem(position),position);
+        iHolder.onBind(getItem(position), position);
 
         //设置点击事件
-        holder.itemView.setOnClickListener((v)->{
-            if (mClickListener != null){
-                mClickListener.onItemClick(v,position);
+        holder.itemView.setOnClickListener((v) -> {
+            if (mClickListener != null) {
+                mClickListener.onItemClick(v, position);
             }
             //adapter监听点击事件
             iHolder.onClick();
-            onItemClick(v,position);
+            onItemClick(v, position);
         });
         //设置长点击事件
         holder.itemView.setOnLongClickListener(
                 (v) -> {
                     boolean isClicked = false;
-                    if (mLongClickListener != null){
-                        isClicked =  mLongClickListener.onItemLongClick(v,position);
+                    if (mLongClickListener != null) {
+                        isClicked = mLongClickListener.onItemLongClick(v, position);
                     }
                     return isClicked;
                 }
@@ -70,10 +71,10 @@ public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerV
         return mList.size();
     }
 
-    protected void onItemClick(View v,int pos){
+    protected void onItemClick(View v, int pos) {
     }
 
-    protected void onItemLongClick(View v,int pos){
+    protected void onItemLongClick(View v, int pos) {
     }
 
     /******************************public area***********************************/
@@ -82,21 +83,21 @@ public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerV
         this.mClickListener = mListener;
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener mListener){
+    public void setOnItemLongClickListener(OnItemLongClickListener mListener) {
         this.mLongClickListener = mListener;
     }
 
-    public void addItem(T value){
+    public void addItem(T value) {
         mList.add(value);
         notifyDataSetChanged();
     }
 
-    public void addItem(int index,T value){
+    public void addItem(int index, T value) {
         mList.add(index, value);
         notifyDataSetChanged();
     }
 
-    public void addItems(List<T> values){
+    public void addItems(List<T> values) {
         mList.addAll(values);
 
         Handler handler = new Handler();
@@ -108,44 +109,44 @@ public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerV
         });
     }
 
-    public void removeItem(T value){
+    public void removeItem(T value) {
         mList.remove(value);
         notifyDataSetChanged();
     }
 
-    public void removeItems(List<T> value){
+    public void removeItems(List<T> value) {
         mList.removeAll(value);
         notifyDataSetChanged();
     }
 
-    public T getItem(int position){
+    public T getItem(int position) {
         return mList.get(position);
     }
 
-    public List<T> getItems(){
+    public List<T> getItems() {
         return Collections.unmodifiableList(mList);
     }
 
-    public int getItemSize(){
+    public int getItemSize() {
         return mList.size();
     }
 
-    public void refreshItems(List<T> list){
+    public void refreshItems(List<T> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         mList.clear();
     }
 
     /***************************inner class area***********************************/
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(View view, int pos);
     }
 
-    public interface OnItemLongClickListener{
+    public interface OnItemLongClickListener {
         boolean onItemLongClick(View view, int pos);
     }
 }

@@ -108,8 +108,7 @@ public class PageView extends View {
                 mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
             case SCROLL:
-                mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        mPageLoader.getMarginHeight(), this, mPageAnimListener);
+                mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0, mPageLoader.getMarginHeight(), this, mPageAnimListener);
                 break;
             case SIMULATION:
             default:
@@ -228,8 +227,7 @@ public class PageView extends View {
                 if (!isMove) {
                     //设置中间区域范围
                     if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3,
-                                mViewWidth * 4 / 5, mViewHeight * 2 / 3);
+                        mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3, mViewWidth * 4 / 5, mViewHeight * 2 / 3);
                     }
 
                     //是否点击了中间
@@ -345,12 +343,7 @@ public class PageView extends View {
         if (mPageLoader != null) {
             return mPageLoader;
         }
-        // 根据书籍类型，获取具体的加载器
-        if (collBook.isLocal()) {
-            mPageLoader = new LocalPageLoader(this, collBook);
-        } else {
-            mPageLoader = new NetPageLoader(this, collBook);
-        }
+        mPageLoader = new LocalPageLoader(this, collBook);
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小

@@ -33,59 +33,58 @@ public abstract class EasyAdapter<T> extends android.widget.BaseAdapter {
         return position;
     }
 
-    public void addItem(T value){
+    public void addItem(T value) {
         mList.add(value);
         notifyDataSetChanged();
     }
 
-    public void addItem(int index,T value){
+    public void addItem(int index, T value) {
         mList.add(index, value);
         notifyDataSetChanged();
     }
 
-    public void addItems(List<T> values){
+    public void addItems(List<T> values) {
         mList.addAll(values);
         notifyDataSetChanged();
     }
 
-    public void removeItem(T value){
+    public void removeItem(T value) {
         mList.remove(value);
         notifyDataSetChanged();
     }
 
-    public List<T> getItems(){
+    public List<T> getItems() {
         return Collections.unmodifiableList(mList);
     }
 
-    public int getItemSize(){
+    public int getItemSize() {
         return mList.size();
     }
 
-    public void refreshItems(List<T> list){
+    public void refreshItems(List<T> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         mList.clear();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         IViewHolder holder = null;
-        if (convertView == null){
+        if (convertView == null) {
             holder = onCreateViewHolder(getItemViewType(position));
             convertView = holder.createItemView(parent);
             convertView.setTag(holder);
             //初始化
             holder.initView();
-        }
-        else {
-            holder = (IViewHolder)convertView.getTag();
+        } else {
+            holder = (IViewHolder) convertView.getTag();
         }
         //执行绑定
-        holder.onBind(getItem(position),position);
+        holder.onBind(getItem(position), position);
         return convertView;
     }
 
