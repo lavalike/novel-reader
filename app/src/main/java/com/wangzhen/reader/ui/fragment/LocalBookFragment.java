@@ -1,10 +1,17 @@
 package com.wangzhen.reader.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.FragmentLocalBookBinding;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
 import com.wangzhen.reader.utils.media.MediaStoreHelper;
@@ -18,65 +25,58 @@ import butterknife.BindView;
  */
 
 public class LocalBookFragment extends BaseFileFragment {
-    @BindView(R.id.refresh_layout)
+    private FragmentLocalBookBinding binding;
     RefreshLayout mRlRefresh;
-    @BindView(R.id.local_book_rv_content)
     RecyclerView mRvContent;
 
+    @Nullable
     @Override
-    protected int getContentId() {
-        return R.layout.fragment_local_book;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentLocalBookBinding.inflate(inflater);
+        mRlRefresh = binding.refreshLayout;
+        mRvContent = binding.localBookRvContent;
+        return binding.getRoot();
     }
 
     @Override
-    protected void initWidget(Bundle savedInstanceState) {
-        super.initWidget(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setUpAdapter();
+        loadFiles();
     }
 
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
+        mAdapter.setOnItemClickListener((v, pos) -> {
+            //如果是已加载的文件，则点击事件无效。
+            String id = mAdapter.getItem(pos).getAbsolutePath();
+            if (BookRepository.getInstance().getCollBook(id) != null) {
+                return;
+            }
+
+            //点击选中
+            mAdapter.setCheckedItem(pos);
+
+            //反馈
+            if (mListener != null) {
+                mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
+            }
+        });
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void initClick() {
-        super.initClick();
-        mAdapter.setOnItemClickListener(
-                (view, pos) -> {
-                    //如果是已加载的文件，则点击事件无效。
-                    String id = mAdapter.getItem(pos).getAbsolutePath();
-                    if (BookRepository.getInstance().getCollBook(id) != null) {
-                        return;
-                    }
-
-                    //点击选中
-                    mAdapter.setCheckedItem(pos);
-
-                    //反馈
-                    if (mListener != null) {
-                        mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
-                    }
+    private void loadFiles() {
+        MediaStoreHelper.getAllBookFile(getActivity(), (files) -> {
+            if (files.isEmpty()) {
+                mRlRefresh.showEmpty();
+            } else {
+                mAdapter.refreshItems(files);
+                mRlRefresh.showFinish();
+                if (mListener != null) {
+                    mListener.onCategoryChanged();
                 }
-        );
-    }
-
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-        MediaStoreHelper.getAllBookFile(getActivity(),
-                (files) -> {
-                    if (files.isEmpty()) {
-                        mRlRefresh.showEmpty();
-                    } else {
-                        mAdapter.refreshItems(files);
-                        mRlRefresh.showFinish();
-                        //反馈
-                        if (mListener != null) {
-                            mListener.onCategoryChanged();
-                        }
-                    }
-                });
+            }
+        });
     }
 }

@@ -8,13 +8,13 @@ import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
 import com.wangzhen.reader.databinding.ActivityMoreSettingBinding;
 import com.wangzhen.reader.model.local.ReadSettingManager;
-import com.wangzhen.reader.ui.base.NewBaseActivity;
+import com.wangzhen.reader.ui.base.BaseActivity;
 
 /**
  * MoreSettingActivity
  * Created by wangzhen on 2023/4/11
  */
-public class MoreSettingActivity extends NewBaseActivity {
+public class MoreSettingActivity extends BaseActivity {
     private ActivityMoreSettingBinding binding;
     private ReadSettingManager mSettingManager;
     private boolean isVolumeTurnPage;

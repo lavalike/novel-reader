@@ -11,13 +11,13 @@ import androidx.annotation.Nullable;
 import com.wangzhen.permission.PermissionManager;
 import com.wangzhen.permission.callback.AbsPermissionCallback;
 import com.wangzhen.reader.databinding.ActivityMainBinding;
-import com.wangzhen.reader.ui.base.NewBaseActivity;
+import com.wangzhen.reader.ui.base.BaseActivity;
 
 /**
  * MainActivity
  * Created by wangzhen on 2023/4/11
  */
-public class MainActivity extends NewBaseActivity {
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
 

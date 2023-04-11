@@ -2,11 +2,18 @@ package com.wangzhen.reader.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.FragmentFileCategoryBinding;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
 import com.wangzhen.reader.utils.FileStack;
@@ -22,95 +29,82 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.BindView;
-
 /**
  * Created by wangzhen on 17-5-27.
  */
 
 public class FileCategoryFragment extends BaseFileFragment {
-    private static final String TAG = "FileCategoryFragment";
-    @BindView(R.id.file_category_tv_path)
+    private FragmentFileCategoryBinding binding;
     TextView mTvPath;
-    @BindView(R.id.file_category_tv_back_last)
     TextView mTvBackLast;
-    @BindView(R.id.file_category_rv_content)
     RecyclerView mRvContent;
 
     private FileStack mFileStack;
 
+    @Nullable
     @Override
-    protected int getContentId() {
-        return R.layout.fragment_file_category;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentFileCategoryBinding.inflate(inflater);
+        mTvPath = binding.fileCategoryTvPath;
+        mTvBackLast = binding.fileCategoryTvBackLast;
+        mRvContent = binding.fileCategoryRvContent;
+        return binding.getRoot();
     }
 
     @Override
-    protected void initWidget(Bundle savedInstanceState) {
-        super.initWidget(savedInstanceState);
-        mFileStack = new FileStack();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         setUpAdapter();
+
+        mTvBackLast.setOnClickListener((v) -> {
+            FileStack.FileSnapshot snapshot = mFileStack.pop();
+            int oldScrollOffset = mRvContent.computeHorizontalScrollOffset();
+            if (snapshot == null) return;
+            mTvPath.setText(snapshot.filePath);
+            mAdapter.refreshItems(snapshot.files);
+            mRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset);
+            //反馈
+            if (mListener != null) {
+                mListener.onCategoryChanged();
+            }
+        });
+
+        mFileStack = new FileStack();
+        File root = Environment.getExternalStorageDirectory();
+        toggleFileTree(root);
     }
 
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
+        mAdapter.setOnItemClickListener((v, pos) -> {
+            File file = mAdapter.getItem(pos);
+            if (file.isDirectory()) {
+                //保存当前信息。
+                FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
+                snapshot.filePath = mTvPath.getText().toString();
+                snapshot.files = new ArrayList<File>(mAdapter.getItems());
+                snapshot.scrollOffset = mRvContent.computeVerticalScrollOffset();
+                mFileStack.push(snapshot);
+                //切换下一个文件
+                toggleFileTree(file);
+            } else {
+
+                //如果是已加载的文件，则点击事件无效。
+                String id = mAdapter.getItem(pos).getAbsolutePath();
+                if (BookRepository.getInstance().getCollBook(id) != null) {
+                    return;
+                }
+                //点击选中
+                mAdapter.setCheckedItem(pos);
+                //反馈
+                if (mListener != null) {
+                    mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
+                }
+            }
+        });
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.setAdapter(mAdapter);
-    }
-
-    @Override
-    protected void initClick() {
-        super.initClick();
-        mAdapter.setOnItemClickListener(
-                (view, pos) -> {
-                    File file = mAdapter.getItem(pos);
-                    if (file.isDirectory()) {
-                        //保存当前信息。
-                        FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
-                        snapshot.filePath = mTvPath.getText().toString();
-                        snapshot.files = new ArrayList<File>(mAdapter.getItems());
-                        snapshot.scrollOffset = mRvContent.computeVerticalScrollOffset();
-                        mFileStack.push(snapshot);
-                        //切换下一个文件
-                        toggleFileTree(file);
-                    } else {
-
-                        //如果是已加载的文件，则点击事件无效。
-                        String id = mAdapter.getItem(pos).getAbsolutePath();
-                        if (BookRepository.getInstance().getCollBook(id) != null) {
-                            return;
-                        }
-                        //点击选中
-                        mAdapter.setCheckedItem(pos);
-                        //反馈
-                        if (mListener != null) {
-                            mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
-                        }
-                    }
-                }
-        );
-
-        mTvBackLast.setOnClickListener(
-                (v) -> {
-                    FileStack.FileSnapshot snapshot = mFileStack.pop();
-                    int oldScrollOffset = mRvContent.computeHorizontalScrollOffset();
-                    if (snapshot == null) return;
-                    mTvPath.setText(snapshot.filePath);
-                    mAdapter.refreshItems(snapshot.files);
-                    mRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset);
-                    //反馈
-                    if (mListener != null) {
-                        mListener.onCategoryChanged();
-                    }
-                }
-        );
-
-    }
-
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-        File root = Environment.getExternalStorageDirectory();
-        toggleFileTree(root);
     }
 
     private void toggleFileTree(File file) {
@@ -155,7 +149,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         }
     }
 
-    public class SimpleFileFilter implements FileFilter {
+    public static class SimpleFileFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
             if (pathname.getName().startsWith(".")) {
@@ -170,8 +164,7 @@ public class FileCategoryFragment extends BaseFileFragment {
              * 现在只支持TXT文件的显示
              */
             //文件内容为空,或者不以txt为开头
-            if (!pathname.isDirectory() &&
-                    (pathname.length() == 0 || !pathname.getName().endsWith(FileUtils.SUFFIX_TXT))) {
+            if (!pathname.isDirectory() && (pathname.length() == 0 || !pathname.getName().endsWith(FileUtils.SUFFIX_TXT))) {
                 return false;
             }
             return true;

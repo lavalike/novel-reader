@@ -7,18 +7,22 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
 import com.wangzhen.reader.databinding.ActivityFileSystemBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.base.BaseTabActivity;
+import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.fragment.BaseFileFragment;
 import com.wangzhen.reader.ui.fragment.FileCategoryFragment;
 import com.wangzhen.reader.ui.fragment.LocalBookFragment;
@@ -32,17 +36,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * FileSystemActivity
  * Created by wangzhen on 2023/4/11
  */
-public class FileSystemActivity extends BaseTabActivity {
+public class FileSystemActivity extends BaseActivity {
     private ActivityFileSystemBinding binding;
     private CheckBox mCbSelectAll;
     private Button mBtnDelete;
     private Button mBtnAddBook;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+
+    private List<Fragment> mFragmentList;
+    private List<String> mTitleList;
 
     private LocalBookFragment mLocalFragment;
     private FileCategoryFragment mCategoryFragment;
@@ -89,21 +97,29 @@ public class FileSystemActivity extends BaseTabActivity {
         return new AppCommonToolbar(this, "本机导入");
     }
 
-    @Override
+    private void setUpTabLayout() {
+        mFragmentList = createTabFragments();
+        mTitleList = createTabTitles();
+
+        TabFragmentPageAdapter adapter = new TabFragmentPageAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
     protected List<Fragment> createTabFragments() {
         mLocalFragment = new LocalBookFragment();
         mCategoryFragment = new FileCategoryFragment();
         return Arrays.asList(mLocalFragment, mCategoryFragment);
     }
 
-    @Override
     protected List<String> createTabTitles() {
         return Arrays.asList("智能导入", "手机目录");
     }
 
     private void initEvents() {
         setUpTabLayout();
-        
+
         mCbSelectAll.setOnClickListener((view) -> {
             //设置全选状态
             boolean isChecked = mCbSelectAll.isChecked();
@@ -265,6 +281,29 @@ public class FileSystemActivity extends BaseTabActivity {
         } else {
             mCbSelectAll.setClickable(false);
             mCbSelectAll.setEnabled(false);
+        }
+    }
+
+    class TabFragmentPageAdapter extends FragmentPagerAdapter {
+
+        public TabFragmentPageAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTitleList.get(position);
         }
     }
 }

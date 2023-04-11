@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
  * BaseMVPActivity
  * Created by wangzhen on 2023/4/11
  */
-public abstract class BaseMVPActivity<T extends BaseContract.BasePresenter> extends NewBaseActivity {
+public abstract class BaseMVPActivity<T extends BaseContract.BasePresenter> extends BaseActivity {
 
     protected T mPresenter;
 

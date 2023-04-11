@@ -18,7 +18,7 @@ import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.activity.ReadActivity;
 import com.wangzhen.reader.ui.adapter.CollBookAdapter;
-import com.wangzhen.reader.ui.base.NewBaseFragment;
+import com.wangzhen.reader.ui.base.BaseFragment;
 
 import java.util.Locale;
 
@@ -26,7 +26,7 @@ import java.util.Locale;
  * Created by wangzhen on 17-4-15.
  */
 
-public class BookShelfFragment extends NewBaseFragment {
+public class BookShelfFragment extends BaseFragment {
     private FragmentBookshelfBinding binding;
     private RecyclerView mRvContent;
 

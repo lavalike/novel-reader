@@ -6,10 +6,10 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
- * NewBaseActivity
+ * BaseActivity
  * Created by wangzhen on 2023/4/11
  */
-public class NewBaseActivity extends ToolbarActivity {
+public class BaseActivity extends ToolbarActivity {
     protected CompositeDisposable mDisposable;
 
     protected void addDisposable(Disposable d) {
