@@ -3,6 +3,7 @@ package com.wangzhen.reader.ui.activity;
 import static com.wangzhen.reader.ui.fragment.BaseFileFragment.OnFileCheckedListener;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 
@@ -14,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
+import com.wangzhen.reader.databinding.ActivityFileSystemBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.base.BaseTabActivity;
@@ -37,20 +39,16 @@ import butterknife.BindView;
  * Created by wangzhen on 2023/4/11
  */
 public class FileSystemActivity extends BaseTabActivity {
-    private static final String TAG = "FileSystemActivity";
-
-    @BindView(R.id.file_system_cb_selected_all)
-    CheckBox mCbSelectAll;
-    @BindView(R.id.file_system_btn_delete)
-    Button mBtnDelete;
-    @BindView(R.id.file_system_btn_add_book)
-    Button mBtnAddBook;
+    private ActivityFileSystemBinding binding;
+    private CheckBox mCbSelectAll;
+    private Button mBtnDelete;
+    private Button mBtnAddBook;
 
     private LocalBookFragment mLocalFragment;
     private FileCategoryFragment mCategoryFragment;
     private BaseFileFragment mCurFragment;
 
-    private OnFileCheckedListener mListener = new OnFileCheckedListener() {
+    private final OnFileCheckedListener mListener = new OnFileCheckedListener() {
         @Override
         public void onItemCheckedChange(boolean isChecked) {
             changeMenuStatus();
@@ -66,6 +64,24 @@ public class FileSystemActivity extends BaseTabActivity {
             changeCheckedAllStatus();
         }
     };
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityFileSystemBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initViews();
+        initEvents();
+        mCurFragment = mLocalFragment;
+    }
+
+    private void initViews() {
+        tabLayout = binding.tabIndicator;
+        viewPager = binding.tabVp;
+        mCbSelectAll = binding.fileSystemCbSelectedAll;
+        mBtnDelete = binding.fileSystemBtnDelete;
+        mBtnAddBook = binding.fileSystemBtnAddBook;
+    }
 
     @Nullable
     @Override
@@ -85,14 +101,9 @@ public class FileSystemActivity extends BaseTabActivity {
         return Arrays.asList("智能导入", "手机目录");
     }
 
-    @Override
-    protected int getContentId() {
-        return R.layout.activity_file_system;
-    }
-
-    @Override
-    protected void initClick() {
-        super.initClick();
+    private void initEvents() {
+        setUpTabLayout();
+        
         mCbSelectAll.setOnClickListener((view) -> {
             //设置全选状态
             boolean isChecked = mCbSelectAll.isChecked();
@@ -101,7 +112,7 @@ public class FileSystemActivity extends BaseTabActivity {
             changeMenuStatus();
         });
 
-        mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -158,17 +169,11 @@ public class FileSystemActivity extends BaseTabActivity {
         mCategoryFragment.setOnFileCheckedListener(mListener);
     }
 
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-        mCurFragment = mLocalFragment;
-    }
-
     /**
      * 将文件转换成CollBook
      *
      * @param files:需要加载的文件列表
-     * @return
+     * @return list of CollBookBean
      */
     private List<CollBookBean> convertCollBook(List<File> files) {
         List<CollBookBean> collBooks = new ArrayList<>(files.size());

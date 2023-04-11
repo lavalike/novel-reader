@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    android:minHeight="?attr/actionBarSize"
+    android:minHeight="?android:attr/actionBarSize"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.ToolBar.Menu">
 </androidx.appcompat.widget.Toolbar>

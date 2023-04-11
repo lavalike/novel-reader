@@ -1,73 +1,50 @@
 package com.wangzhen.reader.ui.base;
 
-import com.google.android.material.tabs.TabLayout;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.wangzhen.reader.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
- * Created by wangzhen on 17-4-24.
+ * BaseTabActivity
+ * Created by wangzhen on 2023/4/11
  */
+public abstract class BaseTabActivity extends NewBaseActivity {
+    protected TabLayout tabLayout;
+    protected ViewPager viewPager;
 
-public abstract class BaseTabActivity extends BaseActivity {
-    /**************View***************/
-    @BindView(R.id.tab_tl_indicator)
-    protected TabLayout mTlIndicator;
-    @BindView(R.id.tab_vp)
-    protected ViewPager mVp;
-    /************Params*******************/
     private List<Fragment> mFragmentList;
     private List<String> mTitleList;
 
-    /**************abstract***********/
     protected abstract List<Fragment> createTabFragments();
+
     protected abstract List<String> createTabTitles();
 
-    /*****************rewrite method***************************/
-    @Override
-    protected void initWidget() {
-        super.initWidget();
-        setUpTabLayout();
-    }
-
-    private void setUpTabLayout(){
+    protected void setUpTabLayout() {
         mFragmentList = createTabFragments();
         mTitleList = createTabTitles();
 
-        checkParamsIsRight();
-
         TabFragmentPageAdapter adapter = new TabFragmentPageAdapter(getSupportFragmentManager());
-        mVp.setAdapter(adapter);
-        mVp.setOffscreenPageLimit(3);
-        mTlIndicator.setupWithViewPager(mVp);
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    /**
-     * 检查输入的参数是否正确。即Fragment和title是成对的。
-     */
-    private void checkParamsIsRight(){
-        if (mFragmentList == null || mTitleList == null){
-            throw new IllegalArgumentException("fragmentList or titleList doesn't have null");
-        }
-
-        if (mFragmentList.size() != mTitleList.size())
-            throw new IllegalArgumentException("fragment and title size must equal");
-    }
-
-    /******************inner class*****************/
-    class TabFragmentPageAdapter extends FragmentPagerAdapter{
+    class TabFragmentPageAdapter extends FragmentPagerAdapter {
 
         public TabFragmentPageAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
