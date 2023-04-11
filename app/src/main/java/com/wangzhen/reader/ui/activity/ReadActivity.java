@@ -32,7 +32,6 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
@@ -45,7 +44,6 @@ import com.wangzhen.reader.ui.dialog.ReadSettingDialog;
 import com.wangzhen.reader.utils.BrightnessUtils;
 import com.wangzhen.reader.utils.LogUtils;
 import com.wangzhen.reader.utils.RxUtils;
-import com.wangzhen.reader.utils.ScreenUtils;
 import com.wangzhen.reader.utils.StringUtils;
 import com.wangzhen.reader.widget.page.PageLoader;
 import com.wangzhen.reader.widget.page.PageView;
@@ -65,7 +63,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     private static final String TAG = "ReadActivity";
     public static final int REQUEST_MORE_SETTING = 1;
     public static final String EXTRA_COLL_BOOK = "extra_coll_book";
-    public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
 
     // 注册 Brightness 的 uri
     private final Uri BRIGHTNESS_MODE_URI = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE);
@@ -75,12 +72,16 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     private static final int WHAT_CATEGORY = 1;
     private static final int WHAT_CHAPTER = 2;
 
+    @BindView(R.id.btn_back)
+    View mBtnBack;
+    @BindView(R.id.book_name)
+    TextView mBookName;
 
     @BindView(R.id.read_dl_slide)
     DrawerLayout mDlSlide;
     /*************top_menu_view*******************/
-    @BindView(R.id.read_abl_top_menu)
-    AppBarLayout mAblTopMenu;
+    @BindView(R.id.top_menu_container)
+    View mTopMenuContainer;
     /***************content_view******************/
     @BindView(R.id.read_pv_page)
     PageView mPvPage;
@@ -100,8 +101,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     TextView mTvCategory;
     @BindView(R.id.read_tv_night_mode)
     TextView mTvNightMode;
-    /*    @BindView(R.id.read_tv_download)
-        TextView mTvDownload;*/
     @BindView(R.id.read_tv_setting)
     TextView mTvSetting;
     /***************left slide*******************************/
@@ -178,15 +177,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         }
     };
 
-    /***************params*****************/
-    private boolean isCollected = false; // isFromSDCard
     private boolean isNightMode = false;
     private boolean isRegistered = false;
 
     private String mBookId;
 
-    public static void startActivity(Context context, CollBookBean collBook, boolean isCollected) {
-        context.startActivity(new Intent(context, ReadActivity.class).putExtra(EXTRA_IS_COLLECTED, isCollected).putExtra(EXTRA_COLL_BOOK, collBook));
+    public static void startActivity(Context context, CollBookBean collBook) {
+        context.startActivity(new Intent(context, ReadActivity.class).putExtra(EXTRA_COLL_BOOK, collBook));
     }
 
     @Override
@@ -203,7 +200,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
-        isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
         isNightMode = ReadSettingManager.getInstance().isNightMode();
         mBookId = mCollBook.get_id();
     }
@@ -211,6 +207,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     @Override
     protected void initWidget() {
         super.initWidget();
+        mBtnBack.setOnClickListener(view -> finish());
+        mBookName.setText(mCollBook.getTitle());
+
         //获取页面加载器
         mPageLoader = mPvPage.getPageLoader(mCollBook);
         //禁止滑动展示DrawerLayout
@@ -244,15 +243,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         //隐藏StatusBar
         mPvPage.post(this::hideSystemBar);
 
-        //初始化TopMenu
-        initTopMenu();
-
         //初始化BottomMenu
         initBottomMenu();
-    }
-
-    private void initTopMenu() {
-        mAblTopMenu.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
     }
 
     private void initBottomMenu() {
@@ -264,7 +256,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Log.d(TAG, "onWindowFocusChanged: " + mAblTopMenu.getMeasuredHeight());
+        Log.d(TAG, "onWindowFocusChanged: " + mTopMenuContainer.getMeasuredHeight());
     }
 
     private void toggleNightMode() {
@@ -455,7 +447,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
      */
     private boolean hideReadMenu() {
         hideSystemBar();
-        if (mAblTopMenu.getVisibility() == VISIBLE) {
+        if (mTopMenuContainer.getVisibility() == VISIBLE) {
             toggleMenu(true);
             return true;
         } else if (mSettingDialog.isShowing()) {
@@ -482,11 +474,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     private void toggleMenu(boolean hideStatusBar) {
         initMenuAnim();
 
-        if (mAblTopMenu.getVisibility() == View.VISIBLE) {
+        if (mTopMenuContainer.getVisibility() == View.VISIBLE) {
             //关闭
-            mAblTopMenu.startAnimation(mTopOutAnim);
+            mTopMenuContainer.startAnimation(mTopOutAnim);
             mLlBottomMenu.startAnimation(mBottomOutAnim);
-            mAblTopMenu.setVisibility(GONE);
+            mTopMenuContainer.setVisibility(GONE);
             mLlBottomMenu.setVisibility(GONE);
             mTvPageTip.setVisibility(GONE);
 
@@ -494,9 +486,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
                 hideSystemBar();
             }
         } else {
-            mAblTopMenu.setVisibility(View.VISIBLE);
+            mTopMenuContainer.setVisibility(View.VISIBLE);
             mLlBottomMenu.setVisibility(View.VISIBLE);
-            mAblTopMenu.startAnimation(mTopInAnim);
+            mTopMenuContainer.startAnimation(mTopInAnim);
             mLlBottomMenu.startAnimation(mBottomInAnim);
 
             showSystemBar();
@@ -519,17 +511,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     @Override
     protected void processLogic() {
         super.processLogic();
-        // 如果是已经收藏的，那么就从数据库中获取目录
-        if (isCollected) {
-            Disposable disposable = BookRepository.getInstance().getBookChaptersInRx(mBookId).compose(RxUtils::toSimpleSingle).subscribe((bookChapterBeen, throwable) -> {
-                // 设置 CollBook
-                mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
-                // 刷新章节列表
-                mPageLoader.refreshChapterList();
-                LogUtils.e(throwable);
-            });
-            addDisposable(disposable);
-        }
+        Disposable disposable = BookRepository.getInstance().getBookChaptersInRx(mBookId).compose(RxUtils::toSimpleSingle).subscribe((bookChapterBeen, throwable) -> {
+            // 设置 CollBook
+            mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
+            // 刷新章节列表
+            mPageLoader.refreshChapterList();
+            LogUtils.e(throwable);
+        });
+        addDisposable(disposable);
     }
 
     /***************************view************************************/
@@ -561,7 +550,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
 
     @Override
     public void onBackPressed() {
-        if (mAblTopMenu.getVisibility() == View.VISIBLE) {
+        if (mTopMenuContainer.getVisibility() == View.VISIBLE) {
             toggleMenu(true);
         } else if (mSettingDialog.isShowing()) {
             mSettingDialog.dismiss();
@@ -594,9 +583,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     protected void onPause() {
         super.onPause();
         mWakeLock.release();
-        if (isCollected) {
-            mPageLoader.saveRecord();
-        }
+        mPageLoader.saveRecord();
     }
 
     @Override

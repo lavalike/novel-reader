@@ -44,7 +44,7 @@ public class BookShelfFragment extends BaseFragment {
         mCollBookAdapter = new CollBookAdapter();
         mCollBookAdapter.setOnItemClickListener((view, pos) -> {
             CollBookBean collBook = mCollBookAdapter.getItem(pos);
-            ReadActivity.startActivity(requireContext(), collBook, true);
+            ReadActivity.startActivity(requireContext(), collBook);
         });
         mCollBookAdapter.setOnItemLongClickListener((view, pos) -> {
             CollBookBean book = mCollBookAdapter.getItem(pos);
