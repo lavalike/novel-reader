@@ -1,9 +1,11 @@
 package com.wangzhen.reader.ui.base;
 
 import android.os.Bundle;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,7 @@ import io.reactivex.disposables.Disposable;
  * Created by wangzhen on 17-3-31.
  */
 
-public abstract class BaseFragment extends Fragment{
-
-    protected CompositeDisposable mDisposable;
+public abstract class BaseFragment extends Fragment {
 
     private View root = null;
     private Unbinder unbinder;
@@ -27,34 +27,25 @@ public abstract class BaseFragment extends Fragment{
     @LayoutRes
     protected abstract int getContentId();
 
-    /*******************************init area*********************************/
-    protected void addDisposable(Disposable d){
-        if (mDisposable == null){
-            mDisposable = new CompositeDisposable();
-        }
-        mDisposable.add(d);
-    }
-
-
-    protected void initData(Bundle savedInstanceState){
+    protected void initData(Bundle savedInstanceState) {
     }
 
     /**
      * 初始化点击事件
      */
-    protected void initClick(){
+    protected void initClick() {
     }
 
     /**
      * 逻辑使用区
      */
-    protected void processLogic(){
+    protected void processLogic() {
     }
 
     /**
      * 初始化零件
      */
-    protected void initWidget(Bundle savedInstanceState){
+    protected void initWidget(Bundle savedInstanceState) {
     }
 
     /******************************lifecycle area*****************************************/
@@ -62,7 +53,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int resId = getContentId();
-        root = inflater.inflate(resId,container,false);
+        root = inflater.inflate(resId, container, false);
         return root;
     }
 
@@ -70,7 +61,7 @@ public abstract class BaseFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initData(savedInstanceState);
-        unbinder = ButterKnife.bind(this,root);
+        unbinder = ButterKnife.bind(this, root);
         initWidget(savedInstanceState);
         initClick();
         processLogic();
@@ -79,22 +70,17 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
-
         unbinder.unbind();
-
-        if (mDisposable != null){
-            mDisposable.clear();
-        }
     }
 
     /**************************公共类*******************************************/
-    public String getName(){
+    public String getName() {
         return getClass().getName();
     }
 
-    protected <VT> VT getViewById(int id){
-        if (root == null){
-            return  null;
+    protected <VT> VT getViewById(int id) {
+        if (root == null) {
+            return null;
         }
         return (VT) root.findViewById(id);
     }

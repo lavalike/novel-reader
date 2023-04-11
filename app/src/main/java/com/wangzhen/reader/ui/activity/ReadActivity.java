@@ -29,10 +29,12 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.ActivityReadBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.model.local.ReadSettingManager;
@@ -52,7 +54,6 @@ import com.wangzhen.reader.widget.page.TxtChapter;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -60,6 +61,7 @@ import io.reactivex.disposables.Disposable;
  * Created by wangzhen on 2023/4/11
  */
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implements ReadContract.View {
+    private ActivityReadBinding binding;
     private static final String TAG = "ReadActivity";
     public static final int REQUEST_MORE_SETTING = 1;
     public static final String EXTRA_COLL_BOOK = "extra_coll_book";
@@ -72,41 +74,21 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     private static final int WHAT_CATEGORY = 1;
     private static final int WHAT_CHAPTER = 2;
 
-    @BindView(R.id.btn_back)
     View mBtnBack;
-    @BindView(R.id.book_name)
     TextView mBookName;
-
-    @BindView(R.id.read_dl_slide)
     DrawerLayout mDlSlide;
-    /*************top_menu_view*******************/
-    @BindView(R.id.top_menu_container)
     View mTopMenuContainer;
-    /***************content_view******************/
-    @BindView(R.id.read_pv_page)
     PageView mPvPage;
-    /***************bottom_menu_view***************************/
-    @BindView(R.id.read_tv_page_tip)
     TextView mTvPageTip;
-
-    @BindView(R.id.read_ll_bottom_menu)
     LinearLayout mLlBottomMenu;
-    @BindView(R.id.read_tv_pre_chapter)
     TextView mTvPreChapter;
-    @BindView(R.id.read_sb_chapter_progress)
     SeekBar mSbChapterProgress;
-    @BindView(R.id.read_tv_next_chapter)
     TextView mTvNextChapter;
-    @BindView(R.id.read_tv_category)
     TextView mTvCategory;
-    @BindView(R.id.read_tv_night_mode)
     TextView mTvNightMode;
-    @BindView(R.id.read_tv_setting)
     TextView mTvSetting;
-    /***************left slide*******************************/
-    @BindView(R.id.read_iv_category)
     ListView mLvCategory;
-    /*****************view******************/
+
     private ReadSettingDialog mSettingDialog;
     private PageLoader mPageLoader;
     private Animation mTopInAnim;
@@ -187,8 +169,37 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
     }
 
     @Override
-    protected int getContentId() {
-        return R.layout.activity_read;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityReadBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initData();
+        initViews();
+        initEvents();
+        loadBook();
+    }
+
+    private void initData() {
+        mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
+        isNightMode = ReadSettingManager.getInstance().isNightMode();
+        mBookId = mCollBook.get_id();
+    }
+
+    private void initViews() {
+        mBtnBack = binding.btnBack;
+        mBookName = binding.bookName;
+        mDlSlide = binding.readDlSlide;
+        mTopMenuContainer = binding.topMenuContainer;
+        mPvPage = binding.readPvPage;
+        mTvPageTip = binding.readTvPageTip;
+        mLlBottomMenu = binding.readLlBottomMenu;
+        mTvPreChapter = binding.readTvPreChapter;
+        mSbChapterProgress = binding.readSbChapterProgress;
+        mTvNextChapter = binding.readTvNextChapter;
+        mTvCategory = binding.readTvCategory;
+        mTvNightMode = binding.readTvNightMode;
+        mTvSetting = binding.readTvSetting;
+        mLvCategory = binding.readIvCategory;
     }
 
     @Override
@@ -196,17 +207,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         return new ReadPresenter();
     }
 
-    @Override
-    protected void initData(Bundle savedInstanceState) {
-        super.initData(savedInstanceState);
-        mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
-        isNightMode = ReadSettingManager.getInstance().isNightMode();
-        mBookId = mCollBook.get_id();
-    }
-
-    @Override
-    protected void initWidget() {
-        super.initWidget();
+    private void initEvents() {
         mBtnBack.setOnClickListener(view -> finish());
         mBookName.setText(mCollBook.getTitle());
 
@@ -245,69 +246,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
 
         //初始化BottomMenu
         initBottomMenu();
-    }
 
-    private void initBottomMenu() {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
-        params.bottomMargin = 0;
-        mLlBottomMenu.setLayoutParams(params);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        Log.d(TAG, "onWindowFocusChanged: " + mTopMenuContainer.getMeasuredHeight());
-    }
-
-    private void toggleNightMode() {
-        if (isNightMode) {
-            mTvNightMode.setText(StringUtils.getString(R.string.mode_morning));
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_morning);
-            mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        } else {
-            mTvNightMode.setText(StringUtils.getString(R.string.mode_night));
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_night);
-            mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        }
-    }
-
-    private void setUpAdapter() {
-        mCategoryAdapter = new CategoryAdapter();
-        mLvCategory.setAdapter(mCategoryAdapter);
-        mLvCategory.setFastScrollEnabled(true);
-    }
-
-    // 注册亮度观察者
-    private void registerBrightObserver() {
-        try {
-            if (!isRegistered) {
-                final ContentResolver cr = getContentResolver();
-                cr.unregisterContentObserver(mBrightObserver);
-                cr.registerContentObserver(BRIGHTNESS_MODE_URI, false, mBrightObserver);
-                cr.registerContentObserver(BRIGHTNESS_URI, false, mBrightObserver);
-                cr.registerContentObserver(BRIGHTNESS_ADJ_URI, false, mBrightObserver);
-                isRegistered = true;
-            }
-        } catch (Throwable throwable) {
-            LogUtils.e(TAG, "register mBrightObserver error! " + throwable);
-        }
-    }
-
-    //解注册
-    private void unregisterBrightObserver() {
-        try {
-            if (isRegistered) {
-                getContentResolver().unregisterContentObserver(mBrightObserver);
-                isRegistered = false;
-            }
-        } catch (Throwable throwable) {
-            LogUtils.e(TAG, "unregister BrightnessObserver error! " + throwable);
-        }
-    }
-
-    @Override
-    protected void initClick() {
-        super.initClick();
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
 
             @Override
@@ -440,6 +379,64 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         mSettingDialog.setOnDismissListener(dialog -> hideSystemBar());
     }
 
+    private void initBottomMenu() {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
+        params.bottomMargin = 0;
+        mLlBottomMenu.setLayoutParams(params);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Log.d(TAG, "onWindowFocusChanged: " + mTopMenuContainer.getMeasuredHeight());
+    }
+
+    private void toggleNightMode() {
+        if (isNightMode) {
+            mTvNightMode.setText(StringUtils.getString(R.string.mode_morning));
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_morning);
+            mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        } else {
+            mTvNightMode.setText(StringUtils.getString(R.string.mode_night));
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_night);
+            mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        }
+    }
+
+    private void setUpAdapter() {
+        mCategoryAdapter = new CategoryAdapter();
+        mLvCategory.setAdapter(mCategoryAdapter);
+        mLvCategory.setFastScrollEnabled(true);
+    }
+
+    // 注册亮度观察者
+    private void registerBrightObserver() {
+        try {
+            if (!isRegistered) {
+                final ContentResolver cr = getContentResolver();
+                cr.unregisterContentObserver(mBrightObserver);
+                cr.registerContentObserver(BRIGHTNESS_MODE_URI, false, mBrightObserver);
+                cr.registerContentObserver(BRIGHTNESS_URI, false, mBrightObserver);
+                cr.registerContentObserver(BRIGHTNESS_ADJ_URI, false, mBrightObserver);
+                isRegistered = true;
+            }
+        } catch (Throwable throwable) {
+            LogUtils.e(TAG, "register mBrightObserver error! " + throwable);
+        }
+    }
+
+    //解注册
+    private void unregisterBrightObserver() {
+        try {
+            if (isRegistered) {
+                getContentResolver().unregisterContentObserver(mBrightObserver);
+                isRegistered = false;
+            }
+        } catch (Throwable throwable) {
+            LogUtils.e(TAG, "unregister BrightnessObserver error! " + throwable);
+        }
+    }
+
     /**
      * 隐藏阅读界面的菜单显示
      *
@@ -508,9 +505,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implem
         mBottomOutAnim.setDuration(200);
     }
 
-    @Override
-    protected void processLogic() {
-        super.processLogic();
+    private void loadBook() {
         Disposable disposable = BookRepository.getInstance().getBookChaptersInRx(mBookId).compose(RxUtils::toSimpleSingle).subscribe((bookChapterBeen, throwable) -> {
             // 设置 CollBook
             mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
