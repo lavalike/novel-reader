@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">阅读器</string>
+    <string name="app_name">图书</string>
 
     <!--menu-->
     <string name="menu.action.search">搜索</string>

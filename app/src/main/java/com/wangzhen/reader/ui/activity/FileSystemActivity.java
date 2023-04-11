@@ -1,16 +1,15 @@
 package com.wangzhen.reader.ui.activity;
 
-import static com.wangzhen.reader.ui.fragment.BaseFileFragment.*;
+import static com.wangzhen.reader.ui.fragment.BaseFileFragment.OnFileCheckedListener;
 
 import android.content.DialogInterface;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
-
 import android.widget.Button;
 import android.widget.CheckBox;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.R;
@@ -34,9 +33,9 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by wangzhen on 17-5-27.
+ * FileSystemActivity
+ * Created by wangzhen on 2023/4/11
  */
-
 public class FileSystemActivity extends BaseTabActivity {
     private static final String TAG = "FileSystemActivity";
 

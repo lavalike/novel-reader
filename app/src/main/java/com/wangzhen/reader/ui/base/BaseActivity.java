@@ -17,12 +17,7 @@ import io.reactivex.disposables.Disposable;
  * Created by PC on 2016/9/8.
  */
 public abstract class BaseActivity extends ToolbarActivity {
-    private static final int INVALID_VAL = -1;
-
     protected CompositeDisposable mDisposable;
-    //ButterKnife
-    private Toolbar mToolbar;
-
     private Unbinder unbinder;
 
     /****************************abstract area*************************************/

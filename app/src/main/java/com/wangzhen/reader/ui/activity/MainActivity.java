@@ -25,6 +25,10 @@ import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.utils.PermissionsChecker;
 import com.wangzhen.reader.utils.ToastUtils;
 
+/**
+ * MainActivity
+ * Created by wangzhen on 2023/4/11
+ */
 public class MainActivity extends BaseActivity {
     private static final int WAIT_INTERVAL = 2000;
     private static final int PERMISSIONS_REQUEST_STORAGE = 1;

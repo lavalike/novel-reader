@@ -58,9 +58,9 @@ import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by wangzhen on 17-5-16.
+ * ReadActivity
+ * Created by wangzhen on 2023/4/11
  */
-
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter> implements ReadContract.View {
     private static final String TAG = "ReadActivity";
     public static final int REQUEST_MORE_SETTING = 1;

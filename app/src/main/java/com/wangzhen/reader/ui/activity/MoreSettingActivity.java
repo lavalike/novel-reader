@@ -15,10 +15,9 @@ import com.wangzhen.reader.ui.base.BaseActivity;
 import butterknife.BindView;
 
 /**
- * Created by wangzhen on 17-6-6.
- * 阅读界面的更多设置
+ * MoreSettingActivity
+ * Created by wangzhen on 2023/4/11
  */
-
 public class MoreSettingActivity extends BaseActivity {
     @BindView(R.id.more_setting_rl_volume)
     RelativeLayout mRlVolume;

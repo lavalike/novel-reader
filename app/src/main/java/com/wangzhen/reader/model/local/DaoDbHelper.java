@@ -9,18 +9,17 @@ import com.wangzhen.reader.model.gen.DaoSession;
 /**
  * Created by wangzhen on 17-4-26.
  */
-
 public class DaoDbHelper {
-    private static final String DB_NAME = "IReader_DB";
+    private static final String DB_NAME = "reader-db";
 
     private static volatile DaoDbHelper sInstance;
-    private SQLiteDatabase mDb;
-    private DaoMaster mDaoMaster;
-    private DaoSession mSession;
+    private final SQLiteDatabase mDb;
+    private final DaoMaster mDaoMaster;
+    private final DaoSession mSession;
 
-    private DaoDbHelper(){
+    private DaoDbHelper() {
         //封装数据库的创建、更新、删除
-        DaoMaster.DevOpenHelper openHelper = new MyOpenHelper(App.getContext(),DB_NAME,null);
+        DaoMaster.DevOpenHelper openHelper = new MyOpenHelper(App.getContext(), DB_NAME, null);
         //获取数据库
         mDb = openHelper.getWritableDatabase();
         //封装数据库中表的创建、更新、删除
@@ -30,10 +29,10 @@ public class DaoDbHelper {
     }
 
 
-    public static DaoDbHelper getInstance(){
-        if (sInstance == null){
-            synchronized (DaoDbHelper.class){
-                if (sInstance == null){
+    public static DaoDbHelper getInstance() {
+        if (sInstance == null) {
+            synchronized (DaoDbHelper.class) {
+                if (sInstance == null) {
                     sInstance = new DaoDbHelper();
                 }
             }
@@ -41,15 +40,15 @@ public class DaoDbHelper {
         return sInstance;
     }
 
-    public DaoSession getSession(){
+    public DaoSession getSession() {
         return mSession;
     }
 
-    public SQLiteDatabase getDatabase(){
+    public SQLiteDatabase getDatabase() {
         return mDb;
     }
 
-    public DaoSession getNewSession(){
+    public DaoSession getNewSession() {
         return mDaoMaster.newSession();
     }
 }

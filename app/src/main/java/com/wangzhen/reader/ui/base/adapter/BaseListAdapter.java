@@ -60,8 +60,6 @@ public abstract class BaseListAdapter <T> extends RecyclerView.Adapter<RecyclerV
                     if (mLongClickListener != null){
                         isClicked =  mLongClickListener.onItemLongClick(v,position);
                     }
-                    //Adapter监听长点击事件
-                    onItemLongClick(v,position);
                     return isClicked;
                 }
         );

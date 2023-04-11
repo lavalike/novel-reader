@@ -1,6 +1,10 @@
 package com.wangzhen.reader.ui.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +14,8 @@ import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.activity.ReadActivity;
 import com.wangzhen.reader.ui.adapter.CollBookAdapter;
 import com.wangzhen.reader.ui.base.BaseFragment;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -40,9 +46,25 @@ public class BookShelfFragment extends BaseFragment {
             CollBookBean collBook = mCollBookAdapter.getItem(pos);
             ReadActivity.startActivity(requireContext(), collBook, true);
         });
+        mCollBookAdapter.setOnItemLongClickListener((view, pos) -> {
+            CollBookBean book = mCollBookAdapter.getItem(pos);
+            deleteBook(book);
+            return false;
+        });
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.setAdapter(mCollBookAdapter);
         mCollBookAdapter.refreshItems(BookRepository.getInstance().getCollBooks());
+    }
+
+    private void deleteBook(CollBookBean book) {
+        new AlertDialog.Builder(requireContext()).setMessage(String.format(Locale.getDefault(), "确定删除%s吗", book.getTitle())).setNegativeButton("取消", null).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                BookRepository.getInstance().deleteBook(book);
+                Toast.makeText(getContext(), book.getTitle() + "已删除", Toast.LENGTH_SHORT).show();
+                setUpAdapter();
+            }
+        }).create().show();
     }
 
     @Override
