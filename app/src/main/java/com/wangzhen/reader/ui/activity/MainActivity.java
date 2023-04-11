@@ -1,17 +1,13 @@
 package com.wangzhen.reader.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -51,15 +47,12 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @RequiresApi(api = Build.VERSION_CODES.R)
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (Environment.isExternalStorageManager()) {
-                openFileSystem();
-            } else {
-                Toast.makeText(MainActivity.this, "请授予所有文件访问权限", Toast.LENGTH_SHORT).show();
-            }
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (Environment.isExternalStorageManager()) {
+            openFileSystem();
+        } else {
+            Toast.makeText(MainActivity.this, "请授予所有文件访问权限", Toast.LENGTH_SHORT).show();
         }
     });
 
@@ -72,7 +65,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onDeny(@NonNull String[] strings, @NonNull String[] strings1) {
-                Toast.makeText(MainActivity.this, "请授予存储权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "请授予存储访问权限", Toast.LENGTH_SHORT).show();
             }
         }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }

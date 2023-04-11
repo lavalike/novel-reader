@@ -5,12 +5,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,7 +15,13 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.DialogReadSettingBinding;
 import com.wangzhen.reader.model.local.ReadSettingManager;
 import com.wangzhen.reader.ui.activity.MoreSettingActivity;
 import com.wangzhen.reader.ui.activity.ReadActivity;
@@ -36,55 +36,34 @@ import com.wangzhen.reader.widget.page.PageStyle;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by wangzhen on 17-5-18.
  */
 
 public class ReadSettingDialog extends Dialog {
-    private static final String TAG = "ReadSettingDialog";
-    private static final int DEFAULT_TEXT_SIZE = 22;
+    private DialogReadSettingBinding binding;
 
-    @BindView(R.id.read_setting_iv_brightness_minus)
     ImageView mIvBrightnessMinus;
-    @BindView(R.id.read_setting_sb_brightness)
     SeekBar mSbBrightness;
-    @BindView(R.id.read_setting_iv_brightness_plus)
     ImageView mIvBrightnessPlus;
-    @BindView(R.id.read_setting_cb_brightness_auto)
     CheckBox mCbBrightnessAuto;
-    @BindView(R.id.read_setting_tv_font_minus)
     TextView mTvFontMinus;
-    @BindView(R.id.read_setting_tv_font)
     TextView mTvFont;
-    @BindView(R.id.read_setting_tv_font_plus)
     TextView mTvFontPlus;
-    @BindView(R.id.read_setting_cb_font_default)
     CheckBox mCbFontDefault;
-    @BindView(R.id.read_setting_rg_page_mode)
     RadioGroup mRgPageMode;
 
-    @BindView(R.id.read_setting_rb_simulation)
     RadioButton mRbSimulation;
-    @BindView(R.id.read_setting_rb_cover)
     RadioButton mRbCover;
-    @BindView(R.id.read_setting_rb_slide)
     RadioButton mRbSlide;
-    @BindView(R.id.read_setting_rb_scroll)
     RadioButton mRbScroll;
-    @BindView(R.id.read_setting_rb_none)
     RadioButton mRbNone;
-    @BindView(R.id.read_setting_rv_bg)
     RecyclerView mRvBg;
-    @BindView(R.id.read_setting_tv_more)
     TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
-    private ReadSettingManager mSettingManager;
-    private PageLoader mPageLoader;
-    private Activity mActivity;
+    private final PageLoader mPageLoader;
+    private final Activity mActivity;
 
     private PageMode mPageMode;
     private PageStyle mPageStyle;
@@ -105,12 +84,12 @@ public class ReadSettingDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_read_setting);
-        ButterKnife.bind(this);
+        binding = DialogReadSettingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setUpWindow();
         initData();
         initWidget();
-        initClick();
+        initEvents();
     }
 
     //设置Dialog显示的位置
@@ -124,23 +103,39 @@ public class ReadSettingDialog extends Dialog {
     }
 
     private void initData() {
-        mSettingManager = ReadSettingManager.getInstance();
+        ReadSettingManager settings = ReadSettingManager.getInstance();
 
-        isBrightnessAuto = mSettingManager.isBrightnessAuto();
-        mBrightness = mSettingManager.getBrightness();
-        mTextSize = mSettingManager.getTextSize();
-        isTextDefault = mSettingManager.isDefaultTextSize();
-        mPageMode = mSettingManager.getPageMode();
-        mPageStyle = mSettingManager.getPageStyle();
+        isBrightnessAuto = settings.isBrightnessAuto();
+        mBrightness = settings.getBrightness();
+        mTextSize = settings.getTextSize();
+        isTextDefault = settings.isDefaultTextSize();
+        mPageMode = settings.getPageMode();
+        mPageStyle = settings.getPageStyle();
     }
 
     private void initWidget() {
+        mIvBrightnessMinus = binding.readSettingIvBrightnessMinus;
+        mSbBrightness = binding.readSettingSbBrightness;
+        mIvBrightnessPlus = binding.readSettingIvBrightnessPlus;
+        mCbBrightnessAuto = binding.readSettingCbBrightnessAuto;
+        mTvFontMinus = binding.readSettingTvFontMinus;
+        mTvFont = binding.readSettingTvFont;
+        mTvFontPlus = binding.readSettingTvFontPlus;
+        mCbFontDefault = binding.readSettingCbFontDefault;
+        mRgPageMode = binding.readSettingRgPageMode;
+        mRbSimulation = binding.readSettingRbSimulation;
+        mRbCover = binding.readSettingRbCover;
+        mRbSlide = binding.readSettingRbSlide;
+        mRbScroll = binding.readSettingRbScroll;
+        mRbNone = binding.readSettingRbNone;
+        mRvBg = binding.readSettingRvBg;
+        mTvMore = binding.readSettingTvMore;
+
         mSbBrightness.setProgress(mBrightness);
         mTvFont.setText(String.valueOf(mTextSize));
         mCbBrightnessAuto.setChecked(isBrightnessAuto);
         mCbFontDefault.setChecked(isTextDefault);
         initPageMode();
-        //RecyclerView
         setUpAdapter();
     }
 
@@ -180,7 +175,7 @@ public class ReadSettingDialog extends Dialog {
         return ContextCompat.getDrawable(getContext(), drawRes);
     }
 
-    private void initClick() {
+    private void initEvents() {
         //亮度调节
         mIvBrightnessMinus.setOnClickListener((v) -> {
             if (mCbBrightnessAuto.isChecked()) {
@@ -243,9 +238,9 @@ public class ReadSettingDialog extends Dialog {
             if (mCbFontDefault.isChecked()) {
                 mCbFontDefault.setChecked(false);
             }
-            int fontSize = Integer.valueOf(mTvFont.getText().toString()) - 1;
+            int fontSize = Integer.parseInt(mTvFont.getText().toString()) - 1;
             if (fontSize < 0) return;
-            mTvFont.setText(fontSize + "");
+            mTvFont.setText(String.valueOf(fontSize));
             mPageLoader.setTextSize(fontSize);
         });
 
@@ -253,15 +248,15 @@ public class ReadSettingDialog extends Dialog {
             if (mCbFontDefault.isChecked()) {
                 mCbFontDefault.setChecked(false);
             }
-            int fontSize = Integer.valueOf(mTvFont.getText().toString()) + 1;
-            mTvFont.setText(fontSize + "");
+            int fontSize = Integer.parseInt(mTvFont.getText().toString()) + 1;
+            mTvFont.setText(String.valueOf(fontSize));
             mPageLoader.setTextSize(fontSize);
         });
 
         mCbFontDefault.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 int fontSize = ScreenUtils.dpToPx(Constant.Text.DEFAULT_TEXT_SIZE);
-                mTvFont.setText(fontSize + "");
+                mTvFont.setText(String.valueOf(fontSize));
                 mPageLoader.setTextSize(fontSize);
             }
         });

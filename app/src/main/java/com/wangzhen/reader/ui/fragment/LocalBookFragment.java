@@ -10,14 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.FragmentLocalBookBinding;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
 import com.wangzhen.reader.utils.media.MediaStoreHelper;
 import com.wangzhen.reader.widget.RefreshLayout;
-
-import butterknife.BindView;
 
 /**
  * Created by wangzhen on 17-5-27.
