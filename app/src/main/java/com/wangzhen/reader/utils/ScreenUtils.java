@@ -7,7 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 
 import java.lang.reflect.Method;
 
@@ -68,7 +68,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getStatusBarHeight(){
-        Resources resources = App.getContext().getResources();
+        Resources resources = MainApplication.getContext().getResources();
         int resourceId = resources.getIdentifier("status_bar_height","dimen","android");
         return resources.getDimensionPixelSize(resourceId);
     }
@@ -79,7 +79,7 @@ public class ScreenUtils {
      */
     public static int getNavigationBarHeight() {
         int navigationBarHeight = 0;
-        Resources rs = App.getContext().getResources();
+        Resources rs = MainApplication.getContext().getResources();
         int id = rs.getIdentifier("navigation_bar_height", "dimen", "android");
         if (id > 0 && hasNavigationBar()) {
             navigationBarHeight = rs.getDimensionPixelSize(id);
@@ -93,7 +93,7 @@ public class ScreenUtils {
      */
     private static boolean hasNavigationBar() {
         boolean hasNavigationBar = false;
-        Resources rs = App.getContext().getResources();
+        Resources rs = MainApplication.getContext().getResources();
         int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
         if (id > 0) {
             hasNavigationBar = rs.getBoolean(id);
@@ -113,7 +113,7 @@ public class ScreenUtils {
     }
 
     public static DisplayMetrics getDisplayMetrics(){
-        DisplayMetrics metrics = App
+        DisplayMetrics metrics = MainApplication
                 .getContext()
                 .getResources()
                 .getDisplayMetrics();

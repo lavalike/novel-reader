@@ -2,7 +2,7 @@ package com.wangzhen.reader.model.local;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 import com.wangzhen.reader.model.gen.DaoMaster;
 import com.wangzhen.reader.model.gen.DaoSession;
 
@@ -19,7 +19,7 @@ public class DaoDbHelper {
 
     private DaoDbHelper() {
         //封装数据库的创建、更新、删除
-        DaoMaster.DevOpenHelper openHelper = new MyOpenHelper(App.getContext(), DB_NAME, null);
+        DaoMaster.DevOpenHelper openHelper = new MyOpenHelper(MainApplication.getContext(), DB_NAME, null);
         //获取数据库
         mDb = openHelper.getWritableDatabase();
         //封装数据库中表的创建、更新、删除

@@ -2,7 +2,7 @@ package com.wangzhen.reader.utils;
 
 import android.os.Environment;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -60,12 +60,12 @@ public class FileUtils {
     //获取Cache文件夹
     public static String getCachePath(){
         if (isSdCardExist()){
-            return App.getContext()
+            return MainApplication.getContext()
                     .getExternalCacheDir()
                     .getAbsolutePath();
         }
         else{
-            return App.getContext()
+            return MainApplication.getContext()
                     .getCacheDir()
                     .getAbsolutePath();
         }

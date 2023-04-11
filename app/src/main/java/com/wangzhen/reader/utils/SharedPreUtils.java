@@ -3,7 +3,7 @@ package com.wangzhen.reader.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 
 /**
  * Created by wangzhen on 17-4-16.
@@ -16,7 +16,7 @@ public class SharedPreUtils {
     private SharedPreferences.Editor sharedWritable;
 
     private SharedPreUtils(){
-        sharedReadable = App.getContext()
+        sharedReadable = MainApplication.getContext()
                 .getSharedPreferences(SHARED_NAME, Context.MODE_MULTI_PROCESS);
         sharedWritable = sharedReadable.edit();
     }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 
 /**
  * Created by wangzhen on 17-5-11.
@@ -18,7 +18,7 @@ public class NetworkUtils {
      * @return NetworkInfo
      */
     public static NetworkInfo getNetworkInfo(){
-        ConnectivityManager cm = (ConnectivityManager) App
+        ConnectivityManager cm = (ConnectivityManager) MainApplication
                 .getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 

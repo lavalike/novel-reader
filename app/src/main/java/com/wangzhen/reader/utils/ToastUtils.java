@@ -2,7 +2,7 @@ package com.wangzhen.reader.utils;
 
 import android.widget.Toast;
 
-import com.wangzhen.reader.App;
+import com.wangzhen.reader.MainApplication;
 
 /**
  * Created by wangzhen on 17-5-11.
@@ -11,6 +11,6 @@ import com.wangzhen.reader.App;
 public class ToastUtils {
 
     public static void show(String msg){
-        Toast.makeText(App.getContext(), msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainApplication.getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }

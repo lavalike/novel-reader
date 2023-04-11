@@ -3,24 +3,17 @@ package com.wangzhen.reader;
 import android.app.Application;
 import android.content.Context;
 
-import com.squareup.leakcanary.LeakCanary;
-
 /**
- * Created by wangzhen on 17-4-15.
+ * MainApplication
+ * Created by wangzhen on 2023/4/11
  */
-
-public class App extends Application {
+public class MainApplication extends Application {
     private static Context sInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-
-        // 初始化内存分析工具
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
     }
 
     public static Context getContext() {
