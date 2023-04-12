@@ -16,7 +16,6 @@ import com.wangzhen.reader.databinding.FragmentLocalBookBinding;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
 import com.wangzhen.reader.utils.media.MediaStoreHelper;
-import com.wangzhen.reader.widget.RefreshLayout;
 
 /**
  * LocalBookFragment
@@ -24,14 +23,12 @@ import com.wangzhen.reader.widget.RefreshLayout;
  */
 public class LocalBookFragment extends BaseFileFragment {
     private FragmentLocalBookBinding binding;
-    RefreshLayout mRlRefresh;
     RecyclerView mRvContent;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLocalBookBinding.inflate(inflater);
-        mRlRefresh = binding.refreshLayout;
         mRvContent = binding.localBookRvContent;
         return binding.getRoot();
     }
@@ -72,14 +69,9 @@ public class LocalBookFragment extends BaseFileFragment {
 
     private void loadFiles() {
         MediaStoreHelper.getAllBookFile(getActivity(), (files) -> {
-            if (files.isEmpty()) {
-                mRlRefresh.showEmpty();
-            } else {
-                mAdapter.setData(files);
-                mRlRefresh.showFinish();
-                if (mListener != null) {
-                    mListener.onCategoryChanged();
-                }
+            mAdapter.setData(files);
+            if (mListener != null) {
+                mListener.onCategoryChanged();
             }
         });
     }
