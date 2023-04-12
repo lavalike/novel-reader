@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -32,6 +31,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.ActivityReadBinding;
@@ -85,7 +86,7 @@ public class ReadActivity extends BaseActivity {
     TextView mTvCategory;
     TextView mTvNightMode;
     TextView mTvSetting;
-    ListView mLvCategory;
+    RecyclerView mRvCategory;
 
     private ReadSettingDialog mSettingDialog;
     private PageLoader mPageLoader;
@@ -104,7 +105,7 @@ public class ReadActivity extends BaseActivity {
 
             switch (msg.what) {
                 case WHAT_CATEGORY:
-                    mLvCategory.setSelection(mPageLoader.getChapterPos());
+                    mRvCategory.scrollToPosition(mPageLoader.getChapterPos());
                     break;
                 case WHAT_CHAPTER:
                     mPageLoader.openChapter();
@@ -198,7 +199,7 @@ public class ReadActivity extends BaseActivity {
         mTvCategory = binding.readTvCategory;
         mTvNightMode = binding.readTvNightMode;
         mTvSetting = binding.readTvSetting;
-        mLvCategory = binding.readIvCategory;
+        mRvCategory = binding.rvCategory;
     }
 
     private void initEvents() {
@@ -250,7 +251,7 @@ public class ReadActivity extends BaseActivity {
                 for (TxtChapter chapter : chapters) {
                     chapter.setTitle(chapter.getTitle());
                 }
-                mCategoryAdapter.refreshItems(chapters);
+                mCategoryAdapter.setData(chapters);
             }
 
             @Override
@@ -317,15 +318,10 @@ public class ReadActivity extends BaseActivity {
             }
         });
 
-        mLvCategory.setOnItemClickListener((parent, view, position, id) -> {
-            mDlSlide.closeDrawer(GravityCompat.START);
-            mPageLoader.skipToChapter(position);
-        });
-
         mTvCategory.setOnClickListener((v) -> {
             //移动到指定位置
-            if (mCategoryAdapter.getCount() > 0) {
-                mLvCategory.setSelection(mPageLoader.getChapterPos());
+            if (mCategoryAdapter.getDatas().size() > 0) {
+                mRvCategory.scrollToPosition(mPageLoader.getChapterPos());
             }
             //切换菜单
             toggleMenu(true);
@@ -383,9 +379,13 @@ public class ReadActivity extends BaseActivity {
     }
 
     private void setUpAdapter() {
-        mCategoryAdapter = new CategoryAdapter();
-        mLvCategory.setAdapter(mCategoryAdapter);
-        mLvCategory.setFastScrollEnabled(true);
+        mRvCategory.setLayoutManager(new LinearLayoutManager(this));
+        mCategoryAdapter = new CategoryAdapter(null);
+        mCategoryAdapter.setOnClickCallback((view, position) -> {
+            mDlSlide.closeDrawer(GravityCompat.START);
+            mPageLoader.skipToChapter(position);
+        });
+        mRvCategory.setAdapter(mCategoryAdapter);
     }
 
     // 注册亮度观察者

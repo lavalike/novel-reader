@@ -1,8 +1,7 @@
 <resources>
-    <dimen name="padding_large">16dp</dimen>
     <!--read-->
     <dimen name="read_text_bottom">12dp</dimen>
-    
+
     <!--read setting-->
     <dimen name="read_setting_divider">20dp</dimen>
     <dimen name="read_setting_btn_height">35dp</dimen>

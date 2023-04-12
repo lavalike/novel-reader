@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/read_dl_slide"
     android:layout_width="match_parent"
@@ -135,20 +136,20 @@
                 <TextView
                     android:id="@+id/read_tv_category"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
-                    android:drawableTop="@drawable/ic_read_menu_category"
-                    android:text="@string/read_category" />
+                    android:text="@string/read_category"
+                    app:drawableTopCompat="@drawable/ic_read_menu_category" />
 
                 <TextView
                     android:id="@+id/read_tv_night_mode"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
-                    android:drawableTop="@drawable/ic_read_menu_night"
-                    android:text="@string/mode_night" />
+                    android:text="@string/mode_night"
+                    app:drawableTopCompat="@drawable/ic_read_menu_night" />
 
                 <TextView
                     android:id="@+id/read_tv_setting"
                     style="@style/Theme.TextAppearance.Read.BottomMenu.Button"
-                    android:drawableTop="@drawable/ic_read_menu_font"
-                    android:text="@string/read_setting" />
+                    android:text="@string/read_setting"
+                    app:drawableTopCompat="@drawable/ic_read_menu_font" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -162,8 +163,8 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:paddingTop="@dimen/padding_large"
-        android:paddingBottom="@dimen/padding_large">
+        android:paddingTop="30dp"
+        android:paddingBottom="15dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -179,8 +180,8 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <ListView
-                android:id="@+id/read_iv_category"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
