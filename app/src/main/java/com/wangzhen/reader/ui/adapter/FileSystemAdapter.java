@@ -85,12 +85,9 @@ public class FileSystemAdapter extends RecyclerAdapter<File> {
         notifyDataSetChanged();
     }
 
-    private boolean isFileLoaded(String id) {
+    private boolean isFileLoaded(String path) {
         //如果是已加载的文件，则点击事件无效。
-        if (BookRepository.getInstance().getCollBook(id) != null) {
-            return true;
-        }
-        return false;
+        return BookRepository.getInstance().getCollBookByPath(path) != null;
     }
 
     public int getCheckableCount() {

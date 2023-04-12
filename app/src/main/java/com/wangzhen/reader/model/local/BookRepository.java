@@ -73,6 +73,10 @@ public class BookRepository {
         return mCollBookDao.queryBuilder().where(CollBookBeanDao.Properties._id.eq(bookId)).unique();
     }
 
+    public CollBookBean getCollBookByPath(String path) {
+        return mCollBookDao.queryBuilder().where(CollBookBeanDao.Properties.Cover.eq(path)).unique();
+    }
+
 
     public List<CollBookBean> getCollBooks() {
         return mCollBookDao.queryBuilder().orderDesc(CollBookBeanDao.Properties.LastRead).list();

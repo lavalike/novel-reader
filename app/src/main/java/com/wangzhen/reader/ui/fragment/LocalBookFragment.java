@@ -50,8 +50,8 @@ public class LocalBookFragment extends BaseFileFragment {
         }.onCreateView(binding.getRoot()));
         mAdapter.setOnClickCallback((v, pos) -> {
             //如果是已加载的文件，则点击事件无效。
-            String id = mAdapter.getDatas().get(pos).getAbsolutePath();
-            if (BookRepository.getInstance().getCollBook(id) != null) {
+            String path = mAdapter.getDatas().get(pos).getAbsolutePath();
+            if (BookRepository.getInstance().getCollBookByPath(path) != null) {
                 return;
             }
 
