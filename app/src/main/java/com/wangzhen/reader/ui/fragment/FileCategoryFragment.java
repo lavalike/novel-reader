@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wangzhen.adapter.base.RecyclerItem;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.FragmentFileCategoryBinding;
 import com.wangzhen.reader.model.local.BookRepository;
@@ -62,7 +63,7 @@ public class FileCategoryFragment extends BaseFileFragment {
             int oldScrollOffset = mRvContent.computeHorizontalScrollOffset();
             if (snapshot == null) return;
             mTvPath.setText(snapshot.filePath);
-            mAdapter.refreshItems(snapshot.files);
+            mAdapter.setData(snapshot.files);
             mRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset);
             //反馈
             if (mListener != null) {
@@ -76,14 +77,20 @@ public class FileCategoryFragment extends BaseFileFragment {
     }
 
     private void setUpAdapter() {
-        mAdapter = new FileSystemAdapter();
-        mAdapter.setOnItemClickListener((v, pos) -> {
-            File file = mAdapter.getItem(pos);
+        mAdapter = new FileSystemAdapter(null);
+        mAdapter.setEmpty(new RecyclerItem() {
+            @Override
+            protected int layout() {
+                return R.layout.layout_file_system_empty;
+            }
+        }.onCreateView(binding.getRoot()));
+        mAdapter.setOnClickCallback((v, pos) -> {
+            File file = mAdapter.getDatas().get(pos);
             if (file.isDirectory()) {
                 //保存当前信息。
                 FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
                 snapshot.filePath = mTvPath.getText().toString();
-                snapshot.files = new ArrayList<File>(mAdapter.getItems());
+                snapshot.files = new ArrayList<>(mAdapter.getDatas());
                 snapshot.scrollOffset = mRvContent.computeVerticalScrollOffset();
                 mFileStack.push(snapshot);
                 //切换下一个文件
@@ -91,7 +98,7 @@ public class FileCategoryFragment extends BaseFileFragment {
             } else {
 
                 //如果是已加载的文件，则点击事件无效。
-                String id = mAdapter.getItem(pos).getAbsolutePath();
+                String id = mAdapter.getDatas().get(pos).getAbsolutePath();
                 if (BookRepository.getInstance().getCollBook(id) != null) {
                     return;
                 }
@@ -117,7 +124,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         //排序
         Collections.sort(rootFiles, new FileComparator());
         //加入
-        mAdapter.refreshItems(rootFiles);
+        mAdapter.setData(rootFiles);
         //反馈
         if (mListener != null) {
             mListener.onCategoryChanged();

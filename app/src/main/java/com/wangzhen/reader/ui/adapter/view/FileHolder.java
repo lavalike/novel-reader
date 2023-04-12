@@ -1,14 +1,16 @@
 package com.wangzhen.reader.ui.adapter.view;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.wangzhen.adapter.base.RecyclerViewHolder;
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.databinding.ItemFileBinding;
 import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.base.adapter.ViewHolderImpl;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.FileUtils;
 import com.wangzhen.reader.utils.MD5Utils;
@@ -18,10 +20,12 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * Created by wangzhen on 17-5-27.
+ * FileHolder
+ * Created by wangzhen on 2023/4/12
  */
+public class FileHolder extends RecyclerViewHolder<File> {
+    private ItemFileBinding binding;
 
-public class FileHolder extends ViewHolderImpl<File> {
     private ImageView mIvIcon;
     private CheckBox mCbSelect;
     private TextView mTvName;
@@ -30,30 +34,29 @@ public class FileHolder extends ViewHolderImpl<File> {
     private TextView mTvDate;
     private TextView mTvSubCount;
 
-    private HashMap<File, Boolean> mSelectedMap;
+    private final HashMap<File, Boolean> mSelectedMap;
 
-    public FileHolder(HashMap<File, Boolean> selectedMap) {
+    public FileHolder(ViewGroup parent, HashMap<File, Boolean> selectedMap) {
+        super(parent, R.layout.item_file);
         mSelectedMap = selectedMap;
     }
 
     @Override
-    public void initView() {
-        mIvIcon = findById(R.id.file_iv_icon);
-        mCbSelect = findById(R.id.file_cb_select);
-        mTvName = findById(R.id.file_tv_name);
-        mLlBrief = findById(R.id.file_ll_brief);
-        mTvSize = findById(R.id.file_tv_size);
-        mTvDate = findById(R.id.file_tv_date);
-        mTvSubCount = findById(R.id.file_tv_sub_count);
-    }
+    public void bind() {
+        binding = ItemFileBinding.bind(itemView);
+        mIvIcon = binding.fileIvIcon;
+        mCbSelect = binding.fileCbSelect;
+        mTvName = binding.fileTvName;
+        mLlBrief = binding.fileLlBrief;
+        mTvSize = binding.fileTvSize;
+        mTvDate = binding.fileTvDate;
+        mTvSubCount = binding.fileTvSubCount;
 
-    @Override
-    public void onBind(File data, int pos) {
         //判断是文件还是文件夹
-        if (data.isDirectory()) {
-            setFolder(data);
+        if (mData.isDirectory()) {
+            setFolder(mData);
         } else {
-            setFile(data);
+            setFile(mData);
         }
     }
 
@@ -96,11 +99,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         if (list != null) {
             count = list.length;
         }
-        mTvSubCount.setText(getContext().getString(R.string.file_sub_count, count));
+        mTvSubCount.setText(itemView.getContext().getString(R.string.file_sub_count, count));
     }
 
-    @Override
-    protected int getItemLayoutId() {
-        return R.layout.item_file;
-    }
 }

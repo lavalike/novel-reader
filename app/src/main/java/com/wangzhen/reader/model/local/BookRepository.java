@@ -70,8 +70,7 @@ public class BookRepository {
 
     /*****************************get************************************************/
     public CollBookBean getCollBook(String bookId) {
-        CollBookBean bean = mCollBookDao.queryBuilder().where(CollBookBeanDao.Properties._id.eq(bookId)).unique();
-        return bean;
+        return mCollBookDao.queryBuilder().where(CollBookBeanDao.Properties._id.eq(bookId)).unique();
     }
 
 

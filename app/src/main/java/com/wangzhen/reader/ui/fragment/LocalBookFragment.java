@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wangzhen.adapter.base.RecyclerItem;
+import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.FragmentLocalBookBinding;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
@@ -17,10 +19,9 @@ import com.wangzhen.reader.utils.media.MediaStoreHelper;
 import com.wangzhen.reader.widget.RefreshLayout;
 
 /**
- * Created by wangzhen on 17-5-27.
- * 本地书籍
+ * LocalBookFragment
+ * Created by wangzhen on 2023/4/12
  */
-
 public class LocalBookFragment extends BaseFileFragment {
     private FragmentLocalBookBinding binding;
     RefreshLayout mRlRefresh;
@@ -43,10 +44,16 @@ public class LocalBookFragment extends BaseFileFragment {
     }
 
     private void setUpAdapter() {
-        mAdapter = new FileSystemAdapter();
-        mAdapter.setOnItemClickListener((v, pos) -> {
+        mAdapter = new FileSystemAdapter(null);
+        mAdapter.setEmpty(new RecyclerItem() {
+            @Override
+            protected int layout() {
+                return R.layout.layout_file_system_empty;
+            }
+        }.onCreateView(binding.getRoot()));
+        mAdapter.setOnClickCallback((v, pos) -> {
             //如果是已加载的文件，则点击事件无效。
-            String id = mAdapter.getItem(pos).getAbsolutePath();
+            String id = mAdapter.getDatas().get(pos).getAbsolutePath();
             if (BookRepository.getInstance().getCollBook(id) != null) {
                 return;
             }
@@ -68,7 +75,7 @@ public class LocalBookFragment extends BaseFileFragment {
             if (files.isEmpty()) {
                 mRlRefresh.showEmpty();
             } else {
-                mAdapter.refreshItems(files);
+                mAdapter.setData(files);
                 mRlRefresh.showFinish();
                 if (mListener != null) {
                     mListener.onCategoryChanged();
