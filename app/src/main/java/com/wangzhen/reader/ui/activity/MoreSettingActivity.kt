@@ -1,43 +1,35 @@
-package com.wangzhen.reader.ui.activity;
+package com.wangzhen.reader.ui.activity
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
-import com.wangzhen.commons.toolbar.impl.Toolbar;
-import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
-import com.wangzhen.reader.databinding.ActivityMoreSettingBinding;
-import com.wangzhen.reader.model.local.ReadSettingManager;
-import com.wangzhen.reader.ui.base.BaseActivity;
+import android.os.Bundle
+import com.wangzhen.commons.toolbar.impl.Toolbar
+import com.wangzhen.reader.base.toolbar.AppCommonToolbar
+import com.wangzhen.reader.databinding.ActivityMoreSettingBinding
+import com.wangzhen.reader.model.local.ReadSettingManager
+import com.wangzhen.reader.ui.base.BaseActivity
 
 /**
  * MoreSettingActivity
  * Created by wangzhen on 2023/4/11
  */
-public class MoreSettingActivity extends BaseActivity {
-    private ActivityMoreSettingBinding binding;
-    private ReadSettingManager mSettingManager;
-    private boolean isVolumeTurnPage;
+class MoreSettingActivity : BaseActivity() {
+    private lateinit var binding: ActivityMoreSettingBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMoreSettingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMoreSettingBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        mSettingManager = ReadSettingManager.getInstance();
-        isVolumeTurnPage = mSettingManager.isVolumeTurnPage();
-
-        binding.moreSettingScVolume.setChecked(isVolumeTurnPage);
-        binding.moreSettingRlVolume.setOnClickListener((v) -> {
-            binding.moreSettingScVolume.setChecked(isVolumeTurnPage = !isVolumeTurnPage);
-            mSettingManager.setVolumeTurnPage(isVolumeTurnPage);
-        });
+        var isVolumeTurnPage = ReadSettingManager.getInstance().isVolumeTurnPage
+        with(binding) {
+            moreSettingScVolume.isChecked = isVolumeTurnPage
+            moreSettingRlVolume.setOnClickListener {
+                isVolumeTurnPage = !isVolumeTurnPage
+                moreSettingScVolume.isChecked = isVolumeTurnPage
+                ReadSettingManager.getInstance().isVolumeTurnPage = isVolumeTurnPage
+            }
+        }
     }
 
-    @Nullable
-    @Override
-    public Toolbar createToolbar() {
-        return new AppCommonToolbar(this, "阅读设置");
+    override fun createToolbar(): Toolbar? {
+        return AppCommonToolbar(this, "阅读设置")
     }
 }

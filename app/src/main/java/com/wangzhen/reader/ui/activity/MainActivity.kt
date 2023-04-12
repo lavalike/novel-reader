@@ -1,76 +1,69 @@
-package com.wangzhen.reader.ui.activity;
+package com.wangzhen.reader.ui.activity
 
-import android.Manifest;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-
-import com.wangzhen.permission.PermissionManager;
-import com.wangzhen.permission.callback.AbsPermissionCallback;
-import com.wangzhen.reader.databinding.ActivityMainBinding;
-import com.wangzhen.reader.ui.base.BaseActivity;
+import android.Manifest
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import com.wangzhen.permission.PermissionManager.request
+import com.wangzhen.permission.callback.AbsPermissionCallback
+import com.wangzhen.reader.databinding.ActivityMainBinding
+import com.wangzhen.reader.ui.base.BaseActivity
+import com.wangzhen.reader.utils.toast
 
 /**
  * MainActivity
  * Created by wangzhen on 2023/4/11
  */
-public class MainActivity extends BaseActivity {
-
-    private ActivityMainBinding binding;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        binding.btnOpen.setOnClickListener(view -> checkPermissions());
+class MainActivity : BaseActivity() {
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnOpen.setOnClickListener { checkPermissions() }
     }
 
-    private void checkPermissions() {
+    private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            checkExternalPermissions();
+            checkExternalPermissions()
         } else {
             if (!Environment.isExternalStorageManager()) {
-                launcher.launch(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                launcher.launch(Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION))
             } else {
-                openFileSystem();
+                openFileSystem()
             }
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (Environment.isExternalStorageManager()) {
-            openFileSystem();
-        } else {
-            Toast.makeText(MainActivity.this, "请授予所有文件访问权限", Toast.LENGTH_SHORT).show();
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (Environment.isExternalStorageManager()) {
+                openFileSystem()
+            } else {
+                "请授予所有文件访问权限".toast()
+            }
         }
-    });
 
-    private void checkExternalPermissions() {
-        PermissionManager.request(this, new AbsPermissionCallback() {
-            @Override
-            public void onGrant(@NonNull String[] strings) {
-                openFileSystem();
+    private fun checkExternalPermissions() {
+        request(this, object : AbsPermissionCallback() {
+            override fun onGrant(permissions: Array<String>) {
+                openFileSystem()
             }
 
-            @Override
-            public void onDeny(@NonNull String[] strings, @NonNull String[] strings1) {
-                Toast.makeText(MainActivity.this, "请授予存储访问权限", Toast.LENGTH_SHORT).show();
+            override fun onDeny(
+                deniedPermissions: Array<String>, neverAskPermissions: Array<String>
+            ) {
+                "请授予存储访问权限".toast()
             }
-        }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
-    private void openFileSystem() {
-        startActivity(new Intent(this, FileSystemActivity.class));
+    private fun openFileSystem() {
+        startActivity(Intent(this, FileSystemActivity::class.java))
     }
 }

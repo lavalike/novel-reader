@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +30,6 @@ import com.wangzhen.reader.ui.fragment.LocalBookFragment;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.MD5Utils;
 import com.wangzhen.reader.utils.StringUtils;
-import com.wangzhen.reader.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -164,8 +164,7 @@ public class FileSystemActivity extends BaseActivity {
             //改变是否可以全选
             changeCheckedAllStatus();
             //提示加入书架成功
-            ToastUtils.show(getResources().getString(R.string.file_add_succeed, collBooks.size()));
-
+            Toast.makeText(this, getResources().getString(R.string.file_add_succeed, collBooks.size()), Toast.LENGTH_SHORT).show();
         });
 
         mBtnDelete.setOnClickListener((v) -> {
@@ -176,7 +175,7 @@ public class FileSystemActivity extends BaseActivity {
                     //删除选中的文件
                     mCurFragment.deleteCheckedFiles();
                     //提示删除文件成功
-                    ToastUtils.show("删除文件成功");
+                    Toast.makeText(FileSystemActivity.this, "删除文件成功", Toast.LENGTH_SHORT).show();
                 }
             }).setNegativeButton(getResources().getString(R.string.common_cancel), null).show();
         });
