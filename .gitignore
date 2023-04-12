@@ -17,6 +17,8 @@ out/
 # Gradle files
 .gradle/
 build/
+*.iml
+.idea
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -32,30 +34,3 @@ proguard/
 
 # Android Studio captures folder
 captures/
-
-# Intellij
-*.iml
-.idea
-
-# Keystore files
-*.jks
-
-# External native build folder generated in Android Studio 2.2 and later
-.externalNativeBuild
-
-# Google Services (e.g. APIs or Firebase)
-google-services.json
-
-# Freeline
-freeline.py
-freeline/
-freeline_project_description.json
-
-# note
-app/daily
-
-# ssh
-.ssh/
-app/libs/
-.DS_Store
-/.ssh/
