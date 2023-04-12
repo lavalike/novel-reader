@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">图书</string>
+    <!--shelf-->
+    <string name="shelf_empty">还没有书哦，快去添加吧</string>
+    <string name="shelf_book_type">- TXT -</string>
     <!--mode-->
     <string name="mode_night">夜间</string>
     <string name="mode_morning">日间</string>

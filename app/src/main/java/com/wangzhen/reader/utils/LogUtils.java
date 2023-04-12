@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.wangzhen.reader.MainApplication;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,7 +29,7 @@ public class LogUtils {
     private static String LOG_FILE_NAME;// 日志文件保存名称
 
     public static void init(Context context) { // 在Application中初始化
-        LOG_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + MainApplication.getContext().getPackageName();
+        LOG_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + AppUtils.getContext().getPackageName();
         LOG_FILE_NAME = "Log";
     }
 
@@ -156,17 +154,14 @@ public class LogUtils {
             if (st.getFileName().equals("LogUtils.java")) {
                 continue;
             }
-            return "[" + Thread.currentThread().getName() + "("
-                    + Thread.currentThread().getId() + "): " + st.getFileName()
-                    + ":" + st.getLineNumber() + "]";
+            return "[" + Thread.currentThread().getName() + "(" + Thread.currentThread().getId() + "): " + st.getFileName() + ":" + st.getLineNumber() + "]";
         }
         return null;
     }
 
     private static String createMessage(String msg) {
         String functionName = getFunctionName();
-        String message = (functionName == null ? msg
-                : (functionName + " - " + msg));
+        String message = (functionName == null ? msg : (functionName + " - " + msg));
         return message;
     }
 

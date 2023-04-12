@@ -1,22 +1,20 @@
 package com.wangzhen.reader.utils;
 
 /**
- * 编码类型
+ * charsets
+ * Created by wangzhen on 2023/4/12
  */
 public enum Charset {
-	UTF8("UTF-8"),
-	UTF16LE("UTF-16LE"),
-	UTF16BE("UTF-16BE"),
-	GBK("GBK");
-	
-	private String mName;
-	public static final byte BLANK = 0x0a;
+    UTF8("UTF-8"), GBK("GBK");
 
-	private Charset(String name) {
-		mName = name;
-	}
-	
-	public String getName() {
-		return mName;
-	}
+    private final String mName;
+    public static final byte BLANK = 0x0a;
+
+    Charset(String name) {
+        mName = name;
+    }
+
+    public String getName() {
+        return mName;
+    }
 }

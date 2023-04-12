@@ -1,81 +1,77 @@
-package com.wangzhen.reader.ui.fragment;
+package com.wangzhen.reader.ui.fragment
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.wangzhen.reader.databinding.FragmentBookshelfBinding;
-import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.activity.ReadActivity;
-import com.wangzhen.reader.ui.adapter.CollBookAdapter;
-import com.wangzhen.reader.ui.base.BaseFragment;
-
-import java.util.Locale;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import com.wangzhen.adapter.base.RecyclerItem
+import com.wangzhen.reader.R
+import com.wangzhen.reader.databinding.FragmentBookshelfBinding
+import com.wangzhen.reader.model.bean.CollBookBean
+import com.wangzhen.reader.model.local.BookRepository
+import com.wangzhen.reader.ui.activity.ReadActivity
+import com.wangzhen.reader.ui.adapter.BookShelfAdapter
+import com.wangzhen.reader.ui.base.BaseFragment
+import java.util.*
 
 /**
- * Created by wangzhen on 17-4-15.
+ * BookShelfFragment
+ * Created by wangzhen on 2023/4/12
  */
+class BookShelfFragment : BaseFragment() {
+    private lateinit var binding: FragmentBookshelfBinding
+    private lateinit var shelfAdapter: BookShelfAdapter
 
-public class BookShelfFragment extends BaseFragment {
-    private FragmentBookshelfBinding binding;
-    private RecyclerView mRvContent;
-
-    private CollBookAdapter mCollBookAdapter;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentBookshelfBinding.inflate(inflater);
-        mRvContent = binding.bookShelfRvContent;
-        return binding.getRoot();
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentBookshelfBinding.inflate(inflater)
+        return binding.root
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setUpAdapter();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        loadBooks()
     }
 
-    private void setUpAdapter() {
-        mCollBookAdapter = new CollBookAdapter();
-        mCollBookAdapter.setOnItemClickListener((view, pos) -> {
-            CollBookBean collBook = mCollBookAdapter.getItem(pos);
-            ReadActivity.startActivity(requireContext(), collBook);
-        });
-        mCollBookAdapter.setOnItemLongClickListener((view, pos) -> {
-            CollBookBean book = mCollBookAdapter.getItem(pos);
-            deleteBook(book);
-            return false;
-        });
-        mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.setAdapter(mCollBookAdapter);
-        mCollBookAdapter.refreshItems(BookRepository.getInstance().getCollBooks());
+    private fun loadBooks() {
+        shelfAdapter.setData(BookRepository.getInstance().collBooks)
     }
 
-    private void deleteBook(CollBookBean book) {
-        new AlertDialog.Builder(requireContext()).setMessage(String.format(Locale.getDefault(), "确定删除%s吗", book.getTitle())).setNegativeButton("取消", null).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                BookRepository.getInstance().deleteBook(book);
-                Toast.makeText(getContext(), book.getTitle() + "已删除", Toast.LENGTH_SHORT).show();
-                setUpAdapter();
+    private fun setUpAdapter() {
+        with(binding.bookShelfRvContent) {
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = BookShelfAdapter(BookRepository.getInstance().collBooks).apply {
+                shelfAdapter = this
+                setOnClickCallback { _, pos ->
+                    ReadActivity.startActivity(requireContext(), datas[pos])
+                }
+                setOnLongClickCallback { _, pos ->
+                    deleteBook(datas[pos])
+                }
+                setEmpty(object : RecyclerItem() {
+                    override fun layout() = R.layout.layout_bookshelf_empty
+                }.onCreateView(binding.root))
             }
-        }).create().show();
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setUpAdapter();
+    private fun deleteBook(book: CollBookBean) {
+        AlertDialog.Builder(requireContext())
+            .setMessage(String.format(Locale.getDefault(), "确定删除%s吗", book.title))
+            .setNegativeButton("取消", null).setPositiveButton("确定") { _, _ ->
+                BookRepository.getInstance().deleteBook(book)
+                Toast.makeText(context, book.title + "已删除", Toast.LENGTH_SHORT).show()
+                setUpAdapter()
+            }.create().show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadBooks()
     }
 }

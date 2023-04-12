@@ -1,22 +1,15 @@
-package com.wangzhen.reader;
+package com.wangzhen.reader
 
-import android.app.Application;
-import android.content.Context;
+import android.app.Application
+import com.wangzhen.reader.utils.AppUtils
 
 /**
  * MainApplication
  * Created by wangzhen on 2023/4/11
  */
-public class MainApplication extends Application {
-    private static Context sInstance;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sInstance = this;
-    }
-
-    public static Context getContext() {
-        return sInstance;
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        AppUtils.init(this)
     }
 }

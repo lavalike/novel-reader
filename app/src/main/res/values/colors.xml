@@ -20,7 +20,9 @@
     <color name="light_blue">#039BE5</color>
     <color name="light_translucent">#23000000</color>
     <color name="common_gray">#EEEEEE</color>
+
     <color name="textColor">#3b424c</color>
+    <color name="textColorSecondary">#a0a4a9</color>
 
     <!--通用分割线细-->
     <color name="divider_narrow">#E3E3E3</color>

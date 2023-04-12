@@ -2,8 +2,6 @@ package com.wangzhen.reader.utils;
 
 import androidx.annotation.StringRes;
 
-import com.wangzhen.reader.MainApplication;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,11 +74,11 @@ public class StringUtils {
     }
 
     public static String getString(@StringRes int id) {
-        return MainApplication.getContext().getResources().getString(id);
+        return AppUtils.getContext().getResources().getString(id);
     }
 
     public static String getString(@StringRes int id, Object... formatArgs) {
-        return MainApplication.getContext().getResources().getString(id, formatArgs);
+        return AppUtils.getContext().getResources().getString(id, formatArgs);
     }
 
     /**

@@ -1,29 +1,21 @@
-package com.wangzhen.reader.ui.base;
+package com.wangzhen.reader.ui.base
 
-import com.wangzhen.commons.toolbar.ToolbarActivity;
-
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import com.wangzhen.commons.toolbar.ToolbarActivity
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * BaseActivity
  * Created by wangzhen on 2023/4/11
  */
-public class BaseActivity extends ToolbarActivity {
-    protected CompositeDisposable mDisposable;
-
-    protected void addDisposable(Disposable d) {
-        if (mDisposable == null) {
-            mDisposable = new CompositeDisposable();
-        }
-        mDisposable.add(d);
+open class BaseActivity : ToolbarActivity() {
+    private var disposables = CompositeDisposable()
+    protected fun addDisposable(d: Disposable) {
+        disposables.add(d)
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mDisposable != null) {
-            mDisposable.dispose();
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 }

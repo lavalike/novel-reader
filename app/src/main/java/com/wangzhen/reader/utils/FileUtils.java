@@ -2,8 +2,6 @@ package com.wangzhen.reader.utils;
 
 import android.os.Environment;
 
-import com.wangzhen.reader.MainApplication;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,20 +30,20 @@ public class FileUtils {
     public static final String SUFFIX_PDF = ".pdf";
 
     //获取文件夹
-    public static File getFolder(String filePath){
+    public static File getFolder(String filePath) {
         File file = new File(filePath);
         //如果文件夹不存在，就创建它
-        if (!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         return file;
     }
 
     //获取文件
-    public static synchronized File getFile(String filePath){
+    public static synchronized File getFile(String filePath) {
         File file = new File(filePath);
         try {
-            if (!file.exists()){
+            if (!file.exists()) {
                 //创建父类文件夹
                 getFolder(file.getParent());
                 //创建文件
@@ -58,20 +56,15 @@ public class FileUtils {
     }
 
     //获取Cache文件夹
-    public static String getCachePath(){
-        if (isSdCardExist()){
-            return MainApplication.getContext()
-                    .getExternalCacheDir()
-                    .getAbsolutePath();
-        }
-        else{
-            return MainApplication.getContext()
-                    .getCacheDir()
-                    .getAbsolutePath();
+    public static String getCachePath() {
+        if (isSdCardExist()) {
+            return AppUtils.getContext().getExternalCacheDir().getAbsolutePath();
+        } else {
+            return AppUtils.getContext().getCacheDir().getAbsolutePath();
         }
     }
 
-    public static long getDirSize(File file){
+    public static long getDirSize(File file) {
         //判断文件是否存在
         if (file.exists()) {
             //如果是目录则递归计算其内容的总大小
@@ -101,51 +94,52 @@ public class FileUtils {
     /**
      * 本来是获取File的内容的。但是为了解决文本缩进、换行的问题
      * 这个方法就是专门用来获取书籍的...
-     *
+     * <p>
      * 应该放在BookRepository中。。。
+     *
      * @param file
      * @return
      */
-    public static String getFileContent(File file){
+    public static String getFileContent(File file) {
         Reader reader = null;
         String str = null;
         StringBuilder sb = new StringBuilder();
         try {
             reader = new FileReader(file);
             BufferedReader br = new BufferedReader(reader);
-            while ((str = br.readLine()) != null){
+            while ((str = br.readLine()) != null) {
                 //过滤空语句
-                if (!str.equals("")){
+                if (!str.equals("")) {
                     //由于sb会自动过滤\n,所以需要加上去
-                    sb.append("    "+str+"\n");
+                    sb.append("    " + str + "\n");
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             IOUtils.close(reader);
         }
         return sb.toString();
     }
 
     //判断是否挂载了SD卡
-    public static boolean isSdCardExist(){
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
+    public static boolean isSdCardExist() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return true;
         }
         return false;
     }
 
     //递归删除文件夹下的数据
-    public static synchronized void deleteFile(String filePath){
+    public static synchronized void deleteFile(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return;
 
-        if (file.isDirectory()){
+        if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File subFile : files){
+            for (File subFile : files) {
                 String path = subFile.getPath();
                 deleteFile(path);
             }
@@ -157,47 +151,44 @@ public class FileUtils {
     //由于递归的耗时问题，取巧只遍历内部三层
 
     //获取txt文件
-    public static List<File> getTxtFiles(String filePath,int layer){
+    public static List<File> getTxtFiles(String filePath, int layer) {
         List txtFiles = new ArrayList();
         File file = new File(filePath);
 
         //如果层级为 3，则直接返回
-        if (layer == 3){
+        if (layer == 3) {
             return txtFiles;
         }
 
         //获取文件夹
-        File[] dirs = file.listFiles(
-                pathname -> {
-                    if (pathname.isDirectory() && !pathname.getName().startsWith(".")) {
-                        return true;
-                    }
-                    //获取txt文件
-                    else if(pathname.getName().endsWith(".txt")){
-                        txtFiles.add(pathname);
-                        return false;
-                    }
-                    else{
-                        return false;
-                    }
-                }
-        );
+        File[] dirs = file.listFiles(pathname -> {
+            if (pathname.isDirectory() && !pathname.getName().startsWith(".")) {
+                return true;
+            }
+            //获取txt文件
+            else if (pathname.getName().endsWith(".txt")) {
+                txtFiles.add(pathname);
+                return false;
+            } else {
+                return false;
+            }
+        });
         //遍历文件夹
-        for (File dir : dirs){
+        for (File dir : dirs) {
             //递归遍历txt文件
-            txtFiles.addAll(getTxtFiles(dir.getPath(),layer + 1));
+            txtFiles.addAll(getTxtFiles(dir.getPath(), layer + 1));
         }
         return txtFiles;
     }
 
     //由于遍历比较耗时
-    public static Single<List<File>> getSDTxtFile(){
+    public static Single<List<File>> getSDTxtFile() {
         //外部存储卡路径
         String rootPath = Environment.getExternalStorageDirectory().getPath();
         return Single.create(new SingleOnSubscribe<List<File>>() {
             @Override
             public void subscribe(SingleEmitter<List<File>> e) throws Exception {
-                List<File> files = getTxtFiles(rootPath,0);
+                List<File> files = getTxtFiles(rootPath, 0);
                 e.onSuccess(files);
             }
         });
@@ -213,11 +204,8 @@ public class FileUtils {
             bis = new BufferedInputStream(new FileInputStream(fileName));
             bis.mark(0);
             int read = bis.read(first3Bytes, 0, 3);
-            if (read == -1)
-                return charset;
-            if (first3Bytes[0] == (byte) 0xEF
-                    && first3Bytes[1] == (byte) 0xBB
-                    && first3Bytes[2] == (byte) 0xBF) {
+            if (read == -1) return charset;
+            if (first3Bytes[0] == (byte) 0xEF && first3Bytes[1] == (byte) 0xBB && first3Bytes[2] == (byte) 0xBF) {
                 charset = Charset.UTF8;
                 checked = true;
             }
@@ -235,8 +223,7 @@ public class FileUtils {
             bis.mark(0);
             if (!checked) {
                 while ((read = bis.read()) != -1) {
-                    if (read >= 0xF0)
-                        break;
+                    if (read >= 0xF0) break;
                     if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
                         break;
                     if (0xC0 <= read && read <= 0xDF) {
@@ -244,8 +231,7 @@ public class FileUtils {
                         if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
                             // (0x80 - 0xBF),也可能在GB编码内
                             continue;
-                        else
-                            break;
+                        else break;
                     } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
                         read = bis.read();
                         if (0x80 <= read && read <= 0xBF) {
@@ -253,10 +239,8 @@ public class FileUtils {
                             if (0x80 <= read && read <= 0xBF) {
                                 charset = Charset.UTF8;
                                 break;
-                            } else
-                                break;
-                        } else
-                            break;
+                            } else break;
+                        } else break;
                     }
                 }
             }
