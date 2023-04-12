@@ -171,6 +171,7 @@ public class ReadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityReadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        fitDarkStatusBar();
         initData();
         initViews();
         initEvents();
@@ -233,9 +234,6 @@ public class ReadActivity extends BaseActivity {
         //初始化屏幕常亮类
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "ireader:keep bright");
-
-        //隐藏StatusBar
-        mPvPage.post(this::hideSystemBar);
 
         //初始化BottomMenu
         initBottomMenu();
@@ -357,7 +355,7 @@ public class ReadActivity extends BaseActivity {
             toggleNightMode();
         });
 
-        mSettingDialog.setOnDismissListener(dialog -> hideSystemBar());
+        mSettingDialog.setOnDismissListener(dialog -> fitDarkStatusBar());
     }
 
     private void initBottomMenu() {
@@ -424,7 +422,7 @@ public class ReadActivity extends BaseActivity {
      * @return 是否隐藏成功
      */
     private boolean hideReadMenu() {
-        hideSystemBar();
+        fitDarkStatusBar();
         if (mTopMenuContainer.getVisibility() == VISIBLE) {
             toggleMenu(true);
             return true;
@@ -433,16 +431,6 @@ public class ReadActivity extends BaseActivity {
             return true;
         }
         return false;
-    }
-
-    private void showSystemBar() {
-        //显示
-
-    }
-
-    private void hideSystemBar() {
-        //隐藏
-
     }
 
     /**
@@ -461,7 +449,7 @@ public class ReadActivity extends BaseActivity {
             mTvPageTip.setVisibility(GONE);
 
             if (hideStatusBar) {
-                hideSystemBar();
+                fitDarkStatusBar();
             }
         } else {
             mTopMenuContainer.setVisibility(View.VISIBLE);
@@ -469,7 +457,7 @@ public class ReadActivity extends BaseActivity {
             mTopMenuContainer.startAnimation(mTopInAnim);
             mLlBottomMenu.startAnimation(mBottomInAnim);
 
-            showSystemBar();
+            fitLightStatusBar();
         }
     }
 

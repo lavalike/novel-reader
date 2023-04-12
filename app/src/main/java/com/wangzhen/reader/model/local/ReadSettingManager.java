@@ -1,6 +1,6 @@
 package com.wangzhen.reader.model.local;
 
-import com.wangzhen.reader.utils.Constant;
+import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.ScreenUtils;
 import com.wangzhen.reader.utils.SharedPreUtils;
 import com.wangzhen.reader.widget.page.PageMode;
@@ -67,7 +67,7 @@ public class ReadSettingManager {
     }
 
     public int getBrightness() {
-        return sharedPreUtils.getInt(SHARED_READ_BRIGHTNESS, Constant.Screen.DEFAULT_BRIGHTNESS);
+        return sharedPreUtils.getInt(SHARED_READ_BRIGHTNESS, AppConfig.screen.DEFAULT_BRIGHTNESS);
     }
 
     public boolean isBrightnessAuto() {
@@ -75,7 +75,7 @@ public class ReadSettingManager {
     }
 
     public int getTextSize() {
-        return sharedPreUtils.getInt(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(Constant.Text.DEFAULT_TEXT_SIZE));
+        return sharedPreUtils.getInt(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(AppConfig.text.DEFAULT_TEXT_SIZE));
     }
 
     public boolean isDefaultTextSize() {

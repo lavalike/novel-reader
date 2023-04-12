@@ -4,8 +4,8 @@ import com.wangzhen.reader.model.bean.BookChapterBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.model.local.Void;
+import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.Charset;
-import com.wangzhen.reader.utils.Constant;
 import com.wangzhen.reader.utils.FileUtils;
 import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.LogUtils;
@@ -317,7 +317,7 @@ public class LocalPageLoader extends PageLoader {
             //表示当前CollBook已经阅读
             mCollBook.setIsUpdate(false);
             mCollBook.setLastChapter(mChapterList.get(mCurChapterPos).getTitle());
-            mCollBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            mCollBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.format.FORMAT_BOOK_DATE));
             //直接更新
             BookRepository.getInstance().saveCollBook(mCollBook);
         }
@@ -339,7 +339,7 @@ public class LocalPageLoader extends PageLoader {
         //获取文件编码
         mCharset = FileUtils.getCharset(mBookFile.getAbsolutePath());
 
-        String lastModified = StringUtils.dateConvert(mBookFile.lastModified(), Constant.FORMAT_BOOK_DATE);
+        String lastModified = StringUtils.dateConvert(mBookFile.lastModified(), AppConfig.format.FORMAT_BOOK_DATE);
 
         // 判断文件是否已经加载过，并具有缓存
         if (!mCollBook.isUpdate() && mCollBook.getUpdated() != null && mCollBook.getUpdated().equals(lastModified) && mCollBook.getBookChapters() != null) {

@@ -16,7 +16,7 @@ import com.wangzhen.reader.model.bean.BookRecordBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
 import com.wangzhen.reader.model.local.ReadSettingManager;
-import com.wangzhen.reader.utils.Constant;
+import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.ScreenUtils;
@@ -47,12 +47,6 @@ public abstract class PageLoader {
     public static final int STATUS_PARING = 5;          // 正在解析 (装载本地数据)
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
-    // 默认的显示参数配置
-    private static final int DEFAULT_MARGIN_HEIGHT = 65; // 正文上下边距
-    private static final int DEFAULT_MARGIN_WIDTH = 20; // 正文左右边距
-    private static final int DEFAULT_TIP_MARGIN_TOP = 35; // 章节标题与顶部边距
-    private static final int DEFAULT_TIP_SIZE = 12; // 章节标题大小
-    private static final int EXTRA_TITLE_SIZE = 4; // 预留追回文本大小
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
@@ -165,9 +159,9 @@ public abstract class PageLoader {
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();
         // 初始化参数
-        mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        mMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
-        mTipMarginHeight = ScreenUtils.dpToPx(DEFAULT_TIP_MARGIN_TOP);
+        mMarginWidth = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_MARGIN_WIDTH);
+        mMarginHeight = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_MARGIN_HEIGHT);
+        mTipMarginHeight = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_TIP_MARGIN_TOP);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -180,7 +174,7 @@ public abstract class PageLoader {
     private void setUpTextParams(int textSize) {
         // 文字大小
         mTextSize = textSize;
-        mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
+        mTitleSize = mTextSize + ScreenUtils.spToPx(AppConfig.dimension.EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
         mTextInterval = mTextSize / 2;
         mTitleInterval = mTitleSize / 2;
@@ -194,7 +188,7 @@ public abstract class PageLoader {
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
-        mTipPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
+        mTipPaint.setTextSize(ScreenUtils.spToPx(AppConfig.dimension.DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTipPaint.setAntiAlias(true);
         mTipPaint.setSubpixelText(true);
 
@@ -794,10 +788,9 @@ public abstract class PageLoader {
         mBatteryPaint.setStyle(Paint.Style.FILL);
         canvas.drawRect(innerFrame, mBatteryPaint);
 
-        /******绘制当前时间********/
         //底部的字显示的位置Y
         float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mTipMarginHeight;
-        String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
+        String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.format.FORMAT_TIME);
         float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
         canvas.drawText(time, x, y, mTipPaint);
     }

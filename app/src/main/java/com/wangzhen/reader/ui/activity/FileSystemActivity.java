@@ -26,7 +26,7 @@ import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.fragment.BaseFileFragment;
 import com.wangzhen.reader.ui.fragment.FileCategoryFragment;
 import com.wangzhen.reader.ui.fragment.LocalBookFragment;
-import com.wangzhen.reader.utils.Constant;
+import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.MD5Utils;
 import com.wangzhen.reader.utils.StringUtils;
 import com.wangzhen.reader.utils.ToastUtils;
@@ -205,8 +205,8 @@ public class FileSystemActivity extends BaseActivity {
             collBook.setCover(file.getAbsolutePath());
             collBook.setLocal(true);
             collBook.setLastChapter("开始阅读");
-            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_BOOK_DATE));
-            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), AppConfig.format.FORMAT_BOOK_DATE));
+            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.format.FORMAT_BOOK_DATE));
             collBooks.add(collBook);
         }
         return collBooks;
