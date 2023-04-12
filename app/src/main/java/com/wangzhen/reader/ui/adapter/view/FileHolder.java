@@ -26,7 +26,6 @@ public class FileHolder extends ViewHolderImpl<File> {
     private CheckBox mCbSelect;
     private TextView mTvName;
     private LinearLayout mLlBrief;
-    private TextView mTvTag;
     private TextView mTvSize;
     private TextView mTvDate;
     private TextView mTvSubCount;
@@ -43,7 +42,6 @@ public class FileHolder extends ViewHolderImpl<File> {
         mCbSelect = findById(R.id.file_cb_select);
         mTvName = findById(R.id.file_tv_name);
         mLlBrief = findById(R.id.file_ll_brief);
-        mTvTag = findById(R.id.file_tv_tag);
         mTvSize = findById(R.id.file_tv_size);
         mTvDate = findById(R.id.file_tv_date);
         mTvSubCount = findById(R.id.file_tv_sub_count);
@@ -93,7 +91,12 @@ public class FileHolder extends ViewHolderImpl<File> {
         mLlBrief.setVisibility(View.GONE);
         mTvSubCount.setVisibility(View.VISIBLE);
 
-        mTvSubCount.setText(getContext().getString(R.string.file_sub_count, folder.list().length));
+        int count = 0;
+        String[] list = folder.list();
+        if (list != null) {
+            count = list.length;
+        }
+        mTvSubCount.setText(getContext().getString(R.string.file_sub_count, count));
     }
 
     @Override
