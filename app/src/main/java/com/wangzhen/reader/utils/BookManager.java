@@ -31,48 +31,6 @@ public class BookManager {
         }
         return sInstance;
     }
-
-    public void setPosition(long position) {
-        this.position = position;
-    }
-
-    public long getPosition() {
-        return position;
-    }
-
-    //获取章节的内容
-    public char[] getContent() {
-        if (cacheMap.size() == 0) {
-            return new char[1];
-        }
-        char[] block = cacheMap.get(chapterName).getData().get();
-        if (block == null) {
-            File file = getBookFile(bookId, chapterName);
-            block = FileUtils.getFileContent(file).toCharArray();
-            Cache cache = cacheMap.get(chapterName);
-            cache.data = new WeakReference<char[]>(block);
-        }
-        return block;
-    }
-
-    public void clear() {
-        cacheMap.clear();
-        position = 0;
-        chapterLen = 0;
-    }
-
-    /**
-     * 创建或获取存储文件
-     *
-     * @param folderName
-     * @param fileName
-     * @return
-     */
-    public static File getBookFile(String folderName, String fileName) {
-        return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_NB);
-    }
-
     /**
      * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存
      * 过)

@@ -9,14 +9,7 @@ import com.wangzhen.reader.model.gen.BookChapterBeanDao;
 import com.wangzhen.reader.model.gen.BookRecordBeanDao;
 import com.wangzhen.reader.model.gen.CollBookBeanDao;
 import com.wangzhen.reader.model.gen.DaoSession;
-import com.wangzhen.reader.utils.BookManager;
-import com.wangzhen.reader.utils.IOUtils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -69,27 +62,6 @@ public class BookRepository {
             mSession.getBookChapterBeanDao().insertOrReplaceInTx(beans);
             Log.d(TAG, "saveBookChaptersWithAsync: " + "进行存储");
         });
-    }
-
-    /**
-     * 存储章节
-     *
-     * @param folderName
-     * @param fileName
-     * @param content
-     */
-    public void saveChapterInfo(String folderName, String fileName, String content) {
-        File file = BookManager.getBookFile(folderName, fileName);
-        //获取流并存储
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
-            writer.write(content);
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-            IOUtils.close(writer);
-        }
     }
 
     public void saveBookRecord(BookRecordBean bean) {

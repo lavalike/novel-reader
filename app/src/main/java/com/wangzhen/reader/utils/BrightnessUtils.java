@@ -7,10 +7,9 @@ import android.util.Log;
 import android.view.WindowManager;
 
 /**
- * Created by wangzhen on 17-5-19.
- * 调节亮度的工具类
+ * 调节亮度工具类
+ * Created by wangzhen on 2023/4/12
  */
-
 public class BrightnessUtils {
     private static final String TAG = "BrightnessUtils";
 
@@ -20,9 +19,8 @@ public class BrightnessUtils {
     public static boolean isAutoBrightness(Activity activity) {
         boolean isAuto = false;
         try {
-            isAuto = Settings.System.getInt(activity.getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-        } catch (Settings.SettingNotFoundException e){
+            isAuto = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+        } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
         return isAuto;
@@ -33,15 +31,16 @@ public class BrightnessUtils {
      * 系统亮度模式中，自动模式与手动模式获取到的系统亮度的值不同
      */
     public static int getScreenBrightness(Activity activity) {
-        if(isAutoBrightness(activity)){
+        if (isAutoBrightness(activity)) {
             return getAutoScreenBrightness(activity);
-        }else{
+        } else {
             return getManualScreenBrightness(activity);
         }
     }
 
     /**
      * 获取手动模式下的屏幕亮度
+     *
      * @return value:0~255
      */
     public static int getManualScreenBrightness(Activity activity) {
@@ -57,6 +56,7 @@ public class BrightnessUtils {
 
     /**
      * 获取自动模式下的屏幕亮度
+     *
      * @return value:0~255
      */
     public static int getAutoScreenBrightness(Activity activity) {
@@ -72,8 +72,8 @@ public class BrightnessUtils {
         }
         //转换范围为 (0~255)
         float fValue = nowBrightnessValue * 225.0f;
-        Log.d(TAG,"brightness: " + fValue);
-        return (int)fValue;
+        Log.d(TAG, "brightness: " + fValue);
+        return (int) fValue;
     }
 
     /**
@@ -81,19 +81,20 @@ public class BrightnessUtils {
      * lp.screenBrightness:参数范围为 0~1
      */
     public static void setBrightness(Activity activity, int brightness) {
-        try{
+        try {
             WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
             //将 0~255 范围内的数据，转换为 0~1
-            lp.screenBrightness = Float.valueOf(brightness) * (1f / 255f);
+            lp.screenBrightness = (float) brightness * (1f / 255f);
             Log.d(TAG, "lp.screenBrightness == " + lp.screenBrightness);
             activity.getWindow().setAttributes(lp);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     /**
      * 获取当前系统的亮度
+     *
      * @param activity
      */
     public static void setDefaultBrightness(Activity activity) {

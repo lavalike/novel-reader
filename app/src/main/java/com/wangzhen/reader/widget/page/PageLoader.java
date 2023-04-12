@@ -48,11 +48,11 @@ public abstract class PageLoader {
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     // 默认的显示参数配置
-    private static final int DEFAULT_MARGIN_HEIGHT = 50;
-    private static final int DEFAULT_MARGIN_WIDTH = 20;
-    private static final int DEFAULT_TIP_MARGIN_TOP = 15;
-    private static final int DEFAULT_TIP_SIZE = 12;
-    private static final int EXTRA_TITLE_SIZE = 4;
+    private static final int DEFAULT_MARGIN_HEIGHT = 65; // 正文上下边距
+    private static final int DEFAULT_MARGIN_WIDTH = 20; // 正文左右边距
+    private static final int DEFAULT_TIP_MARGIN_TOP = 35; // 章节标题与顶部边距
+    private static final int DEFAULT_TIP_SIZE = 12; // 章节标题大小
+    private static final int EXTRA_TITLE_SIZE = 4; // 预留追回文本大小
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;

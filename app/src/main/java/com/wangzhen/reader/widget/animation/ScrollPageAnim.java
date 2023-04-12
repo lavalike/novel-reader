@@ -41,8 +41,7 @@ public class ScrollPageAnim extends PageAnimation {
     // 是否处于刷新阶段
     private boolean isRefresh = true;
 
-    public ScrollPageAnim(int w, int h, int marginWidth, int marginHeight,
-                          View view, OnPageChangeListener listener) {
+    public ScrollPageAnim(int w, int h, int marginWidth, int marginHeight, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginHeight, view, listener);
         // 创建两个BitmapView
         initWidget();
@@ -255,29 +254,12 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     /**
-     * 对Bitmap进行擦除
-     *
-     * @param b
-     * @param width
-     * @param height
-     * @param paddingLeft
-     * @param paddingTop
-     */
-    private void eraseBitmap(Bitmap b, int width, int height,
-                             int paddingLeft, int paddingTop) {
-     /*   if (mInitBitmapPix == null) return;
-        b.setPixels(mInitBitmapPix, 0, width, paddingLeft, paddingTop, width, height);*/
-    }
-
-    /**
      * 重置位移
      */
     public void resetBitmap() {
         isRefresh = true;
         // 将所有的Active加入到Scrap中
-        for (BitmapView view : mActiveViews) {
-            mScrapViews.add(view);
-        }
+        mScrapViews.addAll(mActiveViews);
         // 清除所有的Active
         mActiveViews.clear();
         // 重新进行布局
@@ -334,7 +316,6 @@ public class ScrollPageAnim extends PageAnimation {
         return true;
     }
 
-
     BitmapView tmpView;
 
     @Override
@@ -363,8 +344,7 @@ public class ScrollPageAnim extends PageAnimation {
     @Override
     public synchronized void startAnim() {
         isRunning = true;
-        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
-                , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
+        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity(), 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
     }
 
     @Override

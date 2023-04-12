@@ -1,13 +1,11 @@
 package com.wangzhen.reader.ui.adapter.view;
 
 import android.graphics.drawable.Drawable;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import android.widget.TextView;
-
 import com.wangzhen.reader.R;
-import com.wangzhen.reader.utils.BookManager;
 import com.wangzhen.reader.ui.base.adapter.ViewHolderImpl;
 import com.wangzhen.reader.widget.page.TxtChapter;
 
@@ -26,21 +24,7 @@ public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
 
     @Override
     public void onBind(TxtChapter value, int pos) {
-        //首先判断是否该章已下载
-        Drawable drawable = null;
-
-        //TODO:目录显示设计的有点不好，需要靠成员变量是否为null来判断。
-        //如果没有链接地址表示是本地文件
-        if (value.getLink() == null) {
-            drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_category_load);
-        } else {
-            if (value.getBookId() != null && BookManager.isChapterCached(value.getBookId(), value.getTitle())) {
-                drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_category_load);
-            } else {
-                drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_category_unload);
-            }
-        }
-
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_category_load);
         mTvChapter.setSelected(false);
         mTvChapter.setTextColor(ContextCompat.getColor(getContext(), R.color.text_default));
         mTvChapter.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
