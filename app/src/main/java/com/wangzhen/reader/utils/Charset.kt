@@ -1,20 +1,13 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
 /**
  * charsets
  * Created by wangzhen on 2023/4/12
  */
-public enum Charset {
+enum class Charset(val charset: String) {
     UTF8("UTF-8"), GBK("GBK");
 
-    private final String mName;
-    public static final byte BLANK = 0x0a;
-
-    Charset(String name) {
-        mName = name;
-    }
-
-    public String getName() {
-        return mName;
+    companion object {
+        const val BLANK: Byte = 0x0a
     }
 }

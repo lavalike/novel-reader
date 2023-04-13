@@ -35,6 +35,7 @@ public class FileSystemAdapter extends RecyclerAdapter<File> {
 
     @Override
     public void setData(List<File> list) {
+        if (list == null) return;
         mCheckMap.clear();
         for (File file : list) {
             mCheckMap.put(file, false);

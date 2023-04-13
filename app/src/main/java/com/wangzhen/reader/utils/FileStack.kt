@@ -1,49 +1,41 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
-import java.io.File;
-import java.util.List;
+import java.io.File
 
 /**
- * Created by wangzhen on 17-5-28.
+ * FileStack
+ * Created by wangzhen on 2023/4/13
  */
+class FileStack {
+    private var node: Node? = null
 
-public class FileStack {
-
-    private Node node = null;
-    private int count = 0;
-
-    public void push(FileSnapshot fileSnapshot){
-        if (fileSnapshot == null) return;
-        Node fileNode = new Node();
-        fileNode.fileSnapshot = fileSnapshot;
-        fileNode.next = node;
-        node = fileNode;
-        ++count;
+    fun push(snapshot: FileSnapshot?) {
+        if (snapshot == null) return
+        val fileNode = Node()
+        fileNode.fileSnapshot = snapshot
+        fileNode.next = this.node
+        this.node = fileNode
     }
 
-    public FileSnapshot pop(){
-        Node fileNode = node;
-        if (fileNode == null) return null;
-        FileSnapshot fileSnapshot = fileNode.fileSnapshot;
-        node = fileNode.next;
-        --count;
-        return fileSnapshot;
+    fun pop(): FileSnapshot? {
+        val fileNode = node ?: return null
+        node = fileNode.next
+        return fileNode.fileSnapshot
     }
 
-    public int getSize(){
-        return count;
+    inner class Node {
+        var fileSnapshot: FileSnapshot? = null
+        var next: Node? = null
     }
 
-    //节点
-    public class Node {
-        FileSnapshot fileSnapshot;
-        Node next;
-    }
+    class FileSnapshot {
+        @JvmField
+        var filePath: String? = null
 
-    //文件快照
-    public static class FileSnapshot{
-        public String filePath;
-        public List<File> files;
-        public int scrollOffset;
+        @JvmField
+        var files: ArrayList<File>? = null
+
+        @JvmField
+        var scrollOffset = 0
     }
 }
