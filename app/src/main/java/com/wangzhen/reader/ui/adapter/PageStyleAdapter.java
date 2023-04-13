@@ -1,45 +1,43 @@
 package com.wangzhen.reader.ui.adapter;
 
 import android.graphics.drawable.Drawable;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
+import android.view.ViewGroup;
 
-import com.wangzhen.reader.ui.adapter.view.PageStyleHolder;
-import com.wangzhen.reader.ui.base.adapter.BaseListAdapter;
-import com.wangzhen.reader.ui.base.adapter.BaseViewHolder;
-import com.wangzhen.reader.ui.base.adapter.IViewHolder;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.wangzhen.adapter.RecyclerAdapter;
+import com.wangzhen.reader.ui.adapter.holder.PageStyleHolder;
 import com.wangzhen.reader.widget.page.PageStyle;
 
-/**
- * Created by wangzhen on 17-5-19.
- */
+import java.util.List;
 
-public class PageStyleAdapter extends BaseListAdapter<Drawable> {
+/**
+ * PageStyleAdapter
+ * Created by wangzhen on 2023/4/13
+ */
+public class PageStyleAdapter extends RecyclerAdapter<Drawable> {
     private int currentChecked;
 
-    @Override
-    protected IViewHolder<Drawable> createViewHolder(int viewType) {
-        return new PageStyleHolder();
+    public PageStyleAdapter(List<Drawable> list) {
+        super(list);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onAbsCreateViewHolder(ViewGroup parent, int viewType) {
+        return new PageStyleHolder(parent);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        IViewHolder iHolder = ((BaseViewHolder) holder).holder;
-        PageStyleHolder pageStyleHolder = (PageStyleHolder) iHolder;
-        if (currentChecked == position) {
-            pageStyleHolder.setChecked();
+        if (currentChecked == position && holder instanceof PageStyleHolder) {
+            ((PageStyleHolder) holder).setChecked();
         }
     }
 
     public void setPageStyleChecked(PageStyle pageStyle) {
         currentChecked = pageStyle.ordinal();
-    }
-
-    @Override
-    protected void onItemClick(View v, int pos) {
-        super.onItemClick(v, pos);
-        currentChecked = pos;
         notifyDataSetChanged();
     }
 }

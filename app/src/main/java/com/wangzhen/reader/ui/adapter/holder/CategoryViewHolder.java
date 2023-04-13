@@ -1,4 +1,4 @@
-package com.wangzhen.reader.ui.adapter.view;
+package com.wangzhen.reader.ui.adapter.holder;
 
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;

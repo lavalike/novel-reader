@@ -141,14 +141,15 @@ public class ReadSettingDialog extends Dialog {
 
     private void setUpAdapter() {
         List<Drawable> drawables = Arrays.asList(getDrawable(R.color.read_bg_1), getDrawable(R.color.read_bg_2), getDrawable(R.color.read_bg_3), getDrawable(R.color.read_bg_4), getDrawable(R.color.read_bg_5));
-
-        mPageStyleAdapter = new PageStyleAdapter();
+        mPageStyleAdapter = new PageStyleAdapter(drawables);
+        mPageStyleAdapter.setOnClickCallback((view, pos) -> {
+            PageStyle style = PageStyle.values()[pos];
+            mPageStyleAdapter.setPageStyleChecked(style);
+            mPageLoader.setPageStyle(style);
+        });
         mRvBg.setLayoutManager(new GridLayoutManager(getContext(), 5));
         mRvBg.setAdapter(mPageStyleAdapter);
-        mPageStyleAdapter.refreshItems(drawables);
-
         mPageStyleAdapter.setPageStyleChecked(mPageStyle);
-
     }
 
     private void initPageMode() {
@@ -286,9 +287,6 @@ public class ReadSettingDialog extends Dialog {
             }
             mPageLoader.setPageMode(pageMode);
         });
-
-        //背景的点击事件
-        mPageStyleAdapter.setOnItemClickListener((view, pos) -> mPageLoader.setPageStyle(PageStyle.values()[pos]));
 
         //更多设置
         mTvMore.setOnClickListener((v) -> {

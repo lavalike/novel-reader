@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.adapter.RecyclerAdapter;
-import com.wangzhen.reader.ui.adapter.view.CategoryViewHolder;
+import com.wangzhen.reader.ui.adapter.holder.CategoryViewHolder;
 import com.wangzhen.reader.widget.page.TxtChapter;
 
 import java.util.List;

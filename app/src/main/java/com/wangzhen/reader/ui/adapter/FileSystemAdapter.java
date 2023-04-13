@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.adapter.RecyclerAdapter;
 import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.adapter.view.FileHolder;
+import com.wangzhen.reader.ui.adapter.holder.FileHolder;
 
 import java.io.File;
 import java.util.ArrayList;
