@@ -1,41 +1,36 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.WindowManager;
+import android.app.Activity
+import android.provider.Settings
+import android.provider.Settings.SettingNotFoundException
+import android.util.Log
+import android.view.WindowManager
 
 /**
  * 调节亮度工具类
  * Created by wangzhen on 2023/4/12
  */
-public class BrightnessUtils {
-    private static final String TAG = "BrightnessUtils";
+object BrightnessUtils {
+    private const val TAG = "BrightnessUtils"
 
-    /**
-     * 判断是否开启了自动亮度调节
-     */
-    public static boolean isAutoBrightness(Activity activity) {
-        boolean isAuto = false;
-        try {
-            isAuto = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        return isAuto;
+    @JvmStatic
+    fun isAutoBrightness(activity: Activity) = try {
+        Settings.System.getInt(
+            activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE
+        ) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
+    } catch (e: SettingNotFoundException) {
+        false
     }
 
     /**
      * 获取屏幕的亮度
      * 系统亮度模式中，自动模式与手动模式获取到的系统亮度的值不同
      */
-    public static int getScreenBrightness(Activity activity) {
-        if (isAutoBrightness(activity)) {
-            return getAutoScreenBrightness(activity);
-        } else {
-            return getManualScreenBrightness(activity);
-        }
+    @JvmStatic
+    fun getScreenBrightness(activity: Activity) = if (isAutoBrightness(activity)) {
+        getAutoScreenBrightness(activity)
+    } else {
+        getManualScreenBrightness(activity)
     }
 
     /**
@@ -43,67 +38,43 @@ public class BrightnessUtils {
      *
      * @return value:0~255
      */
-    public static int getManualScreenBrightness(Activity activity) {
-        int nowBrightnessValue = 0;
-        ContentResolver resolver = activity.getContentResolver();
-        try {
-            nowBrightnessValue = Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return nowBrightnessValue;
+    private fun getManualScreenBrightness(activity: Activity) = try {
+        Settings.System.getInt(activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+    } catch (e: Exception) {
+        0
     }
 
-    /**
-     * 获取自动模式下的屏幕亮度
-     *
-     * @return value:0~255
-     */
-    public static int getAutoScreenBrightness(Activity activity) {
-        float nowBrightnessValue = 0;
-
+    private fun getAutoScreenBrightness(activity: Activity): Int {
+        var nowBrightnessValue = 0f
         //获取自动调节下的亮度范围在 0~1 之间
-        ContentResolver resolver = activity.getContentResolver();
+        val resolver = activity.contentResolver
         try {
-            nowBrightnessValue = Settings.System.getFloat(resolver, Settings.System.SCREEN_BRIGHTNESS);
-            Log.d(TAG, "getAutoScreenBrightness: " + nowBrightnessValue);
-        } catch (Exception e) {
-            e.printStackTrace();
+            nowBrightnessValue =
+                Settings.System.getFloat(resolver, Settings.System.SCREEN_BRIGHTNESS)
+            Log.d(TAG, "getAutoScreenBrightness: $nowBrightnessValue")
+        } catch (ignored: Exception) {
         }
         //转换范围为 (0~255)
-        float fValue = nowBrightnessValue * 225.0f;
-        Log.d(TAG, "brightness: " + fValue);
-        return (int) fValue;
+        return (nowBrightnessValue * 225.0f).toInt()
     }
 
-    /**
-     * 设置亮度:通过设置 Windows 的 screenBrightness 来修改当前 Windows 的亮度
-     * lp.screenBrightness:参数范围为 0~1
-     */
-    public static void setBrightness(Activity activity, int brightness) {
+    @JvmStatic
+    fun setBrightness(activity: Activity, brightness: Int) {
         try {
-            WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-            //将 0~255 范围内的数据，转换为 0~1
-            lp.screenBrightness = (float) brightness * (1f / 255f);
-            Log.d(TAG, "lp.screenBrightness == " + lp.screenBrightness);
-            activity.getWindow().setAttributes(lp);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            activity.window.attributes = activity.window.attributes.apply {
+                screenBrightness = brightness.toFloat() * (1f / 255f)
+            }
+        } catch (ignored: Exception) {
         }
     }
 
-    /**
-     * 获取当前系统的亮度
-     *
-     * @param activity
-     */
-    public static void setDefaultBrightness(Activity activity) {
+    @JvmStatic
+    fun setDefaultBrightness(activity: Activity) {
         try {
-            WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-            lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-            activity.getWindow().setAttributes(lp);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            activity.window.attributes = activity.window.attributes.apply {
+                screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+            }
+        } catch (ignored: Exception) {
         }
     }
 }
