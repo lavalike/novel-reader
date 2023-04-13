@@ -103,7 +103,7 @@ public class FileSystemAdapter extends RecyclerAdapter<File> {
 
     public boolean getItemIsChecked(int pos) {
         File file = getDatas().get(pos);
-        return mCheckMap.get(file);
+        return Boolean.TRUE.equals(mCheckMap.get(file));
     }
 
     public List<File> getCheckedFiles() {

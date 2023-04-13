@@ -1,58 +1,38 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import android.content.SharedPreferences
 
 /**
- * Created by wangzhen on 17-4-16.
+ * SharedPreUtils
+ * Created by wangzhen on 2023/4/13
  */
+object SharedPreUtils {
+    private const val SHARED_NAME = "IReader_pref"
 
-public class SharedPreUtils {
-    private static final String SHARED_NAME = "IReader_pref";
-    private static SharedPreUtils sInstance;
-    private SharedPreferences sharedReadable;
-    private SharedPreferences.Editor sharedWritable;
+    private val sharedReadable =
+        AppUtils.getContext().getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE)
 
-    private SharedPreUtils() {
-        sharedReadable = AppUtils.getContext().getSharedPreferences(SHARED_NAME, Context.MODE_MULTI_PROCESS);
-        sharedWritable = sharedReadable.edit();
+    private val editor: SharedPreferences.Editor = sharedReadable.edit()
+
+    fun getString(key: String) = sharedReadable.getString(key, "")
+
+    fun putString(key: String, value: String) {
+        editor.putString(key, value)
+        editor.commit()
     }
 
-    public static SharedPreUtils getInstance() {
-        if (sInstance == null) {
-            synchronized (SharedPreUtils.class) {
-                if (sInstance == null) {
-                    sInstance = new SharedPreUtils();
-                }
-            }
-        }
-        return sInstance;
+    fun putInt(key: String, value: Int) {
+        editor.putInt(key, value)
+        editor.commit()
     }
 
-    public String getString(String key) {
-        return sharedReadable.getString(key, "");
+    fun putBoolean(key: String, value: Boolean) {
+        editor.putBoolean(key, value)
+        editor.commit()
     }
 
-    public void putString(String key, String value) {
-        sharedWritable.putString(key, value);
-        sharedWritable.commit();
-    }
+    fun getInt(key: String, def: Int) = sharedReadable.getInt(key, def)
 
-    public void putInt(String key, int value) {
-        sharedWritable.putInt(key, value);
-        sharedWritable.commit();
-    }
-
-    public void putBoolean(String key, boolean value) {
-        sharedWritable.putBoolean(key, value);
-        sharedWritable.commit();
-    }
-
-    public int getInt(String key, int def) {
-        return sharedReadable.getInt(key, def);
-    }
-
-    public boolean getBoolean(String key, boolean def) {
-        return sharedReadable.getBoolean(key, def);
-    }
+    fun getBoolean(key: String, def: Boolean) = sharedReadable.getBoolean(key, def)
 }

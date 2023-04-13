@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.adapter.RecyclerAdapter;
-import com.wangzhen.reader.ui.adapter.holder.CategoryViewHolder;
+import com.wangzhen.reader.ui.adapter.holder.CategoryHolder;
 import com.wangzhen.reader.widget.page.TxtChapter;
 
 import java.util.List;
@@ -24,14 +24,14 @@ public class CategoryAdapter extends RecyclerAdapter<TxtChapter> {
 
     @Override
     public RecyclerView.ViewHolder onAbsCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CategoryViewHolder(parent);
+        return new CategoryHolder(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        if (position == currentIndex && holder instanceof CategoryViewHolder) {
-            ((CategoryViewHolder) holder).setSelectedChapter();
+        if (position == currentIndex && holder instanceof CategoryHolder) {
+            ((CategoryHolder) holder).setSelectedChapter();
         }
     }
 

@@ -159,9 +159,9 @@ public abstract class PageLoader {
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();
         // 初始化参数
-        mMarginWidth = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_MARGIN_WIDTH);
-        mMarginHeight = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_MARGIN_HEIGHT);
-        mTipMarginHeight = ScreenUtils.dpToPx(AppConfig.dimension.DEFAULT_TIP_MARGIN_TOP);
+        mMarginWidth = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_WIDTH);
+        mMarginHeight = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_HEIGHT);
+        mTipMarginHeight = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_TIP_MARGIN_TOP);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -174,7 +174,7 @@ public abstract class PageLoader {
     private void setUpTextParams(int textSize) {
         // 文字大小
         mTextSize = textSize;
-        mTitleSize = mTextSize + ScreenUtils.spToPx(AppConfig.dimension.EXTRA_TITLE_SIZE);
+        mTitleSize = mTextSize + ScreenUtils.spToPx(AppConfig.Dimension.EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
         mTextInterval = mTextSize / 2;
         mTitleInterval = mTitleSize / 2;
@@ -188,7 +188,7 @@ public abstract class PageLoader {
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
-        mTipPaint.setTextSize(ScreenUtils.spToPx(AppConfig.dimension.DEFAULT_TIP_SIZE)); // Tip默认的字体大小
+        mTipPaint.setTextSize(ScreenUtils.spToPx(AppConfig.Dimension.DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTipPaint.setAntiAlias(true);
         mTipPaint.setSubpixelText(true);
 
@@ -565,7 +565,6 @@ public abstract class PageLoader {
      */
     private void prepareBook() {
         mBookRecord = BookRepository.getInstance().getBookRecord(mCollBook.get_id());
-
         if (mBookRecord == null) {
             mBookRecord = new BookRecordBean();
         }
@@ -790,7 +789,7 @@ public abstract class PageLoader {
 
         //底部的字显示的位置Y
         float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mTipMarginHeight;
-        String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.format.FORMAT_TIME);
+        String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.Format.FORMAT_TIME);
         float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
         canvas.drawText(time, x, y, mTipPaint);
     }

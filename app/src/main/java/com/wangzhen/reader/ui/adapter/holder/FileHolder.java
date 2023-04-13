@@ -80,7 +80,7 @@ public class FileHolder extends RecyclerViewHolder<File> {
 
         mTvName.setText(file.getName());
         mTvSize.setText(FileUtils.getFileSize(file.length()));
-        mTvDate.setText(StringUtils.dateConvert(file.lastModified(), AppConfig.format.FORMAT_FILE_DATE));
+        mTvDate.setText(StringUtils.dateConvert(file.lastModified(), AppConfig.Format.FORMAT_FILE_DATE));
     }
 
     public void setFolder(File folder) {

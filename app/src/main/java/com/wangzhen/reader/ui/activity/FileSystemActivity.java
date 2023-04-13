@@ -204,8 +204,8 @@ public class FileSystemActivity extends BaseActivity {
             collBook.setCover(file.getAbsolutePath());
             collBook.setLocal(true);
             collBook.setLastChapter("开始阅读");
-            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), AppConfig.format.FORMAT_BOOK_DATE));
-            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.format.FORMAT_BOOK_DATE));
+            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), AppConfig.Format.FORMAT_BOOK_DATE));
+            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.Format.FORMAT_BOOK_DATE));
             collBooks.add(collBook);
         }
         return collBooks;

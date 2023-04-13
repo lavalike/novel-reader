@@ -39,13 +39,13 @@ class BookShelfFragment : BaseFragment() {
     }
 
     private fun loadBooks() {
-        shelfAdapter.setData(BookRepository.getInstance().collBooks)
+        shelfAdapter.setData(BookRepository.instance.collBooks)
     }
 
     private fun setUpAdapter() {
         with(binding.bookShelfRvContent) {
             layoutManager = GridLayoutManager(context, 3)
-            adapter = BookShelfAdapter(BookRepository.getInstance().collBooks).apply {
+            adapter = BookShelfAdapter(BookRepository.instance.collBooks).apply {
                 shelfAdapter = this
                 setOnClickCallback { _, pos ->
                     ReadActivity.startActivity(requireContext(), datas[pos])
@@ -64,7 +64,7 @@ class BookShelfFragment : BaseFragment() {
         AlertDialog.Builder(requireContext())
             .setMessage(String.format(Locale.getDefault(), "确定删除%s吗", book.title))
             .setNegativeButton("取消", null).setPositiveButton("确定") { _, _ ->
-                BookRepository.getInstance().deleteBook(book)
+                BookRepository.instance.deleteBook(book)
                 Toast.makeText(context, book.title + "已删除", Toast.LENGTH_SHORT).show()
                 setUpAdapter()
             }.create().show()

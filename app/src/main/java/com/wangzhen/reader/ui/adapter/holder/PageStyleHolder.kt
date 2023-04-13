@@ -1,32 +1,29 @@
-package com.wangzhen.reader.ui.adapter.holder;
+package com.wangzhen.reader.ui.adapter.holder
 
-import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.wangzhen.adapter.base.RecyclerViewHolder;
-import com.wangzhen.reader.R;
-import com.wangzhen.reader.databinding.ItemReadBgBinding;
+import android.graphics.drawable.Drawable
+import android.view.View
+import android.view.ViewGroup
+import com.wangzhen.adapter.base.RecyclerViewHolder
+import com.wangzhen.reader.R
+import com.wangzhen.reader.databinding.ItemReadBgBinding
 
 /**
  * PageStyleHolder
  * Created by wangzhen on 2023/4/13
  */
-public class PageStyleHolder extends RecyclerViewHolder<Drawable> {
-    private ItemReadBgBinding binding;
+class PageStyleHolder(parent: ViewGroup) : RecyclerViewHolder<Drawable>(
+    parent, R.layout.item_read_bg
+) {
+    private lateinit var binding: ItemReadBgBinding
 
-    public PageStyleHolder(ViewGroup parent) {
-        super(parent, R.layout.item_read_bg);
+    override fun bind() {
+        binding = ItemReadBgBinding.bind(itemView).apply {
+            readBgView.background = mData
+            readBgIvChecked.visibility = View.GONE
+        }
     }
 
-    @Override
-    public void bind() {
-        binding = ItemReadBgBinding.bind(itemView);
-        binding.readBgView.setBackground(mData);
-        binding.readBgIvChecked.setVisibility(View.GONE);
-    }
-
-    public void setChecked() {
-        binding.readBgIvChecked.setVisibility(View.VISIBLE);
+    fun setChecked() {
+        binding.readBgIvChecked.visibility = View.VISIBLE
     }
 }

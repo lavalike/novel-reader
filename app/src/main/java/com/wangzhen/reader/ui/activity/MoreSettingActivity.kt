@@ -18,13 +18,13 @@ class MoreSettingActivity : BaseActivity() {
         binding = ActivityMoreSettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var isVolumeTurnPage = ReadSettingManager.getInstance().isVolumeTurnPage
+        var isVolumeTurnPage = ReadSettingManager.instance.isVolumeTurnPage
         with(binding) {
             moreSettingScVolume.isChecked = isVolumeTurnPage
             moreSettingRlVolume.setOnClickListener {
                 isVolumeTurnPage = !isVolumeTurnPage
                 moreSettingScVolume.isChecked = isVolumeTurnPage
-                ReadSettingManager.getInstance().isVolumeTurnPage = isVolumeTurnPage
+                ReadSettingManager.instance.isVolumeTurnPage = isVolumeTurnPage
             }
         }
     }

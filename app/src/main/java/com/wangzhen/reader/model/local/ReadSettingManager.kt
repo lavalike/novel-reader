@@ -1,106 +1,83 @@
-package com.wangzhen.reader.model.local;
+package com.wangzhen.reader.model.local
 
-import com.wangzhen.reader.utils.AppConfig;
-import com.wangzhen.reader.utils.ScreenUtils;
-import com.wangzhen.reader.utils.SharedPreUtils;
-import com.wangzhen.reader.widget.page.PageMode;
-import com.wangzhen.reader.widget.page.PageStyle;
+import com.wangzhen.reader.utils.AppConfig
+import com.wangzhen.reader.utils.ScreenUtils
+import com.wangzhen.reader.utils.SharedPreUtils
+import com.wangzhen.reader.widget.page.PageMode
+import com.wangzhen.reader.widget.page.PageStyle
 
 /**
- * Created by wangzhen on 17-5-17.
  * 阅读器的配置管理
+ * Created by wangzhen on 2023/4/13
  */
-public class ReadSettingManager {
-    public static final String SHARED_READ_BG = "shared_read_bg";
-    public static final String SHARED_READ_BRIGHTNESS = "shared_read_brightness";
-    public static final String SHARED_READ_IS_BRIGHTNESS_AUTO = "shared_read_is_brightness_auto";
-    public static final String SHARED_READ_TEXT_SIZE = "shared_read_text_size";
-    public static final String SHARED_READ_IS_TEXT_DEFAULT = "shared_read_text_default";
-    public static final String SHARED_READ_PAGE_MODE = "shared_read_mode";
-    public static final String SHARED_READ_NIGHT_MODE = "shared_night_mode";
-    public static final String SHARED_READ_VOLUME_TURN_PAGE = "shared_read_volume_turn_page";
-    private static volatile ReadSettingManager sInstance;
+class ReadSettingManager private constructor() {
 
-    private final SharedPreUtils sharedPreUtils;
+    fun setAutoBrightness(isAuto: Boolean) {
+        SharedPreUtils.putBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, isAuto)
+    }
 
-    public static ReadSettingManager getInstance() {
-        if (sInstance == null) {
-            synchronized (ReadSettingManager.class) {
-                if (sInstance == null) {
-                    sInstance = new ReadSettingManager();
-                }
-            }
+    var brightness
+        get() = SharedPreUtils.getInt(SHARED_READ_BRIGHTNESS, AppConfig.Screen.DEFAULT_BRIGHTNESS)
+        set(progress) {
+            SharedPreUtils.putInt(SHARED_READ_BRIGHTNESS, progress)
         }
-        return sInstance;
-    }
 
-    private ReadSettingManager() {
-        sharedPreUtils = SharedPreUtils.getInstance();
-    }
+    val isBrightnessAuto = SharedPreUtils.getBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, false)
 
-    public void setPageStyle(PageStyle pageStyle) {
-        sharedPreUtils.putInt(SHARED_READ_BG, pageStyle.ordinal());
-    }
+    var textSize
+        get() = SharedPreUtils.getInt(
+            SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(AppConfig.Text.DEFAULT_TEXT_SIZE)
+        )
+        set(textSize) {
+            SharedPreUtils.putInt(SHARED_READ_TEXT_SIZE, textSize)
+        }
+    var isDefaultTextSize
+        get() = SharedPreUtils.getBoolean(SHARED_READ_IS_TEXT_DEFAULT, false)
+        set(isDefault) {
+            SharedPreUtils.putBoolean(SHARED_READ_IS_TEXT_DEFAULT, isDefault)
+        }
 
-    public void setBrightness(int progress) {
-        sharedPreUtils.putInt(SHARED_READ_BRIGHTNESS, progress);
-    }
+    var pageMode: PageMode
+        get() {
+            val mode = SharedPreUtils.getInt(SHARED_READ_PAGE_MODE, PageMode.SIMULATION.ordinal)
+            return PageMode.values()[mode]
+        }
+        set(mode) {
+            SharedPreUtils.putInt(SHARED_READ_PAGE_MODE, mode.ordinal)
+        }
 
-    public void setAutoBrightness(boolean isAuto) {
-        sharedPreUtils.putBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, isAuto);
-    }
+    var pageStyle: PageStyle
+        get() {
+            val style = SharedPreUtils.getInt(SHARED_READ_BG, PageStyle.BG_0.ordinal)
+            return PageStyle.values()[style]
+        }
+        set(pageStyle) {
+            SharedPreUtils.putInt(SHARED_READ_BG, pageStyle.ordinal)
+        }
 
-    public void setDefaultTextSize(boolean isDefault) {
-        sharedPreUtils.putBoolean(SHARED_READ_IS_TEXT_DEFAULT, isDefault);
-    }
+    var isNightMode
+        get() = SharedPreUtils.getBoolean(SHARED_READ_NIGHT_MODE, false)
+        set(isNight) {
+            SharedPreUtils.putBoolean(SHARED_READ_NIGHT_MODE, isNight)
+        }
 
-    public void setTextSize(int textSize) {
-        sharedPreUtils.putInt(SHARED_READ_TEXT_SIZE, textSize);
-    }
+    var isVolumeTurnPage
+        get() = SharedPreUtils.getBoolean(SHARED_READ_VOLUME_TURN_PAGE, false)
+        set(isTurn) {
+            SharedPreUtils.putBoolean(SHARED_READ_VOLUME_TURN_PAGE, isTurn)
+        }
 
-    public void setPageMode(PageMode mode) {
-        sharedPreUtils.putInt(SHARED_READ_PAGE_MODE, mode.ordinal());
-    }
+    companion object {
+        const val SHARED_READ_BG = "shared_read_bg"
+        const val SHARED_READ_BRIGHTNESS = "shared_read_brightness"
+        const val SHARED_READ_IS_BRIGHTNESS_AUTO = "shared_read_is_brightness_auto"
+        const val SHARED_READ_TEXT_SIZE = "shared_read_text_size"
+        const val SHARED_READ_IS_TEXT_DEFAULT = "shared_read_text_default"
+        const val SHARED_READ_PAGE_MODE = "shared_read_mode"
+        const val SHARED_READ_NIGHT_MODE = "shared_night_mode"
+        const val SHARED_READ_VOLUME_TURN_PAGE = "shared_read_volume_turn_page"
 
-    public void setNightMode(boolean isNight) {
-        sharedPreUtils.putBoolean(SHARED_READ_NIGHT_MODE, isNight);
-    }
-
-    public int getBrightness() {
-        return sharedPreUtils.getInt(SHARED_READ_BRIGHTNESS, AppConfig.screen.DEFAULT_BRIGHTNESS);
-    }
-
-    public boolean isBrightnessAuto() {
-        return sharedPreUtils.getBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, false);
-    }
-
-    public int getTextSize() {
-        return sharedPreUtils.getInt(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(AppConfig.text.DEFAULT_TEXT_SIZE));
-    }
-
-    public boolean isDefaultTextSize() {
-        return sharedPreUtils.getBoolean(SHARED_READ_IS_TEXT_DEFAULT, false);
-    }
-
-    public PageMode getPageMode() {
-        int mode = sharedPreUtils.getInt(SHARED_READ_PAGE_MODE, PageMode.SIMULATION.ordinal());
-        return PageMode.values()[mode];
-    }
-
-    public PageStyle getPageStyle() {
-        int style = sharedPreUtils.getInt(SHARED_READ_BG, PageStyle.BG_0.ordinal());
-        return PageStyle.values()[style];
-    }
-
-    public boolean isNightMode() {
-        return sharedPreUtils.getBoolean(SHARED_READ_NIGHT_MODE, false);
-    }
-
-    public void setVolumeTurnPage(boolean isTurn) {
-        sharedPreUtils.putBoolean(SHARED_READ_VOLUME_TURN_PAGE, isTurn);
-    }
-
-    public boolean isVolumeTurnPage() {
-        return sharedPreUtils.getBoolean(SHARED_READ_VOLUME_TURN_PAGE, false);
+        @JvmStatic
+        val instance = ReadSettingManager()
     }
 }
