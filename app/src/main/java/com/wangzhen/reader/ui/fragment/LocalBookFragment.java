@@ -68,7 +68,7 @@ public class LocalBookFragment extends BaseFileFragment {
     }
 
     private void loadFiles() {
-        MediaStoreHelper.getAllBookFile(getActivity(), (files) -> {
+        MediaStoreHelper.getAllBookFile(requireActivity(), (files) -> {
             mAdapter.setData(files);
             if (mListener != null) {
                 mListener.onCategoryChanged();

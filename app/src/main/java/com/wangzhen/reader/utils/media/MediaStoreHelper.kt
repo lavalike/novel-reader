@@ -1,65 +1,45 @@
-package com.wangzhen.reader.utils.media;
+package com.wangzhen.reader.utils.media
 
-import android.content.Context;
-import android.database.Cursor;
-import android.os.Bundle;
-
-import androidx.fragment.app.FragmentActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.List;
+import android.content.Context
+import android.database.Cursor
+import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.Loader
+import com.wangzhen.reader.utils.media.LoaderCreator.create
+import java.io.File
+import java.lang.ref.WeakReference
 
 /**
- * Created by wangzhen on 2018/1/14.
- * 获取媒体库的数据。
+ * MediaStoreHelper
+ * Created by wangzhen on 2023/4/13
  */
-
-public class MediaStoreHelper {
-
+object MediaStoreHelper {
     /**
-     * 获取媒体库中所有的书籍文件
-     * <p>
-     * 暂时只支持 TXT
-     *
-     * @param activity       activity
-     * @param resultCallback callback
+     * scan all txt files from media
      */
-    public static void getAllBookFile(FragmentActivity activity, MediaResultCallback resultCallback) {
-        LoaderManager.getInstance(activity).initLoader(LoaderCreator.ALL_BOOK_FILE, null, new MediaLoaderCallbacks(activity, resultCallback));
+    @JvmStatic
+    fun getAllBookFile(activity: FragmentActivity, resultCallback: MediaResultCallback?) {
+        LoaderManager.getInstance(activity).initLoader(
+            LoaderCreator.ALL_BOOK_FILE, null, MediaLoaderCallbacks(activity, resultCallback)
+        )
     }
 
-    public interface MediaResultCallback {
-        void onResultCallback(List<File> files);
+    interface MediaResultCallback {
+        fun onResultCallback(files: ArrayList<File>)
     }
 
-    /**
-     * Loader 回调处理
-     */
-    static class MediaLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
-        protected WeakReference<Context> mContext;
-        protected MediaResultCallback mResultCallback;
-
-        public MediaLoaderCallbacks(Context context, MediaResultCallback resultCallback) {
-            mContext = new WeakReference<>(context);
-            mResultCallback = resultCallback;
+    internal class MediaLoaderCallbacks(
+        val context: Context, private val callback: MediaResultCallback?
+    ) : LoaderManager.LoaderCallbacks<Cursor> {
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+            return create(context)
         }
 
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            return LoaderCreator.create(mContext.get(), id, args);
+        override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
+            (loader as LocalFileLoader).parseData(data, callback)
         }
 
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            LocalFileLoader localFileLoader = (LocalFileLoader) loader;
-            localFileLoader.parseData(data, mResultCallback);
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-        }
+        override fun onLoaderReset(loader: Loader<Cursor>) {}
     }
 }
