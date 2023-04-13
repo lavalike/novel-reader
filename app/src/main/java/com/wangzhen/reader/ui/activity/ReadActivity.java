@@ -479,7 +479,6 @@ public class ReadActivity extends BaseActivity {
             mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
             // 刷新章节列表
             mPageLoader.refreshChapterList();
-            Log.e(TAG, throwable.getMessage());
         });
         addDisposable(disposable);
     }

@@ -9,12 +9,10 @@ import java.io.IOException
  */
 object IOUtils {
     @JvmStatic
-    fun close(vararg closeables: Closeable) {
-        closeables.forEach {
-            try {
-                it.close()
-            } catch (ignored: IOException) {
-            }
+    fun close(closeable: Closeable) {
+        try {
+            closeable.close()
+        } catch (ignored: IOException) {
         }
     }
 }

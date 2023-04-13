@@ -156,7 +156,7 @@ public class FileCategoryFragment extends BaseFileFragment {
             }
 
             //文件内容为空,或者不以txt为开头
-            if (!pathname.isDirectory() && (pathname.length() == 0 || !pathname.getName().endsWith(FileUtils.SUFFIX_TXT))) {
+            if (!pathname.isDirectory() && (pathname.length() == 0 || !pathname.getName().endsWith(".txt"))) {
                 return false;
             }
             return true;

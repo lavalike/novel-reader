@@ -1,6 +1,7 @@
 package com.wangzhen.reader.utils
 
 import android.widget.Toast
+import java.io.Closeable
 
 /**
  * api-extensions
@@ -8,4 +9,8 @@ import android.widget.Toast
  */
 fun String.toast() {
     Toast.makeText(AppUtils.getContext(), this, Toast.LENGTH_SHORT).show()
+}
+
+fun Closeable.closeIO() {
+    IOUtils.close(this)
 }
