@@ -1,21 +1,20 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
-import java.io.Closeable;
-import java.io.IOException;
+import java.io.Closeable
+import java.io.IOException
 
 /**
- * Created by wangzhen on 17-5-11.
+ * IOUtils
+ * Created by wangzhen on 2023/4/13
  */
-
-public class IOUtils {
-
-    public static void close(Closeable closeable){
-        if (closeable == null) return;
-        try {
-            closeable.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //close error
+object IOUtils {
+    @JvmStatic
+    fun close(vararg closeables: Closeable) {
+        closeables.forEach {
+            try {
+                it.close()
+            } catch (ignored: IOException) {
+            }
         }
     }
 }

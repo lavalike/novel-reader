@@ -1,43 +1,36 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
+
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 /**
- * Created by wangzhen on 2018/1/1.
+ * MD5Utils
+ * Created by wangzhen on 2023/4/13
  */
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-/**
- *@Description: 将字符串转化为MD5
- */
-
-public class MD5Utils {
-
-    public static String strToMd5By32(String str){
-        String reStr = null;
+object MD5Utils {
+    private fun strToMd5By32(str: String): String? {
+        var value: String? = null
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] bytes = md5.digest(str.getBytes());
-            StringBuffer stringBuffer = new StringBuffer();
-            for (byte b : bytes){
-                int bt = b&0xff;
-                if (bt < 16){
-                    stringBuffer.append(0);
+            val md5 = MessageDigest.getInstance("MD5")
+            val bytes = md5.digest(str.toByteArray())
+            val stringBuffer = StringBuffer()
+            for (b in bytes) {
+                val bt = b.toInt() and 0xff
+                if (bt < 16) {
+                    stringBuffer.append(0)
                 }
-                stringBuffer.append(Integer.toHexString(bt));
+                stringBuffer.append(Integer.toHexString(bt))
             }
-            reStr = stringBuffer.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            value = stringBuffer.toString()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
         }
-        return reStr;
+        return value
     }
 
-    public static String strToMd5By16(String str){
-        String reStr = strToMd5By32(str);
-        if (reStr != null){
-            reStr = reStr.substring(8, 24);
-        }
-        return reStr;
+    @JvmStatic
+    fun strToMd5By16(str: String): String? {
+        val value = strToMd5By32(str)
+        return value?.substring(8, 24) ?: value
     }
 }

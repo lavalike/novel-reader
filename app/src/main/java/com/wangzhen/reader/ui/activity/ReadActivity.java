@@ -43,7 +43,6 @@ import com.wangzhen.reader.ui.adapter.CategoryAdapter;
 import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.dialog.ReadSettingDialog;
 import com.wangzhen.reader.utils.BrightnessUtils;
-import com.wangzhen.reader.utils.LogUtils;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.StringUtils;
 import com.wangzhen.reader.widget.page.PageLoader;
@@ -400,7 +399,7 @@ public class ReadActivity extends BaseActivity {
                 isRegistered = true;
             }
         } catch (Throwable throwable) {
-            LogUtils.e(TAG, "register mBrightObserver error! " + throwable);
+            Log.e(TAG, "register mBrightObserver error! " + throwable);
         }
     }
 
@@ -412,7 +411,7 @@ public class ReadActivity extends BaseActivity {
                 isRegistered = false;
             }
         } catch (Throwable throwable) {
-            LogUtils.e(TAG, "unregister BrightnessObserver error! " + throwable);
+            Log.e(TAG, "unregister BrightnessObserver error! " + throwable);
         }
     }
 
@@ -480,7 +479,7 @@ public class ReadActivity extends BaseActivity {
             mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
             // 刷新章节列表
             mPageLoader.refreshChapterList();
-            LogUtils.e(throwable);
+            Log.e(TAG, throwable.getMessage());
         });
         addDisposable(disposable);
     }

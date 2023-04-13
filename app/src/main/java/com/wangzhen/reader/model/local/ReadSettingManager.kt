@@ -1,7 +1,7 @@
 package com.wangzhen.reader.model.local
 
 import com.wangzhen.reader.utils.AppConfig
-import com.wangzhen.reader.utils.ScreenUtils
+import com.wangzhen.reader.utils.UiUtils
 import com.wangzhen.reader.utils.SharedPreUtils
 import com.wangzhen.reader.widget.page.PageMode
 import com.wangzhen.reader.widget.page.PageStyle
@@ -26,7 +26,7 @@ class ReadSettingManager private constructor() {
 
     var textSize
         get() = SharedPreUtils.getInt(
-            SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(AppConfig.Text.DEFAULT_TEXT_SIZE)
+            SHARED_READ_TEXT_SIZE, UiUtils.spToPx(AppConfig.Text.DEFAULT_TEXT_SIZE)
         )
         set(textSize) {
             SharedPreUtils.putInt(SHARED_READ_TEXT_SIZE, textSize)

@@ -1,18 +1,16 @@
-package com.wangzhen.reader.utils;
+package com.wangzhen.reader.utils
 
-import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single
+import io.reactivex.SingleSource
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
- * Created by wangzhen on 17-4-29.
+ * RxUtils
+ * Created by wangzhen on 2023/4/13
  */
-
-public class RxUtils {
-
-    public static <T> SingleSource<T> toSimpleSingle(Single<T> upstream) {
-        return upstream.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+object RxUtils {
+    @JvmStatic
+    fun <T> toSimpleSingle(upstream: Single<T>): SingleSource<T> =
+        upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }

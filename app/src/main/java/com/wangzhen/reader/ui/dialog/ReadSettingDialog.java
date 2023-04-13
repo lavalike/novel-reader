@@ -28,7 +28,7 @@ import com.wangzhen.reader.ui.activity.ReadActivity;
 import com.wangzhen.reader.ui.adapter.PageStyleAdapter;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.BrightnessUtils;
-import com.wangzhen.reader.utils.ScreenUtils;
+import com.wangzhen.reader.utils.UiUtils;
 import com.wangzhen.reader.widget.page.PageLoader;
 import com.wangzhen.reader.widget.page.PageMode;
 import com.wangzhen.reader.widget.page.PageStyle;
@@ -256,7 +256,7 @@ public class ReadSettingDialog extends Dialog {
 
         mCbFontDefault.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                int fontSize = ScreenUtils.dpToPx(AppConfig.Text.DEFAULT_TEXT_SIZE);
+                int fontSize = UiUtils.dpToPx(AppConfig.Text.DEFAULT_TEXT_SIZE);
                 mTvFont.setText(String.valueOf(fontSize));
                 mPageLoader.setTextSize(fontSize);
             }

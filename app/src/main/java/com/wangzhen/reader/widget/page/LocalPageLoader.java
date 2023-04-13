@@ -1,5 +1,7 @@
 package com.wangzhen.reader.widget.page;
 
+import android.util.Log;
+
 import com.wangzhen.reader.model.bean.BookChapterBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.BookRepository;
@@ -8,7 +10,6 @@ import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.Charset;
 import com.wangzhen.reader.utils.FileUtils;
 import com.wangzhen.reader.utils.IOUtils;
-import com.wangzhen.reader.utils.LogUtils;
 import com.wangzhen.reader.utils.MD5Utils;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.StringUtils;
@@ -406,7 +407,7 @@ public class LocalPageLoader extends PageLoader {
             @Override
             public void onError(Throwable e) {
                 chapterError();
-                LogUtils.d(TAG, "file load error:" + e.toString());
+                Log.d(TAG, "file load error:" + e.toString());
             }
         });
     }

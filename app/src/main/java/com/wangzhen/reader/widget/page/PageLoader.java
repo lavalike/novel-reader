@@ -19,7 +19,7 @@ import com.wangzhen.reader.model.local.ReadSettingManager;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.RxUtils;
-import com.wangzhen.reader.utils.ScreenUtils;
+import com.wangzhen.reader.utils.UiUtils;
 import com.wangzhen.reader.utils.StringUtils;
 
 import java.io.BufferedReader;
@@ -159,9 +159,9 @@ public abstract class PageLoader {
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();
         // 初始化参数
-        mMarginWidth = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_WIDTH);
-        mMarginHeight = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_HEIGHT);
-        mTipMarginHeight = ScreenUtils.dpToPx(AppConfig.Dimension.DEFAULT_TIP_MARGIN_TOP);
+        mMarginWidth = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_WIDTH);
+        mMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_HEIGHT);
+        mTipMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_TIP_MARGIN_TOP);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -174,7 +174,7 @@ public abstract class PageLoader {
     private void setUpTextParams(int textSize) {
         // 文字大小
         mTextSize = textSize;
-        mTitleSize = mTextSize + ScreenUtils.spToPx(AppConfig.Dimension.EXTRA_TITLE_SIZE);
+        mTitleSize = mTextSize + UiUtils.spToPx(AppConfig.Dimension.EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
         mTextInterval = mTextSize / 2;
         mTitleInterval = mTitleSize / 2;
@@ -188,7 +188,7 @@ public abstract class PageLoader {
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
-        mTipPaint.setTextSize(ScreenUtils.spToPx(AppConfig.Dimension.DEFAULT_TIP_SIZE)); // Tip默认的字体大小
+        mTipPaint.setTextSize(UiUtils.spToPx(AppConfig.Dimension.DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTipPaint.setAntiAlias(true);
         mTipPaint.setSubpixelText(true);
 
@@ -746,7 +746,7 @@ public abstract class PageLoader {
         } else {
             //擦除区域
             mBgPaint.setColor(mBgColor);
-            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mMarginHeight + ScreenUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
+            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mMarginHeight + UiUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
         }
 
         /******绘制电池********/
@@ -757,15 +757,15 @@ public abstract class PageLoader {
         int outFrameWidth = (int) mTipPaint.measureText("xxx");
         int outFrameHeight = (int) mTipPaint.getTextSize();
 
-        int polarHeight = ScreenUtils.dpToPx(6);
-        int polarWidth = ScreenUtils.dpToPx(2);
+        int polarHeight = UiUtils.dpToPx(6);
+        int polarWidth = UiUtils.dpToPx(2);
         int border = 1;
         int innerMargin = 1;
 
         //电极的制作
         int polarLeft = visibleRight - polarWidth;
         int polarTop = visibleBottom - (outFrameHeight + polarHeight) / 2;
-        Rect polar = new Rect(polarLeft, polarTop, visibleRight, polarTop + polarHeight - ScreenUtils.dpToPx(2));
+        Rect polar = new Rect(polarLeft, polarTop, visibleRight, polarTop + polarHeight - UiUtils.dpToPx(2));
 
         mBatteryPaint.setStyle(Paint.Style.FILL);
         canvas.drawRect(polar, mBatteryPaint);
@@ -773,7 +773,7 @@ public abstract class PageLoader {
         //外框的制作
         int outFrameLeft = polarLeft - outFrameWidth;
         int outFrameTop = visibleBottom - outFrameHeight;
-        int outFrameBottom = visibleBottom - ScreenUtils.dpToPx(2);
+        int outFrameBottom = visibleBottom - UiUtils.dpToPx(2);
         Rect outFrame = new Rect(outFrameLeft, outFrameTop, polarLeft, outFrameBottom);
 
         mBatteryPaint.setStyle(Paint.Style.STROKE);
@@ -790,7 +790,7 @@ public abstract class PageLoader {
         //底部的字显示的位置Y
         float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mTipMarginHeight;
         String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.Format.FORMAT_TIME);
-        float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
+        float x = outFrameLeft - mTipPaint.measureText(time) - UiUtils.dpToPx(4);
         canvas.drawText(time, x, y, mTipPaint);
     }
 
