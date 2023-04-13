@@ -44,11 +44,6 @@ public abstract class BaseFileFragment extends BaseFragment {
         return mAdapter != null ? mAdapter.getCheckedFiles() : null;
     }
 
-    //获取文件的总数
-    public int getFileCount() {
-        return mAdapter != null ? mAdapter.getItemCount() : null;
-    }
-
     //获取可点击的文件的数量
     public int getCheckableCount() {
         if (mAdapter == null) return 0;

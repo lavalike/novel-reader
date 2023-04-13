@@ -27,8 +27,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by wangzhen on 17-5-27.
@@ -118,31 +116,21 @@ public class FileCategoryFragment extends BaseFileFragment {
         mTvPath.setText(getString(R.string.file_path, file.getPath()));
         //获取数据
         File[] files = file.listFiles(new SimpleFileFilter());
-        //转换成List
-        List<File> rootFiles = Arrays.asList(files);
-        //排序
-        Collections.sort(rootFiles, new FileComparator());
-        //加入
-        mAdapter.setData(rootFiles);
-        //反馈
-        if (mListener != null) {
-            mListener.onCategoryChanged();
-        }
-    }
-
-    @Override
-    public int getFileCount() {
-        int count = 0;
-        Set<Map.Entry<File, Boolean>> entrys = mAdapter.getCheckMap().entrySet();
-        for (Map.Entry<File, Boolean> entry : entrys) {
-            if (!entry.getKey().isDirectory()) {
-                ++count;
+        if (files != null) {
+            //转换成List
+            List<File> rootFiles = Arrays.asList(files);
+            //排序
+            Collections.sort(rootFiles, new FileComparator());
+            //加入
+            mAdapter.setData(rootFiles);
+            //反馈
+            if (mListener != null) {
+                mListener.onCategoryChanged();
             }
         }
-        return count;
     }
 
-    public class FileComparator implements Comparator<File> {
+    static class FileComparator implements Comparator<File> {
         @Override
         public int compare(File o1, File o2) {
             if (o1.isDirectory() && o2.isFile()) {
@@ -155,7 +143,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         }
     }
 
-    public static class SimpleFileFilter implements FileFilter {
+    static class SimpleFileFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
             if (pathname.getName().startsWith(".")) {
