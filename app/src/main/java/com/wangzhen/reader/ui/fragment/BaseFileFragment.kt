@@ -1,80 +1,54 @@
-package com.wangzhen.reader.ui.fragment;
+package com.wangzhen.reader.ui.fragment
 
-import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
-import com.wangzhen.reader.ui.base.BaseFragment;
-
-import java.io.File;
-import java.util.List;
+import com.wangzhen.reader.ui.adapter.FileSystemAdapter
+import com.wangzhen.reader.ui.base.BaseFragment
+import java.io.File
 
 /**
  * BaseFileFragment
  * Created by wangzhen on 2023/4/11
  */
-public abstract class BaseFileFragment extends BaseFragment {
+abstract class BaseFileFragment : BaseFragment() {
+    protected lateinit var adapter: FileSystemAdapter
 
-    protected FileSystemAdapter mAdapter;
-    protected OnFileCheckedListener mListener;
-    protected boolean isCheckedAll;
+    protected var callback: OnFileCheckedCallback? = null
 
-    //设置当前列表为全选
-    public void setCheckedAll(boolean checkedAll) {
-        if (mAdapter == null) return;
+    private var isCheckedAll = false
 
-        isCheckedAll = checkedAll;
-        mAdapter.setCheckedAll(checkedAll);
+    fun setCheckedAll(checkedAll: Boolean) {
+        isCheckedAll = checkedAll
+        adapter.setCheckedAll(checkedAll)
     }
 
-    public void setChecked(boolean checked) {
-        isCheckedAll = checked;
+    fun setChecked(checked: Boolean) {
+        isCheckedAll = checked
     }
 
-    //当前fragment是否全选
-    public boolean isCheckedAll() {
-        return isCheckedAll;
-    }
+    fun isCheckedAll() = isCheckedAll
 
-    //获取被选中的数量
-    public int getCheckedCount() {
-        if (mAdapter == null) return 0;
-        return mAdapter.getCheckedCount();
-    }
+    fun getCheckedCount() = adapter.checkedCount
 
-    //获取被选中的文件列表
-    public List<File> getCheckedFiles() {
-        return mAdapter != null ? mAdapter.getCheckedFiles() : null;
-    }
+    fun getCheckedFiles(): List<File>? = adapter.checkedFiles
 
-    //获取可点击的文件的数量
-    public int getCheckableCount() {
-        if (mAdapter == null) return 0;
-        return mAdapter.getCheckableCount();
-    }
+    fun getCheckableCount() = adapter.checkableCount
 
-    /**
-     * 删除选中的文件
-     */
-    public void deleteCheckedFiles() {
-        //删除选中的文件
-        List<File> files = getCheckedFiles();
-        //删除显示的文件列表
-        mAdapter.removeItems(files);
-        //删除选中的文件
-        for (File file : files) {
-            if (file.exists()) {
-                boolean ignored = file.delete();
+    fun deleteCheckedFiles() {
+        getCheckedFiles()?.let { files ->
+            adapter.removeItems(files)
+            for (file in files) {
+                if (file.exists()) {
+                    val ignored = file.delete()
+                }
             }
         }
     }
 
-    //设置文件点击监听事件
-    public void setOnFileCheckedListener(OnFileCheckedListener listener) {
-        mListener = listener;
+    fun setOnFileCheckedCallback(listener: OnFileCheckedCallback?) {
+        callback = listener
     }
 
-    //文件点击监听
-    public interface OnFileCheckedListener {
-        void onItemCheckedChange(boolean isChecked);
-
-        void onCategoryChanged();
+    interface OnFileCheckedCallback {
+        fun onItemCheckedChange(isChecked: Boolean)
+        fun onCategoryChanged()
     }
 }

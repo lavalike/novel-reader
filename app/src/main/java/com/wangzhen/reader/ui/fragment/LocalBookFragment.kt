@@ -1,78 +1,67 @@
-package com.wangzhen.reader.ui.fragment;
+package com.wangzhen.reader.ui.fragment
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.wangzhen.adapter.base.RecyclerItem;
-import com.wangzhen.reader.R;
-import com.wangzhen.reader.databinding.FragmentLocalBookBinding;
-import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
-import com.wangzhen.reader.utils.media.MediaStoreHelper;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.wangzhen.adapter.base.RecyclerItem
+import com.wangzhen.reader.R
+import com.wangzhen.reader.databinding.FragmentLocalBookBinding
+import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.ui.adapter.FileSystemAdapter
+import com.wangzhen.reader.utils.media.MediaStoreHelper.MediaResultCallback
+import com.wangzhen.reader.utils.media.MediaStoreHelper.getAllBookFile
+import java.io.File
 
 /**
  * LocalBookFragment
  * Created by wangzhen on 2023/4/12
  */
-public class LocalBookFragment extends BaseFileFragment {
-    private FragmentLocalBookBinding binding;
-    RecyclerView mRvContent;
+class LocalBookFragment : BaseFileFragment() {
+    private lateinit var binding: FragmentLocalBookBinding
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentLocalBookBinding.inflate(inflater);
-        mRvContent = binding.localBookRvContent;
-        return binding.getRoot();
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentLocalBookBinding.inflate(inflater)
+        return binding.root
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setUpAdapter();
-        loadFiles();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        loadFiles()
     }
 
-    private void setUpAdapter() {
-        mAdapter = new FileSystemAdapter(null);
-        mAdapter.setEmpty(new RecyclerItem() {
-            @Override
-            protected int layout() {
-                return R.layout.layout_file_system_empty;
+    private fun setUpAdapter() {
+        with(binding) {
+            localBookRvContent.layoutManager = LinearLayoutManager(context)
+            localBookRvContent.adapter = FileSystemAdapter(null).apply {
+                adapter = this
+                setEmpty(object : RecyclerItem() {
+                    override fun layout(): Int {
+                        return R.layout.layout_file_system_empty
+                    }
+                }.onCreateView(binding.root))
+                setOnClickCallback { _, pos ->
+                    if (instance.getCollBookByPath(datas[pos].absolutePath) != null) {
+                        return@setOnClickCallback
+                    }
+                    setCheckedItem(pos)
+                    callback?.onItemCheckedChange(getItemIsChecked(pos))
+                }
             }
-        }.onCreateView(binding.getRoot()));
-        mAdapter.setOnClickCallback((v, pos) -> {
-            //如果是已加载的文件，则点击事件无效。
-            String path = mAdapter.getDatas().get(pos).getAbsolutePath();
-            if (BookRepository.getInstance().getCollBookByPath(path) != null) {
-                return;
-            }
-
-            //点击选中
-            mAdapter.setCheckedItem(pos);
-
-            //反馈
-            if (mListener != null) {
-                mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
-            }
-        });
-        mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.setAdapter(mAdapter);
+        }
     }
 
-    private void loadFiles() {
-        MediaStoreHelper.getAllBookFile(requireActivity(), (files) -> {
-            mAdapter.setData(files);
-            if (mListener != null) {
-                mListener.onCategoryChanged();
+    private fun loadFiles() {
+        getAllBookFile(requireActivity(), object : MediaResultCallback {
+            override fun onResultCallback(files: ArrayList<File>) {
+                adapter.setData(files)
+                callback?.onCategoryChanged()
             }
-        });
+        })
     }
 }

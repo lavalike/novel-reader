@@ -1,6 +1,6 @@
 package com.wangzhen.reader.ui.activity;
 
-import static com.wangzhen.reader.ui.fragment.BaseFileFragment.OnFileCheckedListener;
+import static com.wangzhen.reader.ui.fragment.BaseFileFragment.OnFileCheckedCallback;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -56,7 +56,7 @@ public class FileSystemActivity extends BaseActivity {
     private FileCategoryFragment mCategoryFragment;
     private BaseFileFragment mCurFragment;
 
-    private final OnFileCheckedListener mListener = new OnFileCheckedListener() {
+    private final OnFileCheckedCallback mListener = new OnFileCheckedCallback() {
         @Override
         public void onItemCheckedChange(boolean isChecked) {
             changeMenuStatus();
@@ -180,8 +180,8 @@ public class FileSystemActivity extends BaseActivity {
             }).setNegativeButton(getResources().getString(R.string.common_cancel), null).show();
         });
 
-        mLocalFragment.setOnFileCheckedListener(mListener);
-        mCategoryFragment.setOnFileCheckedListener(mListener);
+        mLocalFragment.setOnFileCheckedCallback(mListener);
+        mCategoryFragment.setOnFileCheckedCallback(mListener);
     }
 
     /**

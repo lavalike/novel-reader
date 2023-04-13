@@ -1,165 +1,120 @@
-package com.wangzhen.reader.ui.fragment;
+package com.wangzhen.reader.ui.fragment
 
-import android.os.Bundle;
-import android.os.Environment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.wangzhen.adapter.base.RecyclerItem;
-import com.wangzhen.reader.R;
-import com.wangzhen.reader.databinding.FragmentFileCategoryBinding;
-import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.adapter.FileSystemAdapter;
-import com.wangzhen.reader.utils.FileStack;
-import com.wangzhen.reader.utils.FileUtils;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import android.os.Bundle
+import android.os.Environment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.wangzhen.adapter.base.RecyclerItem
+import com.wangzhen.reader.R
+import com.wangzhen.reader.databinding.FragmentFileCategoryBinding
+import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.ui.adapter.FileSystemAdapter
+import com.wangzhen.reader.utils.FileStack
+import com.wangzhen.reader.utils.FileStack.FileSnapshot
+import java.io.File
+import java.io.FileFilter
+import java.util.*
 
 /**
- * Created by wangzhen on 17-5-27.
+ * FileCategoryFragment
+ * Created by wangzhen on 2023/4/13
  */
+class FileCategoryFragment : BaseFileFragment() {
+    private lateinit var binding: FragmentFileCategoryBinding
+    private var fileStack = FileStack()
 
-public class FileCategoryFragment extends BaseFileFragment {
-    private FragmentFileCategoryBinding binding;
-    TextView mTvPath;
-    TextView mTvBackLast;
-    RecyclerView mRvContent;
-
-    private FileStack mFileStack;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentFileCategoryBinding.inflate(inflater);
-        mTvPath = binding.fileCategoryTvPath;
-        mTvBackLast = binding.fileCategoryTvBackLast;
-        mRvContent = binding.fileCategoryRvContent;
-        return binding.getRoot();
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentFileCategoryBinding.inflate(inflater)
+        return binding.root
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        loadTree(Environment.getExternalStorageDirectory())
 
-        setUpAdapter();
-
-        mTvBackLast.setOnClickListener((v) -> {
-            FileStack.FileSnapshot snapshot = mFileStack.pop();
-            int oldScrollOffset = mRvContent.computeHorizontalScrollOffset();
-            if (snapshot == null) return;
-            mTvPath.setText(snapshot.filePath);
-            mAdapter.setData(snapshot.files);
-            mRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset);
-            //反馈
-            if (mListener != null) {
-                mListener.onCategoryChanged();
-            }
-        });
-
-        mFileStack = new FileStack();
-        File root = Environment.getExternalStorageDirectory();
-        toggleFileTree(root);
-    }
-
-    private void setUpAdapter() {
-        mAdapter = new FileSystemAdapter(null);
-        mAdapter.setEmpty(new RecyclerItem() {
-            @Override
-            protected int layout() {
-                return R.layout.layout_file_system_empty;
-            }
-        }.onCreateView(binding.getRoot()));
-        mAdapter.setOnClickCallback((v, pos) -> {
-            File file = mAdapter.getDatas().get(pos);
-            if (file.isDirectory()) {
-                //保存当前信息。
-                FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
-                snapshot.filePath = mTvPath.getText().toString();
-                snapshot.files = new ArrayList<>(mAdapter.getDatas());
-                snapshot.scrollOffset = mRvContent.computeVerticalScrollOffset();
-                mFileStack.push(snapshot);
-                //切换下一个文件
-                toggleFileTree(file);
-            } else {
-                //如果是已加载的文件，则点击事件无效。
-                String path = mAdapter.getDatas().get(pos).getAbsolutePath();
-                if (BookRepository.getInstance().getCollBookByPath(path) != null) {
-                    return;
-                }
-                //点击选中
-                mAdapter.setCheckedItem(pos);
-                //反馈
-                if (mListener != null) {
-                    mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
-                }
-            }
-        });
-        mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.setAdapter(mAdapter);
-    }
-
-    private void toggleFileTree(File file) {
-        //路径名
-        mTvPath.setText(getString(R.string.file_path, file.getPath()));
-        //获取数据
-        File[] files = file.listFiles(new SimpleFileFilter());
-        if (files != null) {
-            //转换成List
-            List<File> rootFiles = Arrays.asList(files);
-            //排序
-            Collections.sort(rootFiles, new FileComparator());
-            //加入
-            mAdapter.setData(rootFiles);
-            //反馈
-            if (mListener != null) {
-                mListener.onCategoryChanged();
+        with(binding) {
+            fileCategoryTvBackLast.setOnClickListener {
+                val snapshot = fileStack.pop() ?: return@setOnClickListener
+                val oldScrollOffset = fileCategoryRvContent.computeHorizontalScrollOffset()
+                fileCategoryTvPath.text = snapshot.filePath
+                adapter.setData(snapshot.files)
+                fileCategoryRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset)
+                callback?.onCategoryChanged()
             }
         }
     }
 
-    static class FileComparator implements Comparator<File> {
-        @Override
-        public int compare(File o1, File o2) {
-            if (o1.isDirectory() && o2.isFile()) {
-                return -1;
+    private fun setUpAdapter() {
+        with(binding) {
+            fileCategoryRvContent.layoutManager = LinearLayoutManager(context)
+            fileCategoryRvContent.adapter = FileSystemAdapter(null).apply {
+                adapter = this
+                setEmpty(object : RecyclerItem() {
+                    override fun layout(): Int {
+                        return R.layout.layout_file_system_empty
+                    }
+                }.onCreateView(binding.root))
+                setOnClickCallback { v: View?, pos: Int ->
+                    val file = datas[pos]
+                    if (file.isDirectory) {
+                        fileStack.push(FileSnapshot().apply {
+                            filePath = fileCategoryTvPath.text.toString()
+                            files = ArrayList(datas)
+                            scrollOffset = fileCategoryRvContent.computeVerticalScrollOffset()
+                        })
+                        loadTree(file)
+                    } else {
+                        val path = datas[pos].absolutePath
+                        if (instance.getCollBookByPath(path) != null) {
+                            return@setOnClickCallback
+                        }
+                        setCheckedItem(pos)
+                        callback?.onItemCheckedChange(getItemIsChecked(pos))
+                    }
+                }
             }
-            if (o2.isDirectory() && o1.isFile()) {
-                return 1;
-            }
-            return o1.getName().compareToIgnoreCase(o2.getName());
         }
     }
 
-    static class SimpleFileFilter implements FileFilter {
-        @Override
-        public boolean accept(File pathname) {
-            if (pathname.getName().startsWith(".")) {
-                return false;
-            }
-            //文件夹内部数量为0
-            String[] list = pathname.list();
-            if (pathname.isDirectory() && list != null && list.length == 0) {
-                return false;
-            }
+    private fun loadTree(file: File) {
+        binding.fileCategoryTvPath.text = getString(R.string.file_path, file.path)
+        file.listFiles(SimpleFileFilter())?.let { files ->
+            val rootFiles = listOf(*files)
+            Collections.sort(rootFiles, FileComparator())
+            adapter.setData(rootFiles)
+            callback?.onCategoryChanged()
+        }
+    }
 
-            //文件内容为空,或者不以txt为开头
-            if (!pathname.isDirectory() && (pathname.length() == 0 || !pathname.getName().endsWith(".txt"))) {
-                return false;
+    internal class FileComparator : Comparator<File> {
+        override fun compare(o1: File, o2: File): Int {
+            if (o1.isDirectory && o2.isFile) {
+                return -1
             }
-            return true;
+            return if (o2.isDirectory && o1.isFile) {
+                1
+            } else o1.name.compareTo(o2.name, ignoreCase = true)
+        }
+    }
+
+    internal class SimpleFileFilter : FileFilter {
+        override fun accept(file: File): Boolean {
+            if (file.name.startsWith(".")) {
+                return false
+            }
+            val list = file.list()
+            if (file.isDirectory && list != null && list.isEmpty()) {
+                return false
+            }
+            if (file.isFile && (file.length() == 0L || !file.name.endsWith(".txt", true))) {
+                return false
+            }
+            return true
         }
     }
 }
