@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.wangzhen.commons.toolbar.impl.Toolbar
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar
 import com.wangzhen.reader.databinding.ActivityMoreSettingBinding
-import com.wangzhen.reader.model.local.ReadSettingManager
+import com.wangzhen.reader.utils.ReadSettingManager
 import com.wangzhen.reader.ui.base.BaseActivity
 
 /**

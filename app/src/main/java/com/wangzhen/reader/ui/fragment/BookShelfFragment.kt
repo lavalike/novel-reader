@@ -11,7 +11,7 @@ import com.wangzhen.adapter.base.RecyclerItem
 import com.wangzhen.reader.R
 import com.wangzhen.reader.databinding.FragmentBookshelfBinding
 import com.wangzhen.reader.model.bean.CollBookBean
-import com.wangzhen.reader.model.local.BookRepository
+import com.wangzhen.reader.base.BookRepository
 import com.wangzhen.reader.ui.activity.ReadActivity
 import com.wangzhen.reader.ui.adapter.BookShelfAdapter
 import com.wangzhen.reader.ui.base.BaseFragment

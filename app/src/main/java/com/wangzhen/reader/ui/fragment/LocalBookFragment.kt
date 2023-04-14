@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.wangzhen.adapter.base.RecyclerItem
 import com.wangzhen.reader.R
 import com.wangzhen.reader.databinding.FragmentLocalBookBinding
-import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.base.BookRepository.Companion.instance
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter
 import com.wangzhen.reader.utils.media.MediaStoreHelper.MediaResultCallback
 import com.wangzhen.reader.utils.media.MediaStoreHelper.getAllBookFile

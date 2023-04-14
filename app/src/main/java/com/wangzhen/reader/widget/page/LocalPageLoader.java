@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.wangzhen.reader.model.bean.BookChapterBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.model.local.BookRepository;
+import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.model.local.Void;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.Charset;

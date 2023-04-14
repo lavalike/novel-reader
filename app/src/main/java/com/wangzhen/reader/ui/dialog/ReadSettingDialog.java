@@ -22,12 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.DialogReadSettingBinding;
-import com.wangzhen.reader.model.local.ReadSettingManager;
 import com.wangzhen.reader.ui.activity.MoreSettingActivity;
 import com.wangzhen.reader.ui.activity.ReadActivity;
 import com.wangzhen.reader.ui.adapter.PageStyleAdapter;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.BrightnessUtils;
+import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.utils.UiUtils;
 import com.wangzhen.reader.widget.page.PageLoader;
 import com.wangzhen.reader.widget.page.PageMode;
@@ -37,9 +37,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by wangzhen on 17-5-18.
+ * ReadSettingDialog
+ * Created by wangzhen on 2023/4/14
  */
-
 public class ReadSettingDialog extends Dialog {
     private DialogReadSettingBinding binding;
 

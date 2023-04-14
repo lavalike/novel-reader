@@ -1,8 +1,5 @@
-package com.wangzhen.reader.model.local
+package com.wangzhen.reader.utils
 
-import com.wangzhen.reader.utils.AppConfig
-import com.wangzhen.reader.utils.UiUtils
-import com.wangzhen.reader.utils.SharedPreUtils
 import com.wangzhen.reader.widget.page.PageMode
 import com.wangzhen.reader.widget.page.PageStyle
 

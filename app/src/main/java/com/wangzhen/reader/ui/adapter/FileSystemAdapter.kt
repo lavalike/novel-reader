@@ -3,7 +3,7 @@ package com.wangzhen.reader.ui.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wangzhen.adapter.RecyclerAdapter
-import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.base.BookRepository.Companion.instance
 import com.wangzhen.reader.ui.adapter.holder.FileHolder
 import java.io.File
 

@@ -1,4 +1,4 @@
-package com.wangzhen.reader.model.local
+package com.wangzhen.reader.base
 
 import com.wangzhen.reader.model.bean.BookChapterBean
 import com.wangzhen.reader.model.bean.BookRecordBean
@@ -7,6 +7,7 @@ import com.wangzhen.reader.model.gen.BookChapterBeanDao
 import com.wangzhen.reader.model.gen.BookRecordBeanDao
 import com.wangzhen.reader.model.gen.CollBookBeanDao
 import com.wangzhen.reader.model.gen.DaoSession
+import com.wangzhen.reader.model.local.DaoDbHelper
 import io.reactivex.Single
 
 /**

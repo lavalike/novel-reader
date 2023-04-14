@@ -22,7 +22,7 @@ import com.wangzhen.reader.R;
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
 import com.wangzhen.reader.databinding.ActivityFileSystemBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.model.local.BookRepository;
+import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.fragment.BaseFileFragment;
 import com.wangzhen.reader.ui.fragment.FileCategoryFragment;

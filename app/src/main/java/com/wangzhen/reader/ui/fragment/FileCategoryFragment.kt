@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wangzhen.adapter.base.RecyclerItem
 import com.wangzhen.reader.R
 import com.wangzhen.reader.databinding.FragmentFileCategoryBinding
-import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.base.BookRepository.Companion.instance
 import com.wangzhen.reader.ui.adapter.FileSystemAdapter
 import com.wangzhen.reader.utils.FileStack
 import com.wangzhen.reader.utils.FileStack.FileSnapshot

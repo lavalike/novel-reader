@@ -14,8 +14,8 @@ import androidx.core.content.ContextCompat;
 
 import com.wangzhen.reader.model.bean.BookRecordBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.model.local.ReadSettingManager;
+import com.wangzhen.reader.base.BookRepository;
+import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.RxUtils;
