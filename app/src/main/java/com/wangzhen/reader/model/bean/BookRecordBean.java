@@ -1,14 +1,15 @@
 package com.wangzhen.reader.model.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
- * Created by wangzhen on 17-5-20.
+ * BookRecordBean
+ * Created by wangzhen on 2023/4/14
  */
 @Entity
-public class BookRecordBean{
+public class BookRecordBean {
     //所属的书的id
     @Id
     private String bookId;

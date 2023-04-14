@@ -16,8 +16,8 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 
 /**
- * Created by wangzhen on 17-5-8.
- * 收藏的书籍
+ * CollBookBean
+ * Created by wangzhen on 2023/4/14
  */
 @Entity
 public class CollBookBean implements Parcelable {

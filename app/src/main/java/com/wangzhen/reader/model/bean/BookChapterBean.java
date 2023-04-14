@@ -1,25 +1,20 @@
 package com.wangzhen.reader.model.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
-import org.greenrobot.greendao.annotation.Generated;
 
 import java.io.Serializable;
 
 /**
- * Created by wangzhen on 17-5-10.
  * 书的章节链接(作为下载的进度数据)
  * 同时作为网络章节和本地章节 (没有找到更好分离两者的办法)
+ * Created by wangzhen on 2023/4/14
  */
 @Entity
-public class BookChapterBean implements Serializable{
+public class BookChapterBean implements Serializable {
     private static final long serialVersionUID = 56423411313L;
-    /**
-     * title : 第一章 他叫白小纯
-     * link : http://read.qidian.com/chapter/rJgN8tJ_cVdRGoWu-UQg7Q2/6jr-buLIUJSaGfXRMrUjdw2
-     * unreadble : false
-     */
     @Id
     private String id;
 
@@ -46,8 +41,7 @@ public class BookChapterBean implements Serializable{
     private long end;
 
     @Generated(hash = 1508543635)
-    public BookChapterBean(String id, String link, String title, String taskName,
-            boolean unreadble, String bookId, long start, long end) {
+    public BookChapterBean(String id, String link, String title, String taskName, boolean unreadble, String bookId, long start, long end) {
         this.id = id;
         this.link = link;
         this.title = title;
@@ -132,15 +126,6 @@ public class BookChapterBean implements Serializable{
 
     @Override
     public String toString() {
-        return "BookChapterBean{" +
-                "id='" + id + '\'' +
-                ", link='" + link + '\'' +
-                ", title='" + title + '\'' +
-                ", taskName='" + taskName + '\'' +
-                ", unreadble=" + unreadble +
-                ", bookId='" + bookId + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                '}';
+        return "BookChapterBean{" + "id='" + id + '\'' + ", link='" + link + '\'' + ", title='" + title + '\'' + ", taskName='" + taskName + '\'' + ", unreadble=" + unreadble + ", bookId='" + bookId + '\'' + ", start=" + start + ", end=" + end + '}';
     }
 }
