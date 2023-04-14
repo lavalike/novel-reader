@@ -24,9 +24,9 @@ class FileHolder(parent: ViewGroup, private val mSelectedMap: HashMap<File, Bool
 
         //判断是文件还是文件夹
         if (mData.isDirectory) {
-            setFolder(mData!!)
+            setFolder(mData)
         } else {
-            setFile(mData!!)
+            setFile(mData)
         }
     }
 
