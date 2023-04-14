@@ -28,17 +28,16 @@ abstract class BaseFileFragment : BaseFragment() {
 
     fun getCheckedCount() = adapter.checkedCount
 
-    fun getCheckedFiles(): List<File>? = adapter.checkedFiles
+    fun getCheckedFiles(): List<File> = adapter.checkedFiles()
 
-    fun getCheckableCount() = adapter.checkableCount
+    fun getCheckableCount() = adapter.checkableCount()
 
     fun deleteCheckedFiles() {
-        getCheckedFiles()?.let { files ->
-            adapter.removeItems(files)
-            for (file in files) {
-                if (file.exists()) {
-                    val ignored = file.delete()
-                }
+        val files = getCheckedFiles()
+        adapter.removeItems(files)
+        for (file in files) {
+            if (file.exists()) {
+                val ignored = file.delete()
             }
         }
     }

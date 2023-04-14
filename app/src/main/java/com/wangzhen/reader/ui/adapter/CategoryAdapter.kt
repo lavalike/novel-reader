@@ -1,42 +1,30 @@
-package com.wangzhen.reader.ui.adapter;
+package com.wangzhen.reader.ui.adapter
 
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.wangzhen.adapter.RecyclerAdapter;
-import com.wangzhen.reader.ui.adapter.holder.CategoryHolder;
-import com.wangzhen.reader.widget.page.TxtChapter;
-
-import java.util.List;
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.wangzhen.adapter.RecyclerAdapter
+import com.wangzhen.reader.ui.adapter.holder.CategoryHolder
+import com.wangzhen.reader.widget.page.TxtChapter
 
 /**
  * CategoryAdapter
  * Created by wangzhen on 2023/4/12
  */
-public class CategoryAdapter extends RecyclerAdapter<TxtChapter> {
-    private int currentIndex;
-
-    public CategoryAdapter(List<TxtChapter> list) {
-        super(list);
+class CategoryAdapter(list: List<TxtChapter>?) : RecyclerAdapter<TxtChapter>(list) {
+    private var currentIndex = 0
+    override fun onAbsCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return CategoryHolder(parent)
     }
 
-    @Override
-    public RecyclerView.ViewHolder onAbsCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CategoryHolder(parent);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        if (position == currentIndex && holder instanceof CategoryHolder) {
-            ((CategoryHolder) holder).setSelectedChapter();
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        if (position == currentIndex && holder is CategoryHolder) {
+            holder.setSelectedChapter()
         }
     }
 
-    public void setChapter(int pos) {
-        currentIndex = pos;
-        notifyDataSetChanged();
+    fun setChapter(pos: Int) {
+        currentIndex = pos
+        notifyDataSetChanged()
     }
 }

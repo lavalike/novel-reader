@@ -41,10 +41,14 @@
 
         <TextView
             android:id="@+id/file_tv_name"
-            style="@style/Theme.TextAppearance.Common.SingleLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
+            android:textStyle="bold"
             tools:text="英语四级" />
 
         <LinearLayout
@@ -57,22 +61,36 @@
 
             <TextView
                 android:id="@+id/file_tv_tag"
-                style="@style/Theme.TextAppearance.File.Tag"
-                android:layout_marginEnd="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/ic_tag_txt"
-                android:text="@string/file_type_txt" />
+                android:gravity="center"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:text="@string/file_type_txt"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                tools:ignore="SmallSp" />
 
             <TextView
                 android:id="@+id/file_tv_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/textColor"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"
                 tools:text="324kb" />
 
             <TextView
                 android:id="@+id/file_tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"
                 tools:text="2023-04-12" />
         </LinearLayout>
 

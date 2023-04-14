@@ -1,129 +1,100 @@
-package com.wangzhen.reader.ui.adapter;
+package com.wangzhen.reader.ui.adapter
 
-import android.view.ViewGroup;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.wangzhen.adapter.RecyclerAdapter;
-import com.wangzhen.reader.model.local.BookRepository;
-import com.wangzhen.reader.ui.adapter.holder.FileHolder;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.wangzhen.adapter.RecyclerAdapter
+import com.wangzhen.reader.model.local.BookRepository.Companion.instance
+import com.wangzhen.reader.ui.adapter.holder.FileHolder
+import java.io.File
 
 /**
  * Created by wangzhen on 17-5-27.
  */
+class FileSystemAdapter(list: List<File>?) : RecyclerAdapter<File>(list) {
+    private val mCheckMap = HashMap<File, Boolean>()
+    var checkedCount = 0
 
-public class FileSystemAdapter extends RecyclerAdapter<File> {
-    private final HashMap<File, Boolean> mCheckMap = new HashMap<>();
-    private int mCheckedCount = 0;
-
-    public FileSystemAdapter(List<File> list) {
-        super(list);
+    override fun onAbsCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return FileHolder(parent, mCheckMap)
     }
 
-    @Override
-    public RecyclerView.ViewHolder onAbsCreateViewHolder(ViewGroup parent, int viewType) {
-        return new FileHolder(parent, mCheckMap);
-    }
-
-
-    @Override
-    public void setData(List<File> list) {
-        if (list == null) return;
-        mCheckMap.clear();
-        for (File file : list) {
-            mCheckMap.put(file, false);
+    override fun setData(list: List<File>?) {
+        list?.let { data ->
+            mCheckMap.clear()
+            for (file in data) {
+                mCheckMap[file] = false
+            }
+            super.setData(data)
         }
-        super.setData(list);
     }
 
-    public void removeItems(List<File> value) {
+    fun removeItems(value: List<File>) {
         //删除在HashMap中的文件
-        for (File file : value) {
-            mCheckMap.remove(file);
+        for (file in value) {
+            mCheckMap.remove(file)
             //因为，能够被移除的文件，肯定是选中的
-            --mCheckedCount;
+            --checkedCount
         }
         //删除列表中的文件
-        super.getDatas().removeAll(value);
+        super.getDatas().removeAll(value)
     }
 
     //设置点击切换
-    public void setCheckedItem(int pos) {
-        File file = getDatas().get(pos);
-        if (isFileLoaded(file.getAbsolutePath())) return;
-
-        boolean isSelected = mCheckMap.get(file);
-        if (isSelected) {
-            mCheckMap.put(file, false);
-            --mCheckedCount;
+    fun setCheckedItem(pos: Int) {
+        val file = datas[pos]
+        if (isFileLoaded(file.absolutePath)) return
+        if (mCheckMap[file] == true) {
+            mCheckMap[file] = false
+            --checkedCount
         } else {
-            mCheckMap.put(file, true);
-            ++mCheckedCount;
+            mCheckMap[file] = true
+            ++checkedCount
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged()
     }
 
-    public void setCheckedAll(boolean isChecked) {
-        Set<Map.Entry<File, Boolean>> entrys = mCheckMap.entrySet();
-        mCheckedCount = 0;
-        for (Map.Entry<File, Boolean> entry : entrys) {
+    fun setCheckedAll(isChecked: Boolean) {
+        val entries: Set<MutableMap.MutableEntry<File, Boolean>> = mCheckMap.entries
+        checkedCount = 0
+        for (entry in entries) {
             //必须是文件，必须没有被收藏
-            if (entry.getKey().isFile() && !isFileLoaded(entry.getKey().getAbsolutePath())) {
-                entry.setValue(isChecked);
+            if (entry.key.isFile && !isFileLoaded(entry.key.absolutePath)) {
+                entry.setValue(isChecked)
                 //如果选中，则增加点击的数量
                 if (isChecked) {
-                    ++mCheckedCount;
+                    ++checkedCount
                 }
             }
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged()
     }
 
-    private boolean isFileLoaded(String path) {
+    private fun isFileLoaded(path: String): Boolean {
         //如果是已加载的文件，则点击事件无效。
-        return BookRepository.getInstance().getCollBookByPath(path) != null;
+        return instance.getCollBookByPath(path) != null
     }
 
-    public int getCheckableCount() {
-        List<File> files = getDatas();
-        int count = 0;
-        if (files != null) {
-            for (File file : files) {
-                if (!isFileLoaded(file.getAbsolutePath()) && file.isFile()) ++count;
+    fun checkableCount(): Int {
+        var count = 0
+        if (datas != null) {
+            for (file in datas) {
+                if (!isFileLoaded(file!!.absolutePath) && file.isFile) ++count
             }
         }
-        return count;
+        return count
     }
 
-    public boolean getItemIsChecked(int pos) {
-        File file = getDatas().get(pos);
-        return Boolean.TRUE.equals(mCheckMap.get(file));
+    fun getItemIsChecked(pos: Int): Boolean {
+        return mCheckMap[datas[pos]] == true
     }
 
-    public List<File> getCheckedFiles() {
-        List<File> files = new ArrayList<>();
-        Set<Map.Entry<File, Boolean>> entrys = mCheckMap.entrySet();
-        for (Map.Entry<File, Boolean> entry : entrys) {
-            if (entry.getValue()) {
-                files.add(entry.getKey());
+    fun checkedFiles(): List<File> {
+        val files: MutableList<File> = ArrayList()
+        for ((key, value) in mCheckMap.entries) {
+            if (value) {
+                files.add(key)
             }
         }
-        return files;
+        return files
     }
-
-    public int getCheckedCount() {
-        return mCheckedCount;
-    }
-
-    public HashMap<File, Boolean> getCheckMap() {
-        return mCheckMap;
-    }
-
 }
