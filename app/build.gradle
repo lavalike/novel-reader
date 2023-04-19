@@ -3,8 +3,9 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    compileSdkVersion 33
+    namespace 'com.wangzhen.reader'
 
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.wangzhen.reader"
         minSdkVersion 21
