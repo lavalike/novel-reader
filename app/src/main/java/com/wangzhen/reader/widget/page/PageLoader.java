@@ -12,15 +12,15 @@ import android.text.TextPaint;
 
 import androidx.core.content.ContextCompat;
 
+import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.model.bean.BookRecordBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.base.BookRepository;
-import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.IOUtils;
+import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.utils.RxUtils;
-import com.wangzhen.reader.utils.UiUtils;
 import com.wangzhen.reader.utils.StringUtils;
+import com.wangzhen.reader.utils.UiUtils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -112,6 +112,7 @@ public abstract class PageLoader {
     private int mMarginWidth;
     private int mMarginHeight;
     private int mTipMarginHeight;
+    private int mBottomInfoMargin;
     //字体的颜色
     private int mTextColor;
     //标题的大小
@@ -162,6 +163,7 @@ public abstract class PageLoader {
         mMarginWidth = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_WIDTH);
         mMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_HEIGHT);
         mTipMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_TIP_MARGIN_TOP);
+        mBottomInfoMargin = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_BOTTOM_INFO_MARGIN);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -169,7 +171,7 @@ public abstract class PageLoader {
     /**
      * 作用：设置与文字相关的参数
      *
-     * @param textSize
+     * @param textSize text size
      */
     private void setUpTextParams(int textSize) {
         // 文字大小
@@ -736,7 +738,7 @@ public abstract class PageLoader {
 
                 /******绘制页码********/
                 // 底部的字显示的位置Y
-                float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mTipMarginHeight;
+                float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mBottomInfoMargin;
                 // 只有finish的时候采用页码
                 if (mStatus == STATUS_FINISH) {
                     String percent = (mCurPage.position + 1) + "/" + mCurPageList.size();
@@ -746,13 +748,13 @@ public abstract class PageLoader {
         } else {
             //擦除区域
             mBgPaint.setColor(mBgColor);
-            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mMarginHeight + UiUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
+            canvas.drawRect(mDisplayWidth / 2f, mDisplayHeight - mMarginHeight + UiUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
         }
 
         /******绘制电池********/
 
         int visibleRight = mDisplayWidth - mMarginWidth;
-        int visibleBottom = mDisplayHeight - mTipMarginHeight;
+        int visibleBottom = mDisplayHeight - mBottomInfoMargin;
 
         int outFrameWidth = (int) mTipPaint.measureText("xxx");
         int outFrameHeight = (int) mTipPaint.getTextSize();
@@ -788,7 +790,7 @@ public abstract class PageLoader {
         canvas.drawRect(innerFrame, mBatteryPaint);
 
         //底部的字显示的位置Y
-        float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mTipMarginHeight;
+        float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - mBottomInfoMargin + 3;
         String time = StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.Format.FORMAT_TIME);
         float x = outFrameLeft - mTipPaint.measureText(time) - UiUtils.dpToPx(4);
         canvas.drawText(time, x, y, mTipPaint);

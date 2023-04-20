@@ -25,5 +25,6 @@ object AppConfig {
         const val DEFAULT_TIP_MARGIN_TOP = 35 // 章节标题与顶部边距
         const val DEFAULT_TIP_SIZE = 12 // 章节标题大小
         const val EXTRA_TITLE_SIZE = 4 // 预留追加文本大小
+        const val DEFAULT_BOTTOM_INFO_MARGIN = 15 // 底部信息(页码/时间/电量)边距
     }
 }
