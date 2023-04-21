@@ -13,20 +13,21 @@
         <!--文件夹标识或已选文件标识-->
         <ImageView
             android:id="@+id/file_iv_icon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:contentDescription="@string/app_name"
             android:scaleType="center"
             android:visibility="gone"
-            tools:src="@drawable/ic_dir" />
+            tools:src="@drawable/ic_dir"
+            tools:visibility="visible" />
         <!--选择是否添加文件-->
         <CheckBox
             android:id="@+id/file_cb_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/selector_cb_file"
-            android:button="@null"
+            android:button="@drawable/selector_cb_file"
             android:clickable="false"
             android:enabled="false"
             android:focusableInTouchMode="false" />
@@ -80,8 +81,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/textColor"
-                android:textSize="10sp"
-                tools:ignore="SmallSp"
                 tools:text="324kb" />
 
             <TextView
@@ -89,8 +88,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textColor"
-                android:textSize="10sp"
-                tools:ignore="SmallSp"
                 tools:text="2023-04-12" />
         </LinearLayout>
 

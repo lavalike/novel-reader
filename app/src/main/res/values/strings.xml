@@ -10,7 +10,7 @@
     <!--read-->
     <string name="read_setting">设置</string>
     <string name="read_category">目录</string>
-    
+
     <!--setting-->
     <string name="setting_volume_page_flip">音量键翻页</string>
 
@@ -22,6 +22,7 @@
     <string name="file_add_shelves">加入书架(%1$d)</string>
     <string name="file_add_succeed">成功添加%1$d本书</string>
     <string name="file_backwards">上一级</string>
+    <string name="file_delete">删除</string>
 
     <!--常用-->
     <string name="common_tip">提示</string>
