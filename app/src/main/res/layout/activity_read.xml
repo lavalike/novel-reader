@@ -61,7 +61,7 @@
                     android:background="?attr/actionBarItemBackground"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_arrow_back" />
+                    android:src="@mipmap/ic_arrow_back_white" />
 
                 <TextView
                     android:id="@+id/book_name"

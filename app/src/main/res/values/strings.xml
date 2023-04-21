@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">图书</string>
+    <string name="app_name_title">Books</string>
     <!--shelf-->
     <string name="shelf_empty">还没有书哦，快去添加吧</string>
     <!--mode-->
@@ -9,6 +10,9 @@
     <!--read-->
     <string name="read_setting">设置</string>
     <string name="read_category">目录</string>
+    
+    <!--setting-->
+    <string name="setting_volume_page_flip">音量键翻页</string>
 
     <!--file system-->
     <string name="file_type_txt">TXT</string>

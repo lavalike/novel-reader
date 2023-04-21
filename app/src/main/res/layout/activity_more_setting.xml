@@ -17,7 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="音量键翻页" />
+            android:text="@string/setting_volume_page_flip"
+            android:textColor="@color/textColor" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/more_setting_sc_volume"
