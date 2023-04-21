@@ -12,7 +12,7 @@ object AppConfig {
     }
 
     object Text {
-        const val DEFAULT_TEXT_SIZE = 22
+        const val DEFAULT_TEXT_SIZE = 22f
     }
 
     object Screen {
@@ -26,5 +26,6 @@ object AppConfig {
         const val DEFAULT_TIP_SIZE = 12 // 章节标题大小
         const val EXTRA_TITLE_SIZE = 4 // 预留追加文本大小
         const val DEFAULT_BOTTOM_INFO_MARGIN = 15 // 底部信息(页码/时间/电量)边距
+        const val CONTENT_LINE_SPACE = 30 // 正文行间距
     }
 }

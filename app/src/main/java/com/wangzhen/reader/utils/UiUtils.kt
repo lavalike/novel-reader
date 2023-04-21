@@ -10,12 +10,12 @@ object UiUtils {
     private val metrics = AppUtils.getContext().resources.displayMetrics
 
     @JvmStatic
-    fun dpToPx(dp: Int): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), metrics).toInt()
+    fun dpToPx(dp: Float): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics).toInt()
     }
 
     @JvmStatic
-    fun spToPx(sp: Int): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), metrics).toInt()
+    fun spToPx(sp: Float): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics).toInt()
     }
 }

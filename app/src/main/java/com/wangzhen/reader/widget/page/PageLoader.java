@@ -113,6 +113,7 @@ public abstract class PageLoader {
     private int mMarginHeight;
     private int mTipMarginHeight;
     private int mBottomInfoMargin;
+    private int mContentLineSpace;
     //字体的颜色
     private int mTextColor;
     //标题的大小
@@ -164,6 +165,7 @@ public abstract class PageLoader {
         mMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_MARGIN_HEIGHT);
         mTipMarginHeight = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_TIP_MARGIN_TOP);
         mBottomInfoMargin = UiUtils.dpToPx(AppConfig.Dimension.DEFAULT_BOTTOM_INFO_MARGIN);
+        mContentLineSpace = UiUtils.dpToPx(AppConfig.Dimension.CONTENT_LINE_SPACE);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -845,7 +847,7 @@ public abstract class PageLoader {
             }
 
             //设置总距离
-            int interval = mTextInterval + (int) mTextPaint.getTextSize();
+            int interval = mContentLineSpace;
             int para = mTextPara + (int) mTextPaint.getTextSize();
             int titleInterval = mTitleInterval + (int) mTitlePaint.getTextSize();
             int titlePara = mTitlePara + (int) mTextPaint.getTextSize();
