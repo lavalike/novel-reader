@@ -1,6 +1,5 @@
 package com.wangzhen.reader.ui.adapter.holder
 
-import android.view.View
 import android.view.ViewGroup
 import com.wangzhen.adapter.base.RecyclerViewHolder
 import com.wangzhen.reader.R
@@ -17,7 +16,6 @@ class BookShelfHolder(parent: ViewGroup) :
         ItemCollBookBinding.bind(itemView).apply {
             bookName.text = mData.title
             lastChapter.text = if (mData.isUpdate()) "未阅读" else mData.lastChapter.trim()
-            redDot.visibility = if (mData.isUpdate()) View.VISIBLE else View.GONE
         }
     }
 }

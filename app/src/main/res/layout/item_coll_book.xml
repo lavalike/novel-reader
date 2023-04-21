@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:padding="10dp">
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="@drawable/selector_shelf_book"
         android:padding="2dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,7 +36,7 @@
             android:textColor="@color/textColor"
             android:textSize="14sp"
             tools:text="逆鳞" />
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/last_chapter"
@@ -48,15 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/container"
+        tools:ignore="SmallSp"
         tools:text="第二卷、逆水行舟！第四百六十五章、打蛇七寸！" />
-
-    <View
-        android:id="@+id/red_dot"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:background="@drawable/shape_red_dot"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
