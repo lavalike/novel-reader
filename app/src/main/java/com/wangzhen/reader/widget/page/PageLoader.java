@@ -1270,11 +1270,6 @@ public abstract class PageLoader {
                     }
 
                     subStr = paragraph.substring(0, wordCount);
-                    if (!showTitle) {
-                        for (String pattern : AppConfig.Pattern.CHAPTER_PATTERNS) {
-                            subStr = subStr.replaceAll(pattern, "");
-                        }
-                    }
 
                     if (!subStr.equals("\n")) {
                         //将一行字节，存储到lines中
