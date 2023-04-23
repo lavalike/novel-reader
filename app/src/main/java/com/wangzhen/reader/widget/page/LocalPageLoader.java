@@ -43,13 +43,6 @@ public class LocalPageLoader extends PageLoader {
     //没有标题的时候，每个章节的最大长度
     private final static int MAX_LENGTH_WITH_NO_CHAPTER = 10 * 1024;
 
-    // "序(章)|前言"
-    private final static Pattern mPreChapterPattern = Pattern.compile("^(\\s{0,10})((\u5e8f[\u7ae0\u8a00]?)|(\u524d\u8a00)|(\u6954\u5b50))(\\s{0,10})$", Pattern.MULTILINE);
-
-    //正则表达式章节匹配模式
-    // "(第)([0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]{1,10})([章节回集卷])(.*)"
-    private static final String[] CHAPTER_PATTERNS = new String[]{"^(.{0,8})(\u7b2c)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\u7ae0\u8282\u56de\u96c6\u5377])(.{0,30})$", "^(\\s{0,4})([\\(\u3010\u300a]?(\u5377)?)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\\.:\uff1a\u0020\f\t])(.{0,30})$", "^(\\s{0,4})([\\(\uff08\u3010\u300a])(.{0,30})([\\)\uff09\u3011\u300b])(\\s{0,2})$", "^(\\s{0,4})(\u6b63\u6587)(.{0,20})$", "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"};
-
     //章节解析模式
     private Pattern mChapterPattern = null;
     //获取书本的文件
@@ -119,6 +112,9 @@ public class LocalPageLoader extends PageLoader {
                     if (seekPos == 0 && chapterStart != 0) {
                         //获取当前章节的内容
                         String chapterContent = blockContent.substring(seekPos, chapterStart);
+                        for (String pattern : AppConfig.Pattern.CHAPTER_PATTERNS) {
+                            chapterContent = chapterContent.replaceFirst(pattern, "");
+                        }
                         //设置指针偏移
                         seekPos += chapterContent.length();
 
@@ -164,6 +160,9 @@ public class LocalPageLoader extends PageLoader {
                         if (chapters.size() != 0) {
                             //获取章节内容
                             String chapterContent = blockContent.substring(seekPos, matcher.start());
+                            for (String pattern : AppConfig.Pattern.CHAPTER_PATTERNS) {
+                                chapterContent = chapterContent.replaceFirst(pattern, "");
+                            }
                             seekPos += chapterContent.length();
 
                             //获取上一章节
@@ -258,9 +257,6 @@ public class LocalPageLoader extends PageLoader {
 
     /**
      * 从文件中提取一章的内容
-     *
-     * @param chapter
-     * @return
      */
     private byte[] getChapterContent(TxtChapter chapter) {
         RandomAccessFile bookStream = null;
@@ -271,14 +267,13 @@ public class LocalPageLoader extends PageLoader {
             byte[] content = new byte[extent];
             bookStream.read(content, 0, extent);
             return content;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.close(bookStream);
+            if (bookStream != null) {
+                IOUtils.close(bookStream);
+            }
         }
-
         return new byte[0];
     }
 
@@ -293,7 +288,7 @@ public class LocalPageLoader extends PageLoader {
         byte[] buffer = new byte[BUFFER_SIZE / 4];
         int length = bookStream.read(buffer, 0, buffer.length);
         //进行章节匹配
-        for (String str : CHAPTER_PATTERNS) {
+        for (String str : AppConfig.Pattern.CHAPTER_PATTERNS) {
             Pattern pattern = Pattern.compile(str, Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(new String(buffer, 0, length, mCharset.getCharset()));
             //如果匹配存在，那么就表示当前章节使用这种匹配方式
@@ -416,9 +411,8 @@ public class LocalPageLoader extends PageLoader {
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
         //从文件中获取数据
         byte[] content = getChapterContent(chapter);
-        ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mCharset.getCharset()));
-        return br;
+        ByteArrayInputStream stream = new ByteArrayInputStream(content);
+        return new BufferedReader(new InputStreamReader(stream, mCharset.getCharset()));
     }
 
     @Override

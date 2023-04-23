@@ -670,7 +670,7 @@ public abstract class PageLoader {
      * 加载页面列表
      *
      * @param chapterPos:章节序号
-     * @return
+     * @return list
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
@@ -681,9 +681,7 @@ public abstract class PageLoader {
         }
         // 获取章节的文本流
         BufferedReader reader = getChapterReader(chapter);
-        List<TxtPage> chapters = loadPages(chapter, reader);
-
-        return chapters;
+        return loadPages(chapter, reader);
     }
 
     /*******************************abstract method***************************************/
@@ -1272,6 +1270,12 @@ public abstract class PageLoader {
                     }
 
                     subStr = paragraph.substring(0, wordCount);
+                    if (!showTitle) {
+                        for (String pattern : AppConfig.Pattern.CHAPTER_PATTERNS) {
+                            subStr = subStr.replaceAll(pattern, "");
+                        }
+                    }
+
                     if (!subStr.equals("\n")) {
                         //将一行字节，存储到lines中
                         lines.add(subStr);
@@ -1310,8 +1314,6 @@ public abstract class PageLoader {
                 //重置Lines
                 lines.clear();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
