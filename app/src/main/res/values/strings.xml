@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">图书</string>
-    <string name="app_name_title">Books</string>
     <!--shelf-->
     <string name="shelf_empty">还没有书哦，快去添加吧</string>
     <!--mode-->

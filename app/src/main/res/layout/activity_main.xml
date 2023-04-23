@@ -17,7 +17,7 @@
             android:layout_height="@dimen/toolbar_height"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="@string/app_name_title"
+            android:text="@string/app_name"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
