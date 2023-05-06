@@ -10,7 +10,8 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         android:src="@mipmap/header_reading"
-        app:radius_bottom_left="35dp" />
+        app:radius_bottom_left="35dp"
+        app:radius_bottom_right="35dp" />
 
     <LinearLayout
         android:id="@+id/btn_choose_files"
