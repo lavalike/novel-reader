@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">图书</string>
     <!--shelf-->
+    <string name="shelf">我的书架</string>
+    <string name="shelf_choose_local">选择本地书籍</string>
     <string name="shelf_empty">还没有书哦，快去添加吧</string>
     <!--mode-->
     <string name="mode_night">夜间</string>

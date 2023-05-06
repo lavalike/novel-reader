@@ -6,13 +6,24 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import com.wangzhen.adapter.base.RecyclerItem
 import com.wangzhen.permission.PermissionManager.request
 import com.wangzhen.permission.callback.AbsPermissionCallback
+import com.wangzhen.reader.R
+import com.wangzhen.reader.base.BookRepository
 import com.wangzhen.reader.databinding.ActivityMainBinding
+import com.wangzhen.reader.databinding.HeaderBookShelfBinding
+import com.wangzhen.reader.model.bean.CollBookBean
+import com.wangzhen.reader.ui.adapter.BookShelfAdapter
 import com.wangzhen.reader.ui.base.BaseActivity
 import com.wangzhen.reader.utils.toast
+import java.util.Locale
 
 /**
  * MainActivity
@@ -20,11 +31,15 @@ import com.wangzhen.reader.utils.toast
  */
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var shelfAdapter: BookShelfAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.btnOpen.setOnClickListener { checkPermissions() }
+        fitLightStatusBar()
+        setUpAdapter()
+        loadBooks()
     }
 
     private fun checkPermissions() {
@@ -65,5 +80,50 @@ class MainActivity : BaseActivity() {
 
     private fun openFileSystem() {
         startActivity(Intent(this, FileSystemActivity::class.java))
+    }
+
+    private fun loadBooks() {
+        shelfAdapter.setData(BookRepository.instance.collBooks)
+    }
+
+    private fun setUpAdapter() {
+        with(binding.bookShelfRvContent) {
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = BookShelfAdapter(BookRepository.instance.collBooks).apply {
+                shelfAdapter = this
+                setOnClickCallback { _, pos ->
+                    ReadActivity.startActivity(this@MainActivity, datas[pos])
+                }
+                setOnLongClickCallback { _, pos ->
+                    deleteBook(datas[pos])
+                }
+                addHeader(object : RecyclerItem() {
+                    override fun layout() = R.layout.header_book_shelf
+                    override fun onViewCreated(itemView: View) {
+                        HeaderBookShelfBinding.bind(itemView).apply {
+                            btnChooseFiles.setOnClickListener { checkPermissions() }
+                        }
+                    }
+                }.onCreateView(binding.root))
+                setEmpty(object : RecyclerItem() {
+                    override fun layout() = R.layout.layout_bookshelf_empty
+                }.onCreateView(binding.root))
+            }
+        }
+    }
+
+    private fun deleteBook(book: CollBookBean) {
+        AlertDialog.Builder(this)
+            .setMessage(String.format(Locale.getDefault(), "确定删除%s吗", book.title))
+            .setNegativeButton("取消", null).setPositiveButton("确定") { _, _ ->
+                BookRepository.instance.deleteBook(book)
+                Toast.makeText(this, book.title + "已删除", Toast.LENGTH_SHORT).show()
+                setUpAdapter()
+            }.create().show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadBooks()
     }
 }

@@ -6,7 +6,7 @@
 
     <!--common-->
     <color name="transparent">#00000000</color>
-    <color name="translucent">#99343434</color>
+    <color name="translucent">#4DEEEEEE</color>
     <color name="white">#ffffff</color>
     <color name="red">#FF0000</color>
     <color name="orange">#DE6014</color>
@@ -14,7 +14,7 @@
     <color name="green">#5FB236</color>
     <color name="black">#000000</color>
     <color name="light_pink">#fb9090</color>
-    <color name="light_white">#EEEEEE</color>
+    <color name="color_eeeeee">#EEEEEE</color>
     <color name="light_coffee">#A58D5E</color>
     <color name="light_red">#EC4A48</color>
     <color name="light_blue">#039BE5</color>
