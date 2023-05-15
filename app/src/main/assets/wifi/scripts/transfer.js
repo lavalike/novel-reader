@@ -159,7 +159,7 @@ $(function() {
 	}
 	
 	function checkFileName(fileName) {
-		if (!fileName || !fileName.toLowerCase().match('(apk)$')) {
+		if (!fileName || !fileName.toLowerCase().match('(txt)$')) {
 			return STRINGS.UNSUPPORTED_FILE_TYPE;
 		}
 		
@@ -214,8 +214,7 @@ $(function() {
 				return;
 			}
 			var fileName = $(this).val();
-			//alert(fileName);
-            
+
 			var msg = checkFileName(fileName);
 			if (msg) {
 				alert(msg);
