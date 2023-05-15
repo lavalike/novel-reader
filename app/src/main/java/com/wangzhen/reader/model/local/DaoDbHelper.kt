@@ -3,7 +3,7 @@ package com.wangzhen.reader.model.local
 import android.database.sqlite.SQLiteDatabase
 import com.wangzhen.reader.model.gen.DaoMaster
 import com.wangzhen.reader.model.gen.DaoSession
-import com.wangzhen.reader.utils.AppUtils.getContext
+import com.wangzhen.utils.utils.AppUtils
 
 /**
  * DaoDbHelper
@@ -13,7 +13,7 @@ object DaoDbHelper {
     private const val DB_NAME = "reader-db"
 
     private val database: SQLiteDatabase =
-        AppOpenHelper(getContext(), DB_NAME, null).writableDatabase
+        AppOpenHelper(AppUtils.getContext(), DB_NAME, null).writableDatabase
 
     private val mDaoMaster: DaoMaster = DaoMaster(database)
 

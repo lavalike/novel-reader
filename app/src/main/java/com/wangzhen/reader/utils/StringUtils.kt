@@ -1,8 +1,10 @@
 package com.wangzhen.reader.utils
 
 import androidx.annotation.StringRes
+import com.wangzhen.utils.utils.AppUtils
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * StringUtils

@@ -69,6 +69,8 @@ dependencies {
     implementation 'com.github.lavalike:adapter:0.2.0'
     implementation 'com.github.lavalike:circle-imageview:0.0.1'
     implementation 'com.github.lavalike:commons:0.0.3'
+    implementation 'com.github.lavalike:utils:0.0.2'
     implementation 'com.github.lavalike:permission:0.0.3'
     implementation 'com.github.lavalike:darkstatusbar:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 }

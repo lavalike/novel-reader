@@ -1,7 +1,7 @@
 package com.wangzhen.reader
 
 import android.app.Application
-import com.wangzhen.reader.utils.AppUtils
+import com.wangzhen.utils.utils.AppUtils
 
 /**
  * MainApplication
@@ -10,6 +10,6 @@ import com.wangzhen.reader.utils.AppUtils
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        AppUtils.init(this)
+        AppUtils.install(this)
     }
 }

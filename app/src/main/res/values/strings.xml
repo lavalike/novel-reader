@@ -25,6 +25,11 @@
     <string name="file_backwards">上一级</string>
     <string name="file_delete">删除</string>
 
+    <!--wifi transfer-->
+    <string name="wifi_transfer_tips">请确保您的手机和传输设备在同一局域网内，传输过程中请勿关闭此页面</string>
+    <string name="wifi_transfer_pc">在电脑浏览器中访问以下地址</string>
+    <string name="wifi_transfer_copy_address">复制地址</string>
+
     <!--常用-->
     <string name="common_tip">提示</string>
     <string name="common_sure">确定</string>

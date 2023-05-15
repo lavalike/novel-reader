@@ -103,7 +103,7 @@ class MainActivity : BaseActivity() {
                         HeaderBookShelfBinding.bind(itemView).apply {
                             btnChooseFiles.setOnClickListener { checkPermissions() }
                             btnWifiTransfer.setOnClickListener {
-
+                                startActivity(Intent(it.context, WifiTransferActivity::class.java))
                             }
                         }
                     }

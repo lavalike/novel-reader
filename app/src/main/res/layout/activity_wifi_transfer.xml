@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_blue"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".ui.activity.WifiTransferActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wifi_transfer_tips"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_wifi_transfer_address"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wifi_transfer_pc"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/light_blue"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="http://192.168.1.101:10123" />
+
+        <Button
+            android:id="@+id/btn_copy_address"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_wifi_transfer_address_copy"
+            android:text="@string/wifi_transfer_copy_address"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</LinearLayout>

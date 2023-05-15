@@ -2,6 +2,7 @@ package com.wangzhen.reader.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.wangzhen.utils.utils.AppUtils
 
 /**
  * SharedPreUtils

@@ -1,6 +1,7 @@
 package com.wangzhen.reader.utils
 
 import android.util.TypedValue
+import com.wangzhen.utils.utils.AppUtils
 
 /**
  * UiUtils
