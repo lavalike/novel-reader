@@ -15,10 +15,10 @@
 
     <LinearLayout
         android:id="@+id/btn_choose_files"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:background="@drawable/bg_header_home_search"
+        android:background="@drawable/bg_header_home_buttons"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="15dp"
@@ -26,6 +26,7 @@
         android:paddingEnd="15dp"
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_wifi_transfer"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
@@ -46,5 +47,19 @@
             android:textSize="14sp" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btn_wifi_transfer"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_header_home_buttons"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_wifi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_choose_files" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -87,7 +87,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setUpAdapter() {
-        with(binding.bookShelfRvContent) {
+        with(binding.recycler) {
             layoutManager = GridLayoutManager(context, 3)
             adapter = BookShelfAdapter(BookRepository.instance.collBooks).apply {
                 shelfAdapter = this
@@ -102,6 +102,9 @@ class MainActivity : BaseActivity() {
                     override fun onViewCreated(itemView: View) {
                         HeaderBookShelfBinding.bind(itemView).apply {
                             btnChooseFiles.setOnClickListener { checkPermissions() }
+                            btnWifiTransfer.setOnClickListener {
+
+                            }
                         }
                     }
                 }.onCreateView(binding.root))

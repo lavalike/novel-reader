@@ -6,7 +6,7 @@
     tools:context="com.wangzhen.reader.ui.activity.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/book_shelf_rv_content"
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
