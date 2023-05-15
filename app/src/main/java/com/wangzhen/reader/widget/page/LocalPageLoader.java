@@ -2,22 +2,21 @@ package com.wangzhen.reader.widget.page;
 
 import android.util.Log;
 
+import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.model.bean.BookChapterBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.model.local.Void;
 import com.wangzhen.reader.utils.AppConfig;
 import com.wangzhen.reader.utils.Charset;
 import com.wangzhen.reader.utils.FileUtils;
-import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.MD5Utils;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.StringUtils;
+import com.wangzhen.utils.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;

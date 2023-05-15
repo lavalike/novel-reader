@@ -1,6 +1,7 @@
 package com.wangzhen.reader.utils
 
 import android.widget.Toast
+import com.wangzhen.utils.io.IOUtils
 import com.wangzhen.utils.utils.AppUtils
 import java.io.Closeable
 

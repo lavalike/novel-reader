@@ -1,354 +1,343 @@
-package com.wangzhen.reader.transfer;
+package com.wangzhen.reader.transfer
 
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
-import android.text.TextUtils;
-
-import com.koushikdutta.async.AsyncServer;
-import com.koushikdutta.async.ByteBufferList;
-import com.koushikdutta.async.DataEmitter;
-import com.koushikdutta.async.http.body.MultipartFormDataBody;
-import com.koushikdutta.async.http.body.Part;
-import com.koushikdutta.async.http.body.UrlEncodedFormBody;
-import com.koushikdutta.async.http.server.AsyncHttpServer;
-import com.koushikdutta.async.http.server.AsyncHttpServerRequest;
-import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
-import com.wangzhen.reader.BuildConfig;
-import com.wangzhen.reader.utils.AppConfig;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.os.IBinder
+import android.text.TextUtils
+import com.koushikdutta.async.AsyncServer
+import com.koushikdutta.async.ByteBufferList
+import com.koushikdutta.async.DataEmitter
+import com.koushikdutta.async.callback.CompletedCallback
+import com.koushikdutta.async.callback.DataCallback
+import com.koushikdutta.async.http.body.AsyncHttpRequestBody
+import com.koushikdutta.async.http.body.MultipartFormDataBody
+import com.koushikdutta.async.http.body.MultipartFormDataBody.MultipartCallback
+import com.koushikdutta.async.http.body.Part
+import com.koushikdutta.async.http.body.UrlEncodedFormBody
+import com.koushikdutta.async.http.server.AsyncHttpServer
+import com.koushikdutta.async.http.server.AsyncHttpServerRequest
+import com.koushikdutta.async.http.server.AsyncHttpServerResponse
+import com.wangzhen.reader.utils.AppConfig
+import com.wangzhen.reader.utils.closeIO
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.text.DecimalFormat
 
 /**
  * TransferService
  * Created by wangzhen on 2023/5/15
  */
-public class TransferService extends Service {
-
-    static final String ACTION_START_WEB_SERVICE = BuildConfig.APPLICATION_ID + ".transfer.action.START_WEB_SERVICE";
-    static final String ACTION_STOP_WEB_SERVICE = BuildConfig.APPLICATION_ID + ".transfer.action.STOP_WEB_SERVICE";
-
-    private static final String TEXT_CONTENT_TYPE = "text/html;charset=utf-8";
-    private static final String CSS_CONTENT_TYPE = "text/css;charset=utf-8";
-    private static final String BINARY_CONTENT_TYPE = "application/octet-stream";
-    private static final String JS_CONTENT_TYPE = "application/javascript";
-    private static final String PNG_CONTENT_TYPE = "application/x-png";
-    private static final String JPG_CONTENT_TYPE = "application/jpeg";
-    private static final String SWF_CONTENT_TYPE = "application/x-shockwave-flash";
-    private static final String WOFF_CONTENT_TYPE = "application/x-font-woff";
-    private static final String TTF_CONTENT_TYPE = "application/x-font-truetype";
-    private static final String SVG_CONTENT_TYPE = "image/svg+xml";
-    private static final String EOT_CONTENT_TYPE = "image/vnd.ms-fontobject";
-    private static final String MP3_CONTENT_TYPE = "audio/mp3";
-    private static final String MP4_CONTENT_TYPE = "video/mpeg4";
-
-    final FileUploadHolder fileUploadHolder = new FileUploadHolder();
-    private final AsyncHttpServer server = new AsyncHttpServer();
-    private final AsyncServer asyncServer = new AsyncServer();
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, TransferService.class);
-        intent.setAction(ACTION_START_WEB_SERVICE);
-        context.startService(intent);
+class TransferService : Service() {
+    private val fileUploadHolder = FileUploadHolder()
+    private val server = AsyncHttpServer()
+    private val asyncServer = AsyncServer()
+    override fun onBind(intent: Intent): IBinder? {
+        return null
     }
 
-    public static void stop(Context context) {
-        Intent intent = new Intent(context, TransferService.class);
-        intent.setAction(ACTION_STOP_WEB_SERVICE);
-        context.startService(intent);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
-            String action = intent.getAction();
-            if (ACTION_START_WEB_SERVICE.equals(action)) {
-                startServer();
-            } else if (ACTION_STOP_WEB_SERVICE.equals(action)) {
-                stopSelf();
-            }
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val action = intent.action
+        if (AppConfig.Transfer.ACTION_START_WEB_SERVICE == action) {
+            startServer()
+        } else if (AppConfig.Transfer.ACTION_STOP_WEB_SERVICE == action) {
+            stopSelf()
         }
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(intent, flags, startId)
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        server.stop();
-        asyncServer.stop();
+    override fun onDestroy() {
+        super.onDestroy()
+        server.stop()
+        asyncServer.stop()
     }
 
-    private void startServer() {
-        server.get("/images/.*", this::sendResources);
-        server.get("/scripts/.*", this::sendResources);
-        server.get("/css/.*", this::sendResources);
+    private fun startServer() {
+        server.get("/images/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            sendResources(
+                request, response
+            )
+        }
+        server.get("/scripts/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            sendResources(
+                request, response
+            )
+        }
+        server.get("/css/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            sendResources(
+                request, response
+            )
+        }
         //index page
-        server.get("/", (AsyncHttpServerRequest request, AsyncHttpServerResponse response) -> {
+        server.get("/") { _: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
             try {
-                response.send(getIndexContent());
-            } catch (IOException e) {
-                e.printStackTrace();
-                response.code(500).end();
+                response.send(indexContent())
+            } catch (e: IOException) {
+                e.printStackTrace()
+                response.code(500).end()
             }
-        });
+        }
         //query upload list
-        server.get("/files", (AsyncHttpServerRequest request, AsyncHttpServerResponse response) -> {
-            JSONArray array = new JSONArray();
-            File dir = AppConfig.Transfer.DIR;
-            if (dir.exists() && dir.isDirectory()) {
-                String[] fileNames = dir.list();
+        server.get("/files") { _: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            val array = JSONArray()
+            val dir = AppConfig.Transfer.DIR
+            if (dir.exists() && dir.isDirectory) {
+                val fileNames = dir.list()
                 if (fileNames != null) {
-                    for (String fileName : fileNames) {
-                        File file = new File(dir, fileName);
-                        if (file.exists() && file.isFile()) {
+                    for (fileName in fileNames) {
+                        val file = File(dir, fileName)
+                        if (file.exists() && file.isFile) {
                             try {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("name", fileName);
-                                long fileLen = file.length();
-                                DecimalFormat df = new DecimalFormat("0.00");
+                                val jsonObject = JSONObject()
+                                jsonObject.put("name", fileName)
+                                val fileLen = file.length()
+                                val df = DecimalFormat("0.00")
                                 if (fileLen > 1024 * 1024) {
-                                    jsonObject.put("size", df.format(fileLen * 1f / 1024 / 1024) + "MB");
+                                    jsonObject.put(
+                                        "size",
+                                        df.format((fileLen * 1f / 1024 / 1024).toDouble()) + "MB"
+                                    )
                                 } else if (fileLen > 1024) {
-                                    jsonObject.put("size", df.format(fileLen * 1f / 1024) + "KB");
+                                    jsonObject.put(
+                                        "size", df.format((fileLen * 1f / 1024).toDouble()) + "KB"
+                                    )
                                 } else {
-                                    jsonObject.put("size", fileLen + "B");
+                                    jsonObject.put("size", fileLen.toString() + "B")
                                 }
-                                array.put(jsonObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                array.put(jsonObject)
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
                             }
                         }
                     }
                 }
             }
-            response.send(array.toString());
-        });
+            response.send(array.toString())
+        }
         //delete
-        server.post("/files/.*", (AsyncHttpServerRequest request, AsyncHttpServerResponse response) -> {
-            final UrlEncodedFormBody body = (UrlEncodedFormBody) request.getBody();
-            if ("delete".equalsIgnoreCase(body.get().getString("_method"))) {
-                String path = request.getPath().replace("/files/", "");
+        server.post("/files/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            val body = request.getBody<AsyncHttpRequestBody<*>>() as UrlEncodedFormBody
+            if ("delete".equals(body.get().getString("_method"), ignoreCase = true)) {
+                var path: String? = request.path.replace("/files/", "")
                 try {
-                    path = URLDecoder.decode(path, "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    path = URLDecoder.decode(path, "utf-8")
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
                 }
-                File file = new File(AppConfig.Transfer.DIR, path);
-                if (file.exists() && file.isFile()) {
-                    boolean ignored = file.delete();
+                val file = File(AppConfig.Transfer.DIR, path)
+                if (file.exists() && file.isFile) {
+                    val ignored = file.delete()
                 }
             }
-            response.end();
-        });
+            response.end()
+        }
         //download
-        server.get("/files/.*", (AsyncHttpServerRequest request, AsyncHttpServerResponse response) -> {
-            String path = request.getPath().replace("/files/", "");
+        server.get("/files/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            var path: String? = request.path.replace("/files/", "")
             try {
-                path = URLDecoder.decode(path, "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                path = URLDecoder.decode(path, "utf-8")
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
             }
-            File file = new File(AppConfig.Transfer.DIR_NAME, path);
-            if (file.exists() && file.isFile()) {
+            val file = File(AppConfig.Transfer.DIR_NAME, path)
+            if (file.exists() && file.isFile) {
                 try {
-                    response.getHeaders().add("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "utf-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    response.headers.add(
+                        "Content-Disposition",
+                        "attachment;filename=" + URLEncoder.encode(file.name, "utf-8")
+                    )
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
                 }
-                response.sendFile(file);
-                return;
+                response.sendFile(file)
+            } else {
+                response.code(404).send("Not found!")
             }
-            response.code(404).send("Not found!");
-        });
+        }
         //upload
-        server.post("/files", (AsyncHttpServerRequest request, AsyncHttpServerResponse response) -> {
-            final MultipartFormDataBody body = (MultipartFormDataBody) request.getBody();
-            body.setMultipartCallback((Part part) -> {
-                if (part.isFile()) {
-                    body.setDataCallback((DataEmitter emitter, ByteBufferList bb) -> {
-                        fileUploadHolder.write(bb.getAllByteArray());
-                        bb.recycle();
-                    });
-                } else {
-                    if (body.getDataCallback() == null) {
-                        body.setDataCallback((DataEmitter emitter, ByteBufferList bb) -> {
-                            try {
-                                String fileName = URLDecoder.decode(new String(bb.getAllByteArray()), "UTF-8");
-                                fileUploadHolder.setFileName(fileName);
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                            bb.recycle();
-                        });
+        server.post("/files") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            val body = request.getBody<AsyncHttpRequestBody<*>>() as MultipartFormDataBody
+            body.multipartCallback = MultipartCallback { part: Part ->
+                if (part.isFile) {
+                    body.dataCallback = DataCallback { emitter: DataEmitter?, bb: ByteBufferList ->
+                        fileUploadHolder.write(bb.allByteArray)
+                        bb.recycle()
                     }
-                }
-            });
-            request.setEndCallback((Exception e) -> {
-                fileUploadHolder.reset();
-                response.end();
-            });
-        });
-        server.get("/progress/.*", (final AsyncHttpServerRequest request, final AsyncHttpServerResponse response) -> {
-                    JSONObject res = new JSONObject();
-
-                    String path = request.getPath().replace("/progress/", "");
-
-                    if (path.equals(fileUploadHolder.fileName)) {
-                        try {
-                            res.put("fileName", fileUploadHolder.fileName);
-                            res.put("size", fileUploadHolder.totalSize);
-                            res.put("progress", fileUploadHolder.fileOutPutStream == null ? 1 : 0.1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                } else {
+                    if (body.dataCallback == null) {
+                        body.dataCallback = DataCallback { _: DataEmitter, bb: ByteBufferList ->
+                            try {
+                                val fileName = URLDecoder.decode(String(bb.allByteArray), "UTF-8")
+                                fileUploadHolder.setFileName(fileName)
+                            } catch (e: UnsupportedEncodingException) {
+                                e.printStackTrace()
+                            }
+                            bb.recycle()
                         }
                     }
-
-                    response.send(res);
                 }
-
-        );
-        server.listen(asyncServer, AppConfig.Transfer.HTTP_PORT);
+            }
+            request.endCallback = CompletedCallback { e: Exception? ->
+                fileUploadHolder.reset()
+                response.end()
+            }
+        }
+        server.get("/progress/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
+            val res = JSONObject()
+            val path = request.path.replace("/progress/", "")
+            if (path == fileUploadHolder.getFileName()) {
+                try {
+                    res.put("fileName", fileUploadHolder.getFileName())
+                    res.put("size", fileUploadHolder.getTotalSize())
+                    res.put("progress", if (fileUploadHolder.fileOutPutStream == null) 1 else 0.1)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+            response.send(res)
+        }
+        server.listen(asyncServer, AppConfig.Transfer.HTTP_PORT)
     }
 
-    private String getIndexContent() throws IOException {
-        BufferedInputStream bInputStream = null;
-        try {
-            bInputStream = new BufferedInputStream(getAssets().open("wifi/index.html"));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int len;
-            byte[] tmp = new byte[10240];
-            while ((len = bInputStream.read(tmp)) > 0) {
-                baos.write(tmp, 0, len);
+    private fun indexContent(): String {
+        var stream: BufferedInputStream? = null
+        return try {
+            stream = BufferedInputStream(assets.open("wifi/index.html"))
+            val baos = ByteArrayOutputStream()
+            var len: Int
+            val tmp = ByteArray(10240)
+            while (stream.read(tmp).also { len = it } > 0) {
+                baos.write(tmp, 0, len)
             }
-            return baos.toString("utf-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+            baos.toString("utf-8")
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw e
         } finally {
-            if (bInputStream != null) {
-                try {
-                    bInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            stream?.closeIO()
         }
     }
 
-    private void sendResources(final AsyncHttpServerRequest request, final AsyncHttpServerResponse response) {
+    private fun sendResources(request: AsyncHttpServerRequest, response: AsyncHttpServerResponse) {
         try {
-            String fullPath = request.getPath();
-            fullPath = fullPath.replace("%20", " ");
-            String resourceName = fullPath;
+            var fullPath = request.path
+            fullPath = fullPath.replace("%20", " ")
+            var resourceName = fullPath
             if (resourceName.startsWith("/")) {
-                resourceName = resourceName.substring(1);
+                resourceName = resourceName.substring(1)
             }
             if (resourceName.indexOf("?") > 0) {
-                resourceName = resourceName.substring(0, resourceName.indexOf("?"));
+                resourceName = resourceName.substring(0, resourceName.indexOf("?"))
             }
             if (!TextUtils.isEmpty(getContentTypeByResourceName(resourceName))) {
-                response.setContentType(getContentTypeByResourceName(resourceName));
+                response.setContentType(getContentTypeByResourceName(resourceName))
             }
-            BufferedInputStream bInputStream = new BufferedInputStream(getAssets().open("wifi/" + resourceName));
-            response.sendStream(bInputStream, bInputStream.available());
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.code(404).end();
+            val bInputStream = BufferedInputStream(assets.open("wifi/$resourceName"))
+            response.sendStream(bInputStream, bInputStream.available().toLong())
+        } catch (e: IOException) {
+            e.printStackTrace()
+            response.code(404).end()
         }
     }
 
-    private String getContentTypeByResourceName(String resourceName) {
+    private fun getContentTypeByResourceName(resourceName: String): String {
         if (resourceName.endsWith(".css")) {
-            return CSS_CONTENT_TYPE;
+            return AppConfig.ContentType.CSS_CONTENT_TYPE
         } else if (resourceName.endsWith(".js")) {
-            return JS_CONTENT_TYPE;
+            return AppConfig.ContentType.JS_CONTENT_TYPE
         } else if (resourceName.endsWith(".swf")) {
-            return SWF_CONTENT_TYPE;
+            return AppConfig.ContentType.SWF_CONTENT_TYPE
         } else if (resourceName.endsWith(".png")) {
-            return PNG_CONTENT_TYPE;
+            return AppConfig.ContentType.PNG_CONTENT_TYPE
         } else if (resourceName.endsWith(".jpg") || resourceName.endsWith(".jpeg")) {
-            return JPG_CONTENT_TYPE;
+            return AppConfig.ContentType.JPG_CONTENT_TYPE
         } else if (resourceName.endsWith(".woff")) {
-            return WOFF_CONTENT_TYPE;
+            return AppConfig.ContentType.WOFF_CONTENT_TYPE
         } else if (resourceName.endsWith(".ttf")) {
-            return TTF_CONTENT_TYPE;
+            return AppConfig.ContentType.TTF_CONTENT_TYPE
         } else if (resourceName.endsWith(".svg")) {
-            return SVG_CONTENT_TYPE;
+            return AppConfig.ContentType.SVG_CONTENT_TYPE
         } else if (resourceName.endsWith(".eot")) {
-            return EOT_CONTENT_TYPE;
+            return AppConfig.ContentType.EOT_CONTENT_TYPE
         } else if (resourceName.endsWith(".mp3")) {
-            return MP3_CONTENT_TYPE;
+            return AppConfig.ContentType.MP3_CONTENT_TYPE
         } else if (resourceName.endsWith(".mp4")) {
-            return MP4_CONTENT_TYPE;
+            return AppConfig.ContentType.MP4_CONTENT_TYPE
         }
-        return "";
+        return ""
     }
 
-    public static class FileUploadHolder {
-        private String fileName;
-        private BufferedOutputStream fileOutPutStream;
-        private long totalSize;
+    class FileUploadHolder {
+        private lateinit var fileName: String
 
+        var fileOutPutStream: BufferedOutputStream? = null
+            private set
+        private var totalSize: Long = 0
 
-        public BufferedOutputStream getFileOutPutStream() {
-            return fileOutPutStream;
-        }
+        fun getTotalSize() = this.totalSize
 
-        public void setFileName(String fileName) {
-            this.fileName = fileName;
-            totalSize = 0;
-            File dir = AppConfig.Transfer.DIR;
+        fun getFileName() = this.fileName
+
+        fun setFileName(fileName: String) {
+            this.fileName = fileName
+            totalSize = 0
+            val dir = AppConfig.Transfer.DIR
             if (!dir.exists()) {
-                boolean ignored = dir.mkdirs();
+                val ignored = dir.mkdirs()
             }
-            File receivedFile = new File(dir, this.fileName);
+            val receivedFile = File(dir, this.fileName)
             try {
-                fileOutPutStream = new BufferedOutputStream(new FileOutputStream(receivedFile));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                fileOutPutStream = BufferedOutputStream(FileOutputStream(receivedFile))
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
             }
         }
 
-        public void reset() {
+        fun reset() {
             if (fileOutPutStream != null) {
                 try {
-                    fileOutPutStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    fileOutPutStream!!.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
-            fileOutPutStream = null;
+            fileOutPutStream = null
         }
 
-        public void write(byte[] data) {
+        fun write(data: ByteArray) {
             if (fileOutPutStream != null) {
                 try {
-                    fileOutPutStream.write(data);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    fileOutPutStream!!.write(data)
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
-            totalSize += data.length;
+            totalSize += data.size.toLong()
+        }
+    }
+
+    companion object {
+        fun start(context: Context) {
+            context.startService(Intent(context, TransferService::class.java).apply {
+                action = AppConfig.Transfer.ACTION_START_WEB_SERVICE
+            })
+        }
+
+        fun stop(context: Context) {
+            context.startService(Intent(context, TransferService::class.java).apply {
+                action = AppConfig.Transfer.ACTION_STOP_WEB_SERVICE
+            })
         }
     }
 }

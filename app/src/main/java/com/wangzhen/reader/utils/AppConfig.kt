@@ -1,6 +1,7 @@
 package com.wangzhen.reader.utils
 
 import android.os.Environment
+import com.wangzhen.reader.BuildConfig
 import java.io.File
 
 /**
@@ -53,5 +54,25 @@ object AppConfig {
         val DIR = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), DIR_NAME
         )
+        const val ACTION_START_WEB_SERVICE =
+            BuildConfig.APPLICATION_ID + ".transfer.action.START_WEB_SERVICE"
+        const val ACTION_STOP_WEB_SERVICE =
+            BuildConfig.APPLICATION_ID + ".transfer.action.STOP_WEB_SERVICE"
+    }
+
+    object ContentType {
+        const val TEXT_CONTENT_TYPE = "text/html;charset=utf-8"
+        const val CSS_CONTENT_TYPE = "text/css;charset=utf-8"
+        const val BINARY_CONTENT_TYPE = "application/octet-stream"
+        const val JS_CONTENT_TYPE = "application/javascript"
+        const val PNG_CONTENT_TYPE = "application/x-png"
+        const val JPG_CONTENT_TYPE = "application/jpeg"
+        const val SWF_CONTENT_TYPE = "application/x-shockwave-flash"
+        const val WOFF_CONTENT_TYPE = "application/x-font-woff"
+        const val TTF_CONTENT_TYPE = "application/x-font-truetype"
+        const val SVG_CONTENT_TYPE = "image/svg+xml"
+        const val EOT_CONTENT_TYPE = "image/vnd.ms-fontobject"
+        const val MP3_CONTENT_TYPE = "audio/mp3"
+        const val MP4_CONTENT_TYPE = "video/mpeg4"
     }
 }

@@ -16,14 +16,13 @@ import com.wangzhen.reader.base.BookRepository;
 import com.wangzhen.reader.model.bean.BookRecordBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.utils.AppConfig;
-import com.wangzhen.reader.utils.IOUtils;
 import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.utils.RxUtils;
 import com.wangzhen.reader.utils.StringUtils;
 import com.wangzhen.reader.utils.UiUtils;
+import com.wangzhen.utils.io.IOUtils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
