@@ -3,7 +3,9 @@ package com.wangzhen.reader.transfer
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.text.TextUtils
 import com.koushikdutta.async.AsyncServer
 import com.koushikdutta.async.ByteBufferList
@@ -18,8 +20,11 @@ import com.koushikdutta.async.http.body.UrlEncodedFormBody
 import com.koushikdutta.async.http.server.AsyncHttpServer
 import com.koushikdutta.async.http.server.AsyncHttpServerRequest
 import com.koushikdutta.async.http.server.AsyncHttpServerResponse
+import com.wangzhen.reader.base.book.BookConverter
+import com.wangzhen.reader.base.book.BookRepository
 import com.wangzhen.reader.utils.AppConfig
 import com.wangzhen.reader.utils.closeIO
+import com.wangzhen.utils.utils.T
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -43,6 +48,7 @@ class TransferService : Service() {
     private val fileUploadHolder = FileUploadHolder()
     private val server = AsyncHttpServer()
     private val asyncServer = AsyncServer()
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
@@ -129,7 +135,7 @@ class TransferService : Service() {
         server.post("/files/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
             val body = request.getBody<AsyncHttpRequestBody<*>>() as UrlEncodedFormBody
             if ("delete".equals(body.get().getString("_method"), ignoreCase = true)) {
-                var path: String? = request.path.replace("/files/", "")
+                var path: String = request.path.replace("/files/", "")
                 try {
                     path = URLDecoder.decode(path, "utf-8")
                 } catch (e: UnsupportedEncodingException) {
@@ -144,7 +150,7 @@ class TransferService : Service() {
         }
         //download
         server.get("/files/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
-            var path: String? = request.path.replace("/files/", "")
+            var path: String = request.path.replace("/files/", "")
             try {
                 path = URLDecoder.decode(path, "utf-8")
             } catch (e: UnsupportedEncodingException) {
@@ -168,6 +174,7 @@ class TransferService : Service() {
         //upload
         server.post("/files") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->
             val body = request.getBody<AsyncHttpRequestBody<*>>() as MultipartFormDataBody
+            var fileName: String? = null
             body.multipartCallback = MultipartCallback { part: Part ->
                 if (part.isFile) {
                     body.dataCallback = DataCallback { emitter: DataEmitter?, bb: ByteBufferList ->
@@ -178,8 +185,10 @@ class TransferService : Service() {
                     if (body.dataCallback == null) {
                         body.dataCallback = DataCallback { _: DataEmitter, bb: ByteBufferList ->
                             try {
-                                val fileName = URLDecoder.decode(String(bb.allByteArray), "UTF-8")
-                                fileUploadHolder.setFileName(fileName)
+                                fileName = URLDecoder.decode(String(bb.allByteArray), "UTF-8")
+                                fileName?.let { name ->
+                                    fileUploadHolder.setFileName(name)
+                                }
                             } catch (e: UnsupportedEncodingException) {
                                 e.printStackTrace()
                             }
@@ -188,9 +197,24 @@ class TransferService : Service() {
                     }
                 }
             }
-            request.endCallback = CompletedCallback { e: Exception? ->
+            request.endCallback = CompletedCallback {
                 fileUploadHolder.reset()
                 response.end()
+
+                // send data to transfer page
+                fileName?.let { name ->
+                    Handler(Looper.getMainLooper()).post {
+                        val file = File(AppConfig.Transfer.DIR, name)
+                        if (file.exists()) {
+                            BookRepository.instance.saveCollBooks(
+                                BookConverter.convertCollBook(
+                                    listOf(file)
+                                )
+                            )
+                            T.show("$name 已添加到书架")
+                        }
+                    }
+                }
             }
         }
         server.get("/progress/.*") { request: AsyncHttpServerRequest, response: AsyncHttpServerResponse ->

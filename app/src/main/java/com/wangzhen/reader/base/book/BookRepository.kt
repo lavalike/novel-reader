@@ -1,4 +1,4 @@
-package com.wangzhen.reader.base
+package com.wangzhen.reader.base.book
 
 import com.wangzhen.reader.model.bean.BookChapterBean
 import com.wangzhen.reader.model.bean.BookRecordBean

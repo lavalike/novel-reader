@@ -19,20 +19,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.wangzhen.commons.toolbar.impl.Toolbar;
 import com.wangzhen.reader.R;
+import com.wangzhen.reader.base.book.BookConverter;
 import com.wangzhen.reader.base.toolbar.AppCommonToolbar;
 import com.wangzhen.reader.databinding.ActivityFileSystemBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.base.BookRepository;
+import com.wangzhen.reader.base.book.BookRepository;
 import com.wangzhen.reader.ui.base.BaseActivity;
 import com.wangzhen.reader.ui.fragment.BaseFileFragment;
 import com.wangzhen.reader.ui.fragment.FileCategoryFragment;
 import com.wangzhen.reader.ui.fragment.LocalBookFragment;
-import com.wangzhen.reader.utils.AppConfig;
-import com.wangzhen.reader.utils.MD5Utils;
-import com.wangzhen.reader.utils.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -155,7 +152,7 @@ public class FileSystemActivity extends BaseActivity {
             //获取选中的文件
             List<File> files = mCurFragment.getCheckedFiles();
             //转换成CollBook,并存储
-            List<CollBookBean> collBooks = convertCollBook(files);
+            List<CollBookBean> collBooks = BookConverter.convertCollBook(files);
             BookRepository.getInstance().saveCollBooks(collBooks);
             //设置HashMap为false
             mCurFragment.setCheckedAll(false);
@@ -182,33 +179,6 @@ public class FileSystemActivity extends BaseActivity {
 
         mLocalFragment.setOnFileCheckedCallback(mListener);
         mCategoryFragment.setOnFileCheckedCallback(mListener);
-    }
-
-    /**
-     * 将文件转换成CollBook
-     *
-     * @param files:需要加载的文件列表
-     * @return list of CollBookBean
-     */
-    private List<CollBookBean> convertCollBook(List<File> files) {
-        List<CollBookBean> collBooks = new ArrayList<>(files.size());
-        for (File file : files) {
-            //判断文件是否存在
-            if (!file.exists()) continue;
-
-            CollBookBean collBook = new CollBookBean();
-            collBook.set_id(MD5Utils.strToMd5By16(file.getAbsolutePath()));
-            collBook.setTitle(file.getName().replace(".txt", ""));
-            collBook.setAuthor("");
-            collBook.setShortIntro("无");
-            collBook.setCover(file.getAbsolutePath());
-            collBook.setLocal(true);
-            collBook.setLastChapter("开始阅读");
-            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), AppConfig.Format.FORMAT_BOOK_DATE));
-            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), AppConfig.Format.FORMAT_BOOK_DATE));
-            collBooks.add(collBook);
-        }
-        return collBooks;
     }
 
     /**

@@ -37,7 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wangzhen.reader.R;
 import com.wangzhen.reader.databinding.ActivityReadBinding;
 import com.wangzhen.reader.model.bean.CollBookBean;
-import com.wangzhen.reader.base.BookRepository;
+import com.wangzhen.reader.base.book.BookRepository;
 import com.wangzhen.reader.utils.ReadSettingManager;
 import com.wangzhen.reader.ui.adapter.CategoryAdapter;
 import com.wangzhen.reader.ui.base.BaseActivity;

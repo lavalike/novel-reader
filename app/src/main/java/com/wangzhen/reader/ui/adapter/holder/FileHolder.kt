@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.wangzhen.adapter.base.RecyclerViewHolder
 import com.wangzhen.reader.R
 import com.wangzhen.reader.databinding.ItemFileBinding
-import com.wangzhen.reader.base.BookRepository
+import com.wangzhen.reader.base.book.BookRepository
 import com.wangzhen.reader.utils.AppConfig
 import com.wangzhen.reader.utils.FileUtils.getFileSize
 import com.wangzhen.reader.utils.MD5Utils

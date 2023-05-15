@@ -2,7 +2,7 @@ package com.wangzhen.reader.widget.page;
 
 import android.util.Log;
 
-import com.wangzhen.reader.base.BookRepository;
+import com.wangzhen.reader.base.book.BookRepository;
 import com.wangzhen.reader.model.bean.BookChapterBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.model.local.Void;

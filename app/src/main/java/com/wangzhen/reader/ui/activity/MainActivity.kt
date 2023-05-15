@@ -16,7 +16,7 @@ import com.wangzhen.adapter.base.RecyclerItem
 import com.wangzhen.permission.PermissionManager
 import com.wangzhen.permission.callback.AbsPermissionCallback
 import com.wangzhen.reader.R
-import com.wangzhen.reader.base.BookRepository
+import com.wangzhen.reader.base.book.BookRepository
 import com.wangzhen.reader.databinding.ActivityMainBinding
 import com.wangzhen.reader.databinding.HeaderBookShelfBinding
 import com.wangzhen.reader.model.bean.CollBookBean

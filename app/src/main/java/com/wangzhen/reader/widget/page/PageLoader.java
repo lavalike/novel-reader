@@ -12,7 +12,7 @@ import android.text.TextPaint;
 
 import androidx.core.content.ContextCompat;
 
-import com.wangzhen.reader.base.BookRepository;
+import com.wangzhen.reader.base.book.BookRepository;
 import com.wangzhen.reader.model.bean.BookRecordBean;
 import com.wangzhen.reader.model.bean.CollBookBean;
 import com.wangzhen.reader.utils.AppConfig;
