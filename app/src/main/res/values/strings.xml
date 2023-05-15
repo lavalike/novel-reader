@@ -26,7 +26,7 @@
     <string name="file_delete">删除</string>
 
     <!--wifi transfer-->
-    <string name="wifi_transfer_tips">请确保您的手机和传输设备在同一局域网内，传输过程中请勿关闭此页面</string>
+    <string name="wifi_transfer_tips">请确保您的手机和传输设备在同一局域网内\n传输过程中请勿关闭此页面</string>
     <string name="wifi_transfer_pc">在电脑浏览器中访问以下地址</string>
     <string name="wifi_transfer_copy_address">复制地址</string>
 

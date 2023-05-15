@@ -8,7 +8,10 @@ import android.text.TextUtils
 import com.wangzhen.commons.toolbar.impl.Toolbar
 import com.wangzhen.reader.base.toolbar.AppWifiTransferToolbar
 import com.wangzhen.reader.databinding.ActivityWifiTransferBinding
+import com.wangzhen.reader.transfer.TransferService
 import com.wangzhen.reader.ui.base.BaseActivity
+import com.wangzhen.reader.utils.AppConfig
+import com.wangzhen.reader.utils.WifiUtils
 import com.wangzhen.utils.utils.T
 
 /**
@@ -24,11 +27,20 @@ class WifiTransferActivity : BaseActivity() {
         setContentView(binding.root)
         fitLightStatusBar()
         initViews()
+        initTransfer()
+    }
+
+    private fun initTransfer() {
+        TransferService.start(this)
     }
 
     private fun initViews() {
         with(binding) {
-            tvAddress.text = "http://192.168.1.102:12345"
+            tvAddress.text = String.format(
+                "http://%s:%d",
+                WifiUtils.getIpAddress(this@WifiTransferActivity),
+                AppConfig.Transfer.HTTP_PORT
+            )
             btnCopyAddress.setOnClickListener {
                 val address = tvAddress.text.toString()
                 if (!TextUtils.isEmpty(address)) {
@@ -41,7 +53,13 @@ class WifiTransferActivity : BaseActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        TransferService.stop(this)
+    }
+
     override fun createToolbar(): Toolbar {
         return AppWifiTransferToolbar(this, "WiFi 传书")
     }
+
 }

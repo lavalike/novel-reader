@@ -1,5 +1,8 @@
 package com.wangzhen.reader.utils
 
+import android.os.Environment
+import java.io.File
+
 /**
  * AppConfig
  * Created by wangzhen on 2023/4/12
@@ -39,6 +42,16 @@ object AppConfig {
             "^(\\s{0,4})([\\(\uff08\u3010\u300a])(.{0,30})([\\)\uff09\u3011\u300b])(\\s{0,2})$",
             "^(\\s{0,4})(\u6b63\u6587)(.{0,20})$",
             "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"
+        )
+    }
+
+    object Transfer {
+        const val HTTP_PORT = 10123
+        const val DIR_NAME = "WiFi-Transfer"
+
+        @JvmField
+        val DIR = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), DIR_NAME
         )
     }
 }

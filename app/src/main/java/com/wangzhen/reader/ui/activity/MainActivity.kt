@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.wangzhen.adapter.base.RecyclerItem
-import com.wangzhen.permission.PermissionManager.request
+import com.wangzhen.permission.PermissionManager
 import com.wangzhen.permission.callback.AbsPermissionCallback
 import com.wangzhen.reader.R
 import com.wangzhen.reader.base.BookRepository
@@ -42,7 +42,45 @@ class MainActivity : BaseActivity() {
         loadBooks()
     }
 
-    private fun checkPermissions() {
+    private fun loadBooks() {
+        shelfAdapter.setData(BookRepository.instance.collBooks)
+    }
+
+    private fun setUpAdapter() {
+        with(binding.recycler) {
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = BookShelfAdapter(BookRepository.instance.collBooks).apply {
+                shelfAdapter = this
+                setOnClickCallback { _, pos ->
+                    ReadActivity.startActivity(this@MainActivity, datas[pos])
+                }
+                setOnLongClickCallback { _, pos ->
+                    deleteBook(datas[pos])
+                }
+                addHeader(object : RecyclerItem() {
+                    override fun layout() = R.layout.header_book_shelf
+                    override fun onViewCreated(itemView: View) {
+                        HeaderBookShelfBinding.bind(itemView).apply {
+                            btnChooseFiles.setOnClickListener { checkOpenFileSystem() }
+                            btnWifiTransfer.setOnClickListener {
+                                startActivity(
+                                    Intent(
+                                        this@MainActivity,
+                                        WifiTransferActivity::class.java
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }.onCreateView(binding.root))
+                setEmpty(object : RecyclerItem() {
+                    override fun layout() = R.layout.layout_bookshelf_empty
+                }.onCreateView(binding.root))
+            }
+        }
+    }
+
+    private fun checkOpenFileSystem() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             checkExternalPermissions()
         } else {
@@ -65,7 +103,7 @@ class MainActivity : BaseActivity() {
         }
 
     private fun checkExternalPermissions() {
-        request(this, object : AbsPermissionCallback() {
+        PermissionManager.request(this, object : AbsPermissionCallback() {
             override fun onGrant(permissions: Array<String>) {
                 openFileSystem()
             }
@@ -80,39 +118,6 @@ class MainActivity : BaseActivity() {
 
     private fun openFileSystem() {
         startActivity(Intent(this, FileSystemActivity::class.java))
-    }
-
-    private fun loadBooks() {
-        shelfAdapter.setData(BookRepository.instance.collBooks)
-    }
-
-    private fun setUpAdapter() {
-        with(binding.recycler) {
-            layoutManager = GridLayoutManager(context, 3)
-            adapter = BookShelfAdapter(BookRepository.instance.collBooks).apply {
-                shelfAdapter = this
-                setOnClickCallback { _, pos ->
-                    ReadActivity.startActivity(this@MainActivity, datas[pos])
-                }
-                setOnLongClickCallback { _, pos ->
-                    deleteBook(datas[pos])
-                }
-                addHeader(object : RecyclerItem() {
-                    override fun layout() = R.layout.header_book_shelf
-                    override fun onViewCreated(itemView: View) {
-                        HeaderBookShelfBinding.bind(itemView).apply {
-                            btnChooseFiles.setOnClickListener { checkPermissions() }
-                            btnWifiTransfer.setOnClickListener {
-                                startActivity(Intent(it.context, WifiTransferActivity::class.java))
-                            }
-                        }
-                    }
-                }.onCreateView(binding.root))
-                setEmpty(object : RecyclerItem() {
-                    override fun layout() = R.layout.layout_bookshelf_empty
-                }.onCreateView(binding.root))
-            }
-        }
     }
 
     private fun deleteBook(book: CollBookBean) {
