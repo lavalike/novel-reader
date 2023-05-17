@@ -18,12 +18,14 @@
         android:textSize="14sp" />
 
     <LinearLayout
+        android:id="@+id/container_wifi"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_wifi_transfer_address"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,6 +50,34 @@
             android:layout_height="40dp"
             android:background="@drawable/bg_wifi_transfer_address_copy"
             android:text="@string/wifi_transfer_copy_address"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_setting"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_wifi_transfer_address"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="@string/wifi_transfer_no_wifi"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_wifi_setting"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_wifi_transfer_address_copy"
+            android:text="@string/wifi_transfer_wifi_setting"
             android:textColor="@color/white" />
 
     </LinearLayout>

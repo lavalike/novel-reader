@@ -53,12 +53,14 @@ class TransferService : Service() {
         return null
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val action = intent.action
-        if (AppConfig.Transfer.ACTION_START_WEB_SERVICE == action) {
-            startServer()
-        } else if (AppConfig.Transfer.ACTION_STOP_WEB_SERVICE == action) {
-            stopSelf()
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent != null) {
+            val action = intent.action
+            if (AppConfig.Transfer.ACTION_START_WEB_SERVICE == action) {
+                startServer()
+            } else if (AppConfig.Transfer.ACTION_STOP_WEB_SERVICE == action) {
+                stopSelf()
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }

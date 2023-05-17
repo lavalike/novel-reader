@@ -2,8 +2,10 @@ package com.wangzhen.reader.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.os.Build
 
 /**
  * WifiUtils
@@ -22,13 +24,18 @@ object WifiUtils {
         return (i and 0xFF).toString() + "." + (i shr 8 and 0xFF) + "." + (i shr 16 and 0xFF) + "." + (i shr 24 and 0xFF)
     }
 
-    fun getWifiState(context: Context): Int {
-        return getWifiManager(context).wifiState
-    }
+    fun isWiFiConnected(ctx: Context): Boolean {
+        val manager = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)?.let { networkInfo ->
+                return networkInfo.isAvailable
+            }
+        } else {
+            val network = manager.activeNetwork ?: return false
+            val status = manager.getNetworkCapabilities(network) ?: return false
+            return status.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+        }
 
-    fun getConnectState(context: Context): NetworkInfo.State {
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)?.state
-            ?: NetworkInfo.State.DISCONNECTED
+        return false
     }
 }

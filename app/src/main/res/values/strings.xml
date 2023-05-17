@@ -30,6 +30,9 @@
     <string name="wifi_transfer_pc">在电脑浏览器中访问以下地址</string>
     <string name="wifi_transfer_copy_address">复制地址</string>
 
+    <string name="wifi_transfer_no_wifi">未连接到WiFi</string>
+    <string name="wifi_transfer_wifi_setting">去设置</string>
+
     <!--常用-->
     <string name="common_tip">提示</string>
     <string name="common_sure">确定</string>
